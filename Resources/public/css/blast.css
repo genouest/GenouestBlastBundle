@@ -1,14 +1,3 @@
-div.jobResultsLepido {
-    margin-top: 2em;
-    margin-bottom: 2em;
-    margin-left:auto;
-    margin-right:auto;
-    padding: 1em;
-    border: 1px dashed #ddd;
-    background-color:#eeeeee;
-    width:70%;
-}
-
 tr.headFields td {
   border: 0;
 }
