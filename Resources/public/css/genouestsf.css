@@ -1,0 +1,49 @@
+div.jobResultsLepido {
+    margin-top: 2em;
+    margin-bottom: 2em;
+    margin-left:auto;
+    margin-right:auto;
+    padding: 1em;
+    border: 1px dashed #ddd;
+    background-color:#eeeeee;
+    width:70%;
+}
+
+tr.headFields td {
+  border: 0;
+}
+
+tr.headFields td.emailField {
+  text-align: right;
+}
+
+form#blast table {
+  width: 80%;
+  margin-top: 0;
+  margin-bottom: 1em;
+}
+
+form#blast th {
+  width: 20%;
+}
+
+form#blast p.formPart {
+  width:80%;
+  margin-left:auto;
+  margin-right:auto;
+  padding:0;
+  padding-left: 5px;
+  text-align:left;
+  font-style:italic;
+  font-weight:bold;
+  color: #32639A;
+}
+
+form#blast p.formPart img {
+  vertical-align:middle;
+}
+
+div.jobResults p.koriviewer{
+  text-align:center;
+  font-size: 1.3em;
+}

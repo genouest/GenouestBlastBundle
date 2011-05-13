@@ -1,0 +1,178 @@
+{% extends "::base.html.twig" %}
+
+{% block content %}
+    <h1>Blast 2.2.25+</h1>
+
+    {{ form_errors(form) }}
+
+    <form name="blast" action="#" method="post" id="blast" {{ form_enctype(form) }}>
+      <table>
+        <tr class="headFields">
+          <td title="Optional, give a title to this job (will be displayed in emails and history)">{{ form_label(form.title, 'Job title') }} {{ form_widget(form.title) }}{{ form_errors(form.title) }}</td>
+          <td class="emailField" title="Optional, if you want to receive the results by email">{{ form_label(form.email, 'Email address') }} {{ form_widget(form.email) }}{{ form_errors(form.email) }}</td>
+        </tr>
+      </table>
+      
+      <p class="formPart"><img src="{{ asset('bundles/blast/images/item.png') }}" width=16 height=16 alt="Program selection" /> Program selection</p>
+      <table>
+        <tr>
+          <th>{{ form_label(form.program) }}</th><td>{{ form_widget(form.program) }}{{ form_errors(form.program) }}</td>
+        </tr>
+        <tr>
+          <th>{{ form_label(form.blastnType, 'Search type') }}</th><td>{{ form_widget(form.blastnType) }}{{ form_errors(form.blastnType) }}</td>
+        </tr>
+        <tr>
+          <th>{{ form_label(form.blastpType, 'Search type') }}</th><td>{{ form_widget(form.blastpType) }}
+          <br />PSI-BLAST and PHI-BLAST can be used to find distantly related sequences{{ form_errors(form.blastpType) }}</td>
+        </tr>
+      </table>
+      
+      <p class="formPart"><img src="{{ asset('bundles/blast/images/item.png') }}" width=16 height=16 alt="Query sequence" /> Query sequence</p>
+      <table>
+        <tr>
+          <th>{{ form_label(form.pastedSeq, 'Paste your sequence') }}</th><td>{{ form_widget(form.pastedSeq, { 'attr' : { 'cols': '75', 'rows': '7'}}) }}
+          <br />FASTA format. Length is limited to 20Mb{{ form_errors(form.pastedSeq) }}</td>
+        </tr>
+        <tr>
+          <th>{{ form_label(form.fileSeq, 'Or select a file') }}</th><td>{{ form_widget(form.fileSeq) }}
+          <br />FASTA format. File size is limited to 20Mb{{ form_errors(form.fileSeq) }}</td>
+        </tr>
+        <tr>
+          <th>{{ form_label(form.queryCode, 'Query genetic code') }}</th><td>{{ form_widget(form.queryCode) }}{{ form_errors(form.queryCode) }}</td>
+        </tr>
+      </table>
+      
+      <p class="formPart"><img src="{{ asset('bundles/blast/images/item.png') }}" width=16 height=16 alt="Databank selection" /> Databank selection</p>
+      <table>
+        <tr>
+          <th>{{ form_label(form.bankTypeNuc, 'Databank type') }}</th><td>{{ form_widget(form.bankTypeNuc) }}{{ form_errors(form.bankTypeNuc) }}</td>
+        </tr>
+        <tr>
+          <th>{{ form_label(form.bankTypeProt, 'Databank type') }}</th><td>{{ form_widget(form.bankTypeProt) }}{{ form_errors(form.bankTypeProt) }}</td>
+        </tr>
+        <tr>
+          <th>{{ form_label(form.persoBankFile, 'Select a personal databank (FASTA format)') }}</th><td>{{ form_widget(form.persoBankFile) }}
+          <br />File size is limited to 20Mb{{ form_errors(form.persoBankFile) }}</td>
+        </tr>
+        <tr>
+          <th>{{ form_label(form.dbPath, 'Databank') }}</th><td>{{ form_widget(form.dbPath) }}{{ form_errors(form.dbPath) }}</td>
+        </tr>
+        <tr>
+          <th>{{ form_label(form.dbCode, 'Databank genetic code') }}</th><td>{{ form_widget(form.dbCode) }}{{ form_errors(form.dbCode) }}</td>
+        </tr>
+      </table>
+      
+      <p class="formPart"><img src="{{ asset('bundles/blast/images/item.png') }}" width=16 height=16 alt="General parameters" /> General parameters</p>
+      <table>
+        <tr>
+          <th>{{ form_label(form.expect, 'Expect') }}</th><td>{{ form_widget(form.expect) }}
+          <br />The statistical significance threshold for reporting matches. Lowest values are the most stringent.{{ form_errors(form.expect) }}</td>
+        </tr>
+        <tr>
+          <th>{{ form_label(form.wordSizesProt, 'Word size') }}</th><td>{{ form_widget(form.wordSizesProt) }}
+          <br />The length of the seed that initiates an alignment.{{ form_errors(form.wordSizesProt) }}</td>
+        </tr>
+        <tr>
+          <th>{{ form_label(form.wordSizesBlastn, 'Word size') }}</th><td>{{ form_widget(form.wordSizesBlastn) }}
+          <br />The length of the seed that initiates an alignment.{{ form_errors(form.wordSizesBlastn) }}</td>
+        </tr>
+        <tr>
+          <th>{{ form_label(form.wordSizesMegablast, 'Word size') }}</th><td>{{ form_widget(form.wordSizesMegablast) }}
+          <br />The length of the seed that initiates an alignment.{{ form_errors(form.wordSizesMegablast) }}</td>
+        </tr>
+        <tr>
+          <th>{{ form_label(form.wordSizesDcMegablast, 'Word size') }}</th><td>{{ form_widget(form.wordSizesDcMegablast) }}
+          <br />The length of the seed that initiates an alignment.{{ form_errors(form.wordSizesDcMegablast) }}</td>
+        </tr>
+        <tr>
+          <th>{{ form_label(form.maxTargetSequences, 'Max target sequences') }}</th><td>{{ form_widget(form.maxTargetSequences) }}
+          <br />Maximum number of aligned sequences to display{{ form_errors(form.maxTargetSequences) }}</td>
+        </tr>
+      </table>
+      
+      <p class="formPart"><img src="{{ asset('bundles/blast/images/item.png') }}" width=16 height=16 alt="Scoring parameters" /> Scoring parameters</p>
+      <table>
+        <tr>
+          <th>{{ form_label(form.matricesNuc, 'Matrix') }}</th><td>{{ form_widget(form.matricesNuc) }}
+          <br />First number is the reward when two aligned nucleotides match.
+          <br />Second number is the penalty when two aligned nucleotides are different.{{ form_errors(form.matricesNuc) }}</td>
+        </tr>
+        <tr>
+          <th>{{ form_label(form.matricesMegablast, 'Matrix') }}</th><td>{{ form_widget(form.matricesMegablast) }}
+          <br />First number is the reward when two aligned nucleotides match.
+          <br />Second number is the penalty when two aligned nucleotides are different.{{ form_errors(form.matricesMegablast) }}</td>
+        </tr>
+        <tr>
+          <th>{{ form_label(form.matricesProt, 'Matrix') }}</th><td>{{ form_widget(form.matricesProt) }}
+          <br />Substitution matrix for scoring any pair of residues.
+          <br />BLOSUM45 or PAM70 are for more divergent sequences. BLOSUM80 or PAM30 are for less divergent sequences.{{ form_errors(form.matricesProt) }}</td>
+        </tr>
+        <tr>
+          <th>{{ form_label(form.gapCostsBlastn, 'Gap costs') }}</th><td>{{ form_widget(form.gapCostsBlastn) }}
+          <br />Penalties when opening and extending a gap in each alignment.{{ form_errors(form.gapCostsBlastn) }}</td>
+        </tr>
+        <tr>
+          <th>{{ form_label(form.gapCostsMegablast, 'Gap costs') }}</th><td>{{ form_widget(form.gapCostsMegablast) }}
+          <br />Penalties when opening and extending a gap in each alignment.{{ form_errors(form.gapCostsMegablast) }}</td>
+        </tr>
+        <tr>
+          <th>{{ form_label(form.gapCostsProt, 'Gap costs') }}</th><td>{{ form_widget(form.gapCostsProt) }}
+          <br />Penalties when opening and extending a gap in each alignment.{{ form_errors(form.gapCostsProt) }}</td>
+        </tr>
+        <tr>
+          <th>{{ form_label(form.compositionalAdjustments, 'Compositional adjustments') }}</th><td>{{ form_widget(form.compositionalAdjustments) }}
+          <br />Matrix adjustment method to compensate for amino acid composition of sequences.{{ form_errors(form.compositionalAdjustments) }}</td>
+        </tr>
+      </table>
+      
+      <p class="formPart"><img src="{{ asset('bundles/blast/images/item.png') }}" width=16 height=16 alt="Filters and masking" /> Filters and masking</p>
+      <table>
+        <tr>
+          <th>{{ form_label(form.lowComplex, 'Low complexity regions') }}</th><td>{{ form_widget(form.lowComplex) }}
+          <br />Mask off segments of the query sequence that have low compositional complexity.{{ form_errors(form.lowComplex) }}</td>
+        </tr>
+        <tr>
+          <th>{{ form_label(form.softMasking, 'Soft masking') }}</th><td>{{ form_widget(form.softMasking) }}
+          <br />Mask only when finding alignment seeds, not during extension.{{ form_errors(form.softMasking) }}</td>
+        </tr>
+        <tr>
+          <th>{{ form_label(form.lowerCase, 'Mask lower case letters') }}</th><td>{{ form_widget(form.lowerCase) }}
+          <br />Filter regions in lower case in query sequence.{{ form_errors(form.lowerCase) }}</td>
+        </tr>
+      </table>
+      
+      <p class="formPart psiFormPart"><img src="{{ asset('bundles/blast/images/item.png') }}" width=16 height=16 alt="PSI-BLAST and PHI-BLAST" /> PSI-BLAST and PHI-BLAST</p>
+      <table class="psiFormPart">
+        <tr>
+          <th>{{ form_label(form.psiThreshold, 'Inclusion threshold') }}</th><td>{{ form_widget(form.psiThreshold) }}
+          <br />Set the statistical significance threshold to include a sequence in the model used by PSI-BLAST to create the PSSM on the next iteration. {{ form_errors(form.psiThreshold) }}</td>
+        </tr>
+        <tr>
+          <th>{{ form_label(form.psiIterationNb, 'Iteration number') }}</th><td>{{ form_widget(form.psiIterationNb) }}
+          <br />Number of PSI-BLAST iterations{{ form_errors(form.psiIterationNb) }}</td>
+        </tr>
+        <tr>
+          <th>{{ form_label(form.psiPseudoCount, 'Pseudocount') }}</th><td>{{ form_widget(form.psiPseudoCount) }}
+          <br />If zero is specified, then the parameter is automatically determined through a minimum length description principle (PMID 19088134).{{ form_errors(form.psiPseudoCount) }}</td>
+        </tr>
+        <tr>
+          <th>{{ form_label(form.psiPSSM, 'Upload PSSM') }}</th><td>{{ form_widget(form.psiPSSM) }}
+          <br />Upload a Position Specific Score Matrix (PSSM) that you previously downloaded from a PSI-BLAST iteration. You may search a different database than that used to generate the PSSM, but you must use the same query.{{ form_errors(form.psiPSSM) }}</td>
+        </tr>
+        <tr>
+          <th>{{ form_label(form.phiPattern, 'PHI-BLAST pattern') }}</th><td>{{ form_widget(form.phiPattern) }}
+          <br />Enter a PHI pattern (PROSITE format) to start the search. PHI-BLAST may perform better than simple pattern searching because it filters out false positives (pattern matches that are probably random and not indicative of homology).{{ form_errors(form.phiPattern) }}</td>
+        </tr>
+      </table>
+      
+      {{ form_rest(form) }}
+
+      <input type="submit" />
+    </form>
+
+    <script type="text/javascript">
+        //<![CDATA[
+        jQuery(document).ready(blastLoaded('blast_dbPath'));
+        //]]>
+    </script>
+{% endblock %}
