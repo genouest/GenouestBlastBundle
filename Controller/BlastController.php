@@ -3,6 +3,8 @@
 namespace Genouest\Bundle\BlastBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Genouest\Bundle\BlastBundle\Form\BlastType;
 use Genouest\Bundle\BlastBundle\Entity\BlastRequest;
 use Genouest\Bundle\SchedulerBundle\Entity\Job;
@@ -12,7 +14,8 @@ class BlastController extends Controller
     /**
      * Main blast form
      *
-     * @extra:Route("/", name = "_welcome")
+     * @Route("/", name = "_welcome")
+     * @Template()
      */
     public function indexAction()
     {
@@ -43,7 +46,8 @@ class BlastController extends Controller
     /**
      * Show results
      *
-     * @extra:Route("/job/results/{uid}", name = "_job_results")
+     * @Route("/job/results/{uid}", name = "_job_results")
+     * @Template()
      */
     public function jobResultsAction($uid) {
         // Load job from db

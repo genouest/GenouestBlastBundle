@@ -7,33 +7,35 @@ use Genouest\Bundle\SchedulerBundle\Entity\ResultViewer;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
+use Symfony\Component\Validator\Constraints as Assert;
+
 class BlastRequest
 {
     /**
-     * @assert:MaxLength(255)
+     * @Assert\MaxLength(255)
      */
     public $title;
 
     /**
-     * @assert:Email
+     * @Assert\Email
      */
     public $email;
 
     /**
-     * @assert:Choice(callback = "getPrograms")
-     * @assert:NotBlank
+     * @Assert\Choice(callback = "getPrograms")
+     * @Assert\NotBlank
      */
     public $program = 'blastn';
 
     /**
-     * @assert:Choice(callback = "getBlastnTypes")
-     * @assert:NotBlank
+     * @Assert\Choice(callback = "getBlastnTypes")
+     * @Assert\NotBlank
      */
     public $blastnType = 'blastn';
 
     /**
-     * @assert:Choice(callback = "getBlastpTypes")
-     * @assert:NotBlank
+     * @Assert\Choice(callback = "getBlastpTypes")
+     * @Assert\NotBlank
      */
     public $blastpType = 'blastp';
     
@@ -48,14 +50,14 @@ class BlastRequest
     public $fileSeq;
 
     /**
-     * @assert:Choice(callback = "getNucBankTypes")
-     * @assert:NotBlank
+     * @Assert\Choice(callback = "getNucBankTypes")
+     * @Assert\NotBlank
      */
     public $bankTypeNuc = 'pubdb';
 
     /**
-     * @assert:Choice(callback = "getProtBankTypes")
-     * @assert:NotBlank
+     * @Assert\Choice(callback = "getProtBankTypes")
+     * @Assert\NotBlank
      */
     public $bankTypeProt = 'pubdb';
     
@@ -70,143 +72,143 @@ class BlastRequest
     public $dbPath;
 
     /**
-     * @assert:Choice(callback = "getMaxTargetSequences")
-     * @assert:NotBlank
+     * @Assert\Choice(callback = "getMaxTargetSequences")
+     * @Assert\NotBlank
      */
     public $maxTargetSequences = '100';
 
     /**
-     * @assert:Choice(callback = "getExpects")
-     * @assert:NotBlank
+     * @Assert\Choice(callback = "getExpects")
+     * @Assert\NotBlank
      */
     public $expect = '0.1';
 
     /**
-     * @assert:Choice(callback = "getProtWordSizes")
-     * @assert:NotBlank
+     * @Assert\Choice(callback = "getProtWordSizes")
+     * @Assert\NotBlank
      */
     public $wordSizesProt = '3';
 
     /**
-     * @assert:Choice(callback = "getBlastnWordSizes")
-     * @assert:NotBlank
+     * @Assert\Choice(callback = "getBlastnWordSizes")
+     * @Assert\NotBlank
      */
     public $wordSizesBlastn = '11';
 
     /**
-     * @assert:Choice(callback = "getMegablastWordSizes")
-     * @assert:NotBlank
+     * @Assert\Choice(callback = "getMegablastWordSizes")
+     * @Assert\NotBlank
      */
     public $wordSizesMegablast = '28';
 
     /**
-     * @assert:Choice(callback = "getDcMegablastWordSizes")
-     * @assert:NotBlank
+     * @Assert\Choice(callback = "getDcMegablastWordSizes")
+     * @Assert\NotBlank
      */
     public $wordSizesDcMegablast = '11';
 
     /**
-     * @assert:Choice(callback = "getNucMatrices")
-     * @assert:NotBlank
+     * @Assert\Choice(callback = "getNucMatrices")
+     * @Assert\NotBlank
      */
     public $matricesNuc = '2,-3';
 
     /**
-     * @assert:Choice(callback = "getMegablastMatrices")
-     * @assert:NotBlank
+     * @Assert\Choice(callback = "getMegablastMatrices")
+     * @Assert\NotBlank
      */
     public $matricesMegablast = '1,-2';
 
     /**
-     * @assert:Choice(callback = "getProtMatrices")
-     * @assert:NotBlank
+     * @Assert\Choice(callback = "getProtMatrices")
+     * @Assert\NotBlank
      */
     public $matricesProt = "BLOSUM62";
 
     /**
-     * @assert:Choice(callback = "getGeneticCodes")
-     * @assert:NotBlank
+     * @Assert\Choice(callback = "getGeneticCodes")
+     * @Assert\NotBlank
      */
     public $queryCode = '1';
 
     /**
-     * @assert:Choice(callback = "getGeneticCodes")
-     * @assert:NotBlank
+     * @Assert\Choice(callback = "getGeneticCodes")
+     * @Assert\NotBlank
      */
     public $dbCode = '1';
 
     /**
-     * @assert:Choice(callback = "getBlastnGapCosts")
-     * @assert:NotBlank
+     * @Assert\Choice(callback = "getBlastnGapCosts")
+     * @Assert\NotBlank
      */
     public $gapCostsBlastn = '5,2';
 
     /**
-     * @assert:Choice(callback = "getMegablastGapCosts")
-     * @assert:NotBlank
+     * @Assert\Choice(callback = "getMegablastGapCosts")
+     * @Assert\NotBlank
      */
     public $gapCostsMegablast = 'linear';
 
     /**
-     * @assert:Choice(callback = "getProtGapCosts")
-     * @assert:NotBlank
+     * @Assert\Choice(callback = "getProtGapCosts")
+     * @Assert\NotBlank
      */
     public $gapCostsProt = '11,1';
 
     /**
-     * @assert:Choice(callback = "getCompositionalAdjustments")
-     * @assert:NotBlank
+     * @Assert\Choice(callback = "getCompositionalAdjustments")
+     * @Assert\NotBlank
      */
     public $compositionalAdjustments = '2';
     
     /**
-     * @assert:Type("bool")
+     * @Assert\Type("bool")
      */
     public $lowComplex = true;
     
     /**
-     * @assert:Type("bool")
+     * @Assert\Type("bool")
      */
     public $softMasking = true;
     
     /**
-     * @assert:Type("bool")
+     * @Assert\Type("bool")
      */
     public $lowerCase = false;
     
     /**
-     * @assert:Type("float")
-     * @assert:Min(0)
-     * @assert:Max(1000)
+     * @Assert\Type("float")
+     * @Assert\Min(0)
+     * @Assert\Max(1000)
      */
     public $psiThreshold = 0.005;
     
     /**
-     * @assert:Type("integer")
-     * @assert:Min(0)
-     * @assert:Max(1000)
+     * @Assert\Type("integer")
+     * @Assert\Min(0)
+     * @Assert\Max(1000)
      */
     public $psiIterationNb = 10;
     
     /**
-     * @assert:Type("integer")
-     * @assert:Min(0)
-     * @assert:Max(1000)
+     * @Assert\Type("integer")
+     * @Assert\Min(0)
+     * @Assert\Max(1000)
      */
     public $psiPseudoCount = 0;
     
     /**
-     * @assert:File(maxSize = "104857600")
+     * @Assert\File(maxSize = "104857600")
      */
     public $psiPSSM;
     
     /**
-     * @assert:File(maxSize = "104857600")
+     * @Assert\File(maxSize = "104857600")
      */
     public $phiPattern;
     
     /**
-     * @assert:True(message = "Please paste or upload a query sequence")
+     * @Assert\True(message = "Please paste or upload a query sequence")
      */
     public function isSequencePresent() {
         if ($this->program != 'blastp' || $this->blastpType != 'psiblast')
@@ -216,7 +218,7 @@ class BlastRequest
     }
     
     /**
-     * @assert:True(message = "Please paste or upload a query sequence, or upload a PSSM")
+     * @Assert\True(message = "Please paste or upload a query sequence, or upload a PSSM")
      */
     public function isSequencePresentForPsi() {
         if ($this->program == 'blastp' && $this->blastpType == 'psiblast')
@@ -226,14 +228,14 @@ class BlastRequest
     }
     
     /**
-     * @assert:True(message = "You have to choose between pasting or uploading a query sequence")
+     * @Assert\True(message = "You have to choose between pasting or uploading a query sequence")
      */
     public function isSequenceSingle() {
         return ($this->isSequencePresent() && (empty($this->pastedSeq) || empty($this->fileSeq))) || !$this->isSequencePresent();
     }
     
     /**
-     * @assert:True(message = "You have to choose between pasting a query sequence, uploading it, or uploading a PSSM")
+     * @Assert\True(message = "You have to choose between pasting a query sequence, uploading it, or uploading a PSSM")
      */
     public function isSequenceSingleForPsi() {
         if ($this->program == 'blastp' && $this->blastpType == 'psiblast')
@@ -243,7 +245,7 @@ class BlastRequest
     }
     
     /**
-     * @assert:True(message = "Please upload a personal databank, or choose a public one")
+     * @Assert\True(message = "Please upload a personal databank, or choose a public one")
      */
     public function isDatabankOk() {
         if ($this->hasPersoDb())
@@ -545,7 +547,7 @@ class BlastRequest
      *
      * @param Genouest\Bundle\SchedulerBundle\Scheduler\SchedulerInterface A job scheduler instance
      * @param string $back_url The url to get back to this application
-     * @returns Genouest\Bundle\SchedulerBundle\Entity\Job A job instance
+     * @return Genouest\Bundle\SchedulerBundle\Entity\Job A job instance
      */
     public function getJob($scheduler, $back_url) {
         $job = new Job();
