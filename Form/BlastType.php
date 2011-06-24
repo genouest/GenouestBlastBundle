@@ -14,11 +14,11 @@ class BlastType extends AbstractType
         $builder->add('program', 'choice', array('choices' => BlastRequest::getProgramLabels()));
         $builder->add('blastnType', 'choice', array('choices' => BlastRequest::getBlastnTypeLabels()));
         $builder->add('blastpType', 'choice', array('choices' => BlastRequest::getBlastpTypeLabels()));
-        $builder->add('pastedSeq', 'textarea');
-        $builder->add('fileSeq', 'file');
+        $builder->add('pastedSeq', 'textarea', array('required' => false));
+        $builder->add('fileSeq', 'file', array('required' => false));
         $builder->add('bankTypeNuc', 'choice', array('choices' => BlastRequest::getNucBankTypeLabels(true)));
         $builder->add('bankTypeProt', 'choice', array('choices' => BlastRequest::getProtBankTypeLabels(true)));
-        $builder->add('persoBankFile', 'file');
+        $builder->add('persoBankFile', 'file', array('required' => false));
         $builder->add('dbPath', 'biomaj', array('dbtype' => array('nucleic', 'proteic', 'genome/procaryotic', 'genome/eucaryotic'), 'dbformat' => 'blast', 'autoload' => false));
         $builder->add('maxTargetSequences', 'choice', array('choices' => BlastRequest::getMaxTargetSequenceLabels(true)));
         $builder->add('expect', 'choice', array('choices' => BlastRequest::getExpectLabels(true)));
@@ -38,11 +38,11 @@ class BlastType extends AbstractType
         $builder->add('lowComplex');
         $builder->add('softMasking');
         $builder->add('lowerCase');
-        $builder->add('psiThreshold');
-        $builder->add('psiIterationNb');
-        $builder->add('psiPseudoCount');
-        $builder->add('psiPSSM', 'file');
-        $builder->add('phiPattern', 'file');
+        $builder->add('psiThreshold', 'number', array('precision' => 10));
+        $builder->add('psiIterationNb', 'integer');
+        $builder->add('psiPseudoCount', 'integer');
+        $builder->add('psiPSSM', 'file', array('required' => false));
+        $builder->add('phiPattern', 'file', array('required' => false));
     }
     
     public function getDefaultOptions(array $options)

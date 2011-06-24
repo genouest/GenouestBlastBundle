@@ -170,11 +170,11 @@ function refreshControls() {
     
     
     if (bankType == 'persodb') {
-      jQuery('#blast_persoBankFile_file').parent().parent().parent().show();
+      jQuery('#blast_persoBankFile').parent().parent().show();
       jQuery('#blast_dbPath').parent().parent().hide();
     }
     else {
-      jQuery('#blast_persoBankFile_file').parent().parent().parent().hide();
+      jQuery('#blast_persoBankFile').parent().parent().hide();
       jQuery('#blast_dbPath').parent().parent().show();
     }
     
