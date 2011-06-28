@@ -31,7 +31,7 @@ class BlastController extends Controller
             $form->bindRequest($request);
             
             if ($form->isValid()) {
-                $job = $blastRequest->getJob($this->get('scheduler.method'), $this->generateUrl('_welcome', array(), true));
+                $job = $blastRequest->getJob($this->get('scheduler.scheduler'), $this->generateUrl('_welcome', array(), true));
                 
                 return $this->forward('SchedulerBundle:Scheduler:launchJob', array('job' => $job));
             }
@@ -51,7 +51,7 @@ class BlastController extends Controller
      */
     public function jobResultsAction($uid) {
         // Load job from db
-        $scheduler = $this->get('scheduler.method');
+        $scheduler = $this->get('scheduler.scheduler');
         $jobRepo = $this->get('job.repository');
         $job = $jobRepo->find($uid);
         
