@@ -31,7 +31,7 @@ class BlastController extends Controller
             $form->bindRequest($request);
             
             if ($form->isValid()) {
-                $job = $blastRequest->getJob($this->get('job.scheduler'), $this->generateUrl('_welcome', array(), true));
+                $job = $blastRequest->getJob($this->get('scheduler.method'), $this->generateUrl('_welcome', array(), true));
                 
                 return $this->forward('SchedulerBundle:Scheduler:launchJob', array('job' => $job));
             }
@@ -51,7 +51,7 @@ class BlastController extends Controller
      */
     public function jobResultsAction($uid) {
         // Load job from db
-        $scheduler = $this->get('job.scheduler');
+        $scheduler = $this->get('scheduler.method');
         $jobRepo = $this->get('job.repository');
         $job = $jobRepo->find($uid);
         
@@ -71,7 +71,7 @@ class BlastController extends Controller
         $htmlFile = '';
         foreach ($job->getResultFiles() as $file) {
             if ($file->getDisplayName() == 'HTML blast output')
-                $htmlFile = $scheduler->getResultDir($job).$file->getFsName();
+                $htmlFile = $scheduler->getWorkDir($job).$file->getFsName();
         }
         
         $blastCrashed = false;

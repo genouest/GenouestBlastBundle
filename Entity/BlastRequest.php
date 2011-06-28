@@ -564,7 +564,7 @@ class BlastRequest
         // Construct the job command
         $formatdbCommand = "";
         $dbPath = "";
-        $resultDir = $scheduler->getResultDir($job);
+        $workDir = $scheduler->getWorkDir($job);
         
         // Add databank path
         if (!$this->hasPersoDb())
@@ -572,8 +572,8 @@ class BlastRequest
         else {
             $formatDbWithProt = in_array($this->program, array('blastp', 'blastx')) ? 'prot' : 'nuc';
 
-            $formatdbCommand = " makeblastdb -in $dbFilePath -dbtype $formatDbWithProt -out ".$resultDir."uploadedDB -title uploadedDB; ";
-            $dbPath = $resultDir."uploadedDB";
+            $formatdbCommand = " makeblastdb -in $dbFilePath -dbtype $formatDbWithProt -out ".$workDir."uploadedDB -title uploadedDB; ";
+            $dbPath = $workDir."uploadedDB";
         }
         
         $jobCommand .= "$formatdbCommand";
@@ -589,7 +589,7 @@ class BlastRequest
             $blastCommand .=  " -task ".$this->blastpType;
           
         if (!empty($this->fileSeq) || !empty($this->pastedSeq))
-            $blastCommand .= " -query ".$resultDir.'input.fasta';
+            $blastCommand .= " -query ".$workDir.'input.fasta';
         
         $blastCommand .= " -db ".$this->dbPath." -evalue ".$this->expect." -max_target_seqs ".$this->maxTargetSequences." -soft_masking ".($this->softMasking ? "true" : "false" );
         
@@ -648,16 +648,16 @@ class BlastRequest
             $blastCommand .= " -pseudocount ".$this->psiPseudoCount;
           
             if ($this->blastpType == 'psiblast') {
-                $blastCommand .= " -out_pssm ".$resultDir.$outputFilePrefix.".pssm";
-                $blastCommand .= " -out_ascii_pssm ".$resultDir.$outputFilePrefix.".pssm.ascii";
+                $blastCommand .= " -out_pssm ".$workDir.$outputFilePrefix.".pssm";
+                $blastCommand .= " -out_ascii_pssm ".$workDir.$outputFilePrefix.".pssm.ascii";
             }
           
             if ($this->blastpType == 'psiblast' && $this->psiPSSM) {
-                $blastCommand .= " -in_pssm ".$resultDir.'input.pssm';
+                $blastCommand .= " -in_pssm ".$workDir.'input.pssm';
             }
             
             if ($this->blastpType == 'phiblast' && $this->phiPattern) {
-                $blastCommand .= " -phi_pattern ".$resultDir.'input.pattern';
+                $blastCommand .= " -phi_pattern ".$workDir.'input.pattern';
             }
         }
         
@@ -672,14 +672,14 @@ class BlastRequest
                                'PSSM ASCII' => $outputFilePrefix.'.pssm.ascii',
                                'Executed command' => "blast_command.txt");
                                                           
-          $blastCommand .= " -outfmt 0 -html -out ".$resultDir.$outputFilePrefix.".html ;";
+          $blastCommand .= " -outfmt 0 -html -out ".$workDir.$outputFilePrefix.".html ;";
           $jobCommand .= $blastCommand;
         }
         else if ($this->program == 'blastp' && $this->blastpType == 'phiblast') {
           $resultFiles = array('HTML blast output' => $outputFilePrefix.'.html',
                                'Executed command' => "blast_command.txt");
                                
-          $blastCommand .= " -outfmt 0 -html -out ".$resultDir.$outputFilePrefix.".html ;";
+          $blastCommand .= " -outfmt 0 -html -out ".$workDir.$outputFilePrefix.".html ;";
           $jobCommand .= $blastCommand;
         }
         else {          
@@ -691,24 +691,24 @@ class BlastRequest
                                'ASN.1 archive blast output' => $outputFilePrefix.'.asn',
                                'Executed command' => "blast_command.txt");
 
-          $blastCommand .= " -outfmt 11 -out ".$resultDir.$outputFilePrefix.".asn ;"; // Format 11 = blast archive format
+          $blastCommand .= " -outfmt 11 -out ".$workDir.$outputFilePrefix.".asn ;"; // Format 11 = blast archive format
           $jobCommand .= $blastCommand;
           
           // Reformat the blast output in txt, xml, html ...
-          $jobCommand .= "blast_formatter -archive ".$resultDir.$outputFilePrefix.".asn -outfmt 5 -out ".$resultDir.$outputFilePrefix.".xml;";
-          $jobCommand .= "blast_formatter -archive ".$resultDir.$outputFilePrefix.".asn -outfmt 0 -html -out ".$resultDir.$outputFilePrefix.".html;";
-          $jobCommand .= "blast_formatter -archive ".$resultDir.$outputFilePrefix.".asn -outfmt 0 -out ".$resultDir.$outputFilePrefix.".txt;";
-          $jobCommand .= "blast_formatter -archive ".$resultDir.$outputFilePrefix.".asn -outfmt 6 -out ".$resultDir.$outputFilePrefix.".tsv;";
-          $jobCommand .= "blast_formatter -archive ".$resultDir.$outputFilePrefix.".asn -outfmt 10 -out ".$resultDir.$outputFilePrefix.".csv;";
+          $jobCommand .= "blast_formatter -archive ".$workDir.$outputFilePrefix.".asn -outfmt 5 -out ".$workDir.$outputFilePrefix.".xml;";
+          $jobCommand .= "blast_formatter -archive ".$workDir.$outputFilePrefix.".asn -outfmt 0 -html -out ".$workDir.$outputFilePrefix.".html;";
+          $jobCommand .= "blast_formatter -archive ".$workDir.$outputFilePrefix.".asn -outfmt 0 -out ".$workDir.$outputFilePrefix.".txt;";
+          $jobCommand .= "blast_formatter -archive ".$workDir.$outputFilePrefix.".asn -outfmt 6 -out ".$workDir.$outputFilePrefix.".tsv;";
+          $jobCommand .= "blast_formatter -archive ".$workDir.$outputFilePrefix.".asn -outfmt 10 -out ".$workDir.$outputFilePrefix.".csv;";
         }
         
         // Move uploaded files
         if ($this->hasPersoDb())
-            $this->persoBankFile->move($resultDir, 'uploadedDB.fasta');
+            $this->persoBankFile->move($workDir, 'uploadedDB.fasta');
         if (!empty($this->fileSeq))
-            $this->fileSeq->move($resultDir, 'input.fasta');
+            $this->fileSeq->move($workDir, 'input.fasta');
         if (!empty($this->pastedSeq)) {
-            $seqFile = @fopen($resultDir.'input.fasta','w');
+            $seqFile = @fopen($workDir.'input.fasta','w');
             $fError = $seqFiles === false;
             if ($seqFile) {
                 $fError = $fError || (false === @fwrite($seqFile,$this->pastedSeq));
@@ -717,16 +717,16 @@ class BlastRequest
             
             if ($fError) {
                 $error = error_get_last();
-                throw new FileException(sprintf('Could not create file %s (%s)', $resultDir.'input.fasta', strip_tags($error['message'])));
+                throw new FileException(sprintf('Could not create file %s (%s)', $workDir.'input.fasta', strip_tags($error['message'])));
             }
         }
         if ($this->blastpType == 'psiblast' && $this->psiPSSM)
-            $this->psiPSSM->move($resultDir, 'input.pssm');
+            $this->psiPSSM->move($workDir, 'input.pssm');
         if ($this->blastpType == 'phiblast' && $this->phiPattern)
-            $this->phiPattern->move($resultDir, 'input.pattern');
+            $this->phiPattern->move($workDir, 'input.pattern');
     
         // Write command line in case the user wants to see it
-        $fp = @fopen($resultDir."blast_command.txt", 'w');
+        $fp = @fopen($workDir."blast_command.txt", 'w');
         $fError = $fp === false;
         if ($fp) {
             $fError = $fError || (false === @fwrite($fp, $blastCommand));
@@ -735,7 +735,7 @@ class BlastRequest
 
         if ($fError) {
             $error = error_get_last();
-            throw new FileException(sprintf('Could not create file %s (%s)', $resultDir.'blast_command.txt', strip_tags($error['message'])));
+            throw new FileException(sprintf('Could not create file %s (%s)', $workDir.'blast_command.txt', strip_tags($error['message'])));
         }
 
         // Save files and viewers in db
