@@ -101,14 +101,6 @@ class BlastController extends Controller
             'truncatedPreview' => $truncatedPreview,
             ));
     }
-    
-    // TODO
-    protected function showJobsAction()
-    {
-        //echo $this->get('job.repository')->getJobsForUser("");
-    }
-
-
 
     /**
      * Close any opened tags in an html snippet. Useful when you want to only show the x first bytes of an html file.
