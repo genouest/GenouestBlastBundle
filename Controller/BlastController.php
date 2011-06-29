@@ -38,7 +38,7 @@ class BlastController extends Controller
 
         }
 
-        return $this->render('BlastBundle:Blast:index.html.twig', array(
+        return $this->render('GenouestBlastBundle:Blast:index.html.twig', array(
             'form' => $form->createView(),
         ));
     }
