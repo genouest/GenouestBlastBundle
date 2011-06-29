@@ -552,12 +552,10 @@ class BlastRequest
     public function getJob($scheduler, $back_url) {
         $job = new Job();
         $job->setProgramName('blast'); // It is important to set program name *before* generating the uid
-        $uid = $job->generateJobUid();
+        $outputFilePrefix = $job->generateJobUid();
         $job->setTitle($this->title);
         $job->setEmail($this->email);
         $job->setBackUrl($back_url);// Add an url to come back to the application
-        
-        $outputFilePrefix = 'blast_'.$uid;
         
         $jobCommand = ". /local/env/envblast+.sh;";
     
