@@ -33,7 +33,7 @@ class BlastController extends Controller
             if ($form->isValid()) {
                 $job = $blastRequest->getJob($this->get('scheduler.scheduler'), $this->generateUrl('_welcome', array(), true));
                 
-                return $this->forward('SchedulerBundle:Scheduler:launchJob', array('job' => $job));
+                return $this->forward('GenouestSchedulerBundle:Scheduler:launchJob', array('job' => $job));
             }
 
         }
@@ -57,7 +57,7 @@ class BlastController extends Controller
         
         // Check that job is valid
         if (!$job || !$job->isLaunched())
-            return $this->render('SchedulerBundle:Scheduler:error.html.twig', array('job' => $job, 'uid' => $uid, 'error' => 'Job '.$uid.' is not available.'));
+            return $this->render('GenouestSchedulerBundle:Scheduler:error.html.twig', array('job' => $job, 'uid' => $uid, 'error' => 'Job '.$uid.' is not available.'));
         
         // Finished?
         if (!$scheduler->isFinished($job)) {
@@ -93,7 +93,7 @@ class BlastController extends Controller
             }
         }
         
-        return $this->render('SchedulerBundle:Scheduler:results.html.twig', array('job' => $job,
+        return $this->render('GenouestSchedulerBundle:Scheduler:results.html.twig', array('job' => $job,
             'status' => $textStatus,
             'resultUrl' => $resultUrl,
             'blastCrashed' => $blastCrashed,
