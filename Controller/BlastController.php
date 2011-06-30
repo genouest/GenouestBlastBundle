@@ -32,7 +32,7 @@ class BlastController extends Controller
     {
         $blastRequest = new BlastRequest();
         
-        $form = $this->get('form.factory')->create(new BlastType());
+        $form = $this->get('form.factory')->create($this->get('blast.form.type'));
         
         $form->setData($blastRequest); // Default values
         

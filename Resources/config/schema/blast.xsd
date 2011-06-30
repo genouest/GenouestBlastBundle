@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<xsd:schema xmlns="http://www.genouest.org/schema/scheduler"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="http://www.genouest.org/schema/scheduler"
+    elementFormDefault="qualified">
+
+  <xsd:element name="config" type="config" />
+
+  <xsd:complexType name="config">
+    <xsd:all>
+      <xsd:element name="form_type" type="xsd:string" minOccurs="0" maxOccurs="1" />
+    </xsd:all>
+</xsd:schema>
+
