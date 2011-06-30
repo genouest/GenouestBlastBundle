@@ -1,5 +1,16 @@
 <?php
 
+/*
+ * Copyright 2011 Anthony Bretaudeau <abretaud@irisa.fr>
+ *
+ * Licensed under the CeCILL License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt
+ *
+ */
+
 namespace Genouest\Bundle\BlastBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -44,7 +55,7 @@ class BlastController extends Controller
     }
 
     /**
-     * Show results
+     * Show results. Override Scheduler template to show more information.
      *
      * @Route("/job/results/{uid}", name = "_job_results")
      * @Template()
@@ -93,7 +104,7 @@ class BlastController extends Controller
             }
         }
         
-        return $this->render('GenouestSchedulerBundle:Scheduler:results.html.twig', array('job' => $job,
+        return $this->render('GenouestBlastBundle:Blast:results.html.twig', array('job' => $job,
             'status' => $textStatus,
             'resultUrl' => $resultUrl,
             'blastCrashed' => $blastCrashed,
