@@ -1,0 +1,89 @@
+{#
+/*
+ * Copyright 2011 Anthony Bretaudeau <abretaud@irisa.fr>
+ *
+ * Licensed under the CeCILL License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt
+ *
+ */
+#}
+
+{% extends "GenouestSchedulerBundle:Scheduler:layout.html.twig" %}
+
+{% block scheduler %}
+<div class="jobGeneralInfo">
+  <h3>Your blast job {{ job.title }} is finished.</h3>
+
+  {% if job.hasValidEmail %}
+    <p>An email has been sent to {{ job.email }}.</p>
+  {% endif %}
+
+  <div class="progressContainer">
+    <div class="progressBar" style="background-position: 1px 0;"> 
+    </div>
+  </div>
+
+  {% if job.backURL %}
+    <p style="text-align:center;">
+      <a href="{{ job.backURL }}">Click here to launch another job.</a>
+    </p>
+  {% endif %}
+</div>
+
+
+
+<div class="jobResults">
+    <h3>Results</h3>
+
+    <div class="viewers">
+        {% if blastCrashed %}
+          <p class="error">
+              Your job is finished but we could not find the blast output. This usually means Blast crashed. Check your request parameters, especially the format of your sequence(s) (or prosite pattern and PSSM if you are using PHI-BLAST or PSI-BLAST), and if the problem persists, let us know by sending an email to <img src="{{ asset('bundles/genouestcommons/images/contact.png') }}" alt="Contact GenOuest" width=111 height=11 style="vertical-align:middle" /> with this reference: "{{ job.jobUid }}".
+          </p>
+        {% else %}
+            {% autoescape false %}
+                {{ previewResults }}
+            {% endautoescape %}
+            {% if truncatedPreview %}
+              <p class='warn'>The result file is too long to be displayed here. Please click on the link below to download the results.</p>
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
+  
+<div class="jobResults">
+  {% if job.hasResultViewers %}
+    <div class="viewers">
+      <p>View the results online:</p>
+      <ul>
+      {% for viewer in job.resultViewers %}
+        {% if viewer %}
+          <li>
+          <a href="{{ viewer.url }}">{{ viewer.displayName }}</a>
+          </li>
+        {% endif %}
+      {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+
+  {% if job.hasResultFiles %}
+    <div class="downloads">
+      <p>Download the result files:</p>
+      <ul>
+      {% for file in job.resultFiles %}
+        {% if file %}
+          <li>
+          <a href="{{ resultUrl }}{{ file.fsName }}">{{ file.displayName }}</a>
+          </li>
+        {% endif %}
+      {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+</div>
+
+{% endblock %}
