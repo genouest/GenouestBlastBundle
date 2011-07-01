@@ -55,12 +55,12 @@ class BlastRequest implements BlastRequestInterface
     public $blastpType = 'blastp';
     
     /**
-     * @Genouest\Bundle\CommonsBundle\Constraints\Fasta(seqType = "PROT_OR_ADN")
+     * @Genouest\Bundle\BlastBundle\Constraints\Fasta(seqType = "PROT_OR_ADN")
      */
     public $pastedSeq;
     
     /**
-     * @Genouest\Bundle\CommonsBundle\Constraints\FastaFile(maxSize = "104857600", seqType = "PROT_OR_ADN")
+     * @Genouest\Bundle\BlastBundle\Constraints\FastaFile(maxSize = "104857600", seqType = "PROT_OR_ADN")
      */
     public $fileSeq;
 
@@ -77,7 +77,7 @@ class BlastRequest implements BlastRequestInterface
     public $bankTypeProt = 'pubdb';
     
     /**
-     * @Genouest\Bundle\CommonsBundle\Constraints\FastaFile(maxSize = "104857600", seqType = "PROT_OR_ADN")
+     * @Genouest\Bundle\BlastBundle\Constraints\FastaFile(maxSize = "104857600", seqType = "PROT_OR_ADN")
      */
     public $persoBankFile;
     
