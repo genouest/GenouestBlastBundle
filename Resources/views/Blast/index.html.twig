@@ -11,9 +11,16 @@
  */
 #}
 
-{% extends "::base.html.twig" %}
+{% extends "GenouestBlastBundle:Blast:layout.html.twig" %}
 
-{% block content %}
+{% block title %}
+    Blast
+    {% if blast_version %}
+        {{ blast_version }}
+    {% endif %}
+{% endblock %}
+
+{% block scheduler %}
     <h1>Blast
     {% if blast_version %}
         {{ blast_version }}
