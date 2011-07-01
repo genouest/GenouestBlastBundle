@@ -38,6 +38,10 @@ class Configuration implements ConfigurationInterface
                     ->cannotBeEmpty()
                     ->defaultValue('Genouest\Bundle\BlastBundle\Form\BlastType')
                 ->end()
+                ->scalarNode('request_class')
+                    ->cannotBeEmpty()
+                    ->defaultValue('Genouest\Bundle\BlastBundle\Entity\BlastRequest')
+                ->end()
             ->end()
         ;
 
