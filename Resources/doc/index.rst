@@ -77,7 +77,7 @@ Customization
 -------------
 
 Customizing the Blast+ command
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The blast command line is generated using a twig template. To customize it, you only need to
 override the 'GenouestBlastBundle:Blast:command.txt.twig' template.

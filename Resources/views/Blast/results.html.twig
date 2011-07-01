@@ -41,7 +41,7 @@
     <div class="viewers">
         {% if blastCrashed %}
           <p class="error">
-              Your job is finished but we could not find the blast output. This usually means Blast crashed. Check your request parameters, especially the format of your sequence(s) (or prosite pattern and PSSM if you are using PHI-BLAST or PSI-BLAST), and if the problem persists, let us know by sending an email to <img src="{{ asset('bundles/genouestcommons/images/contact.png') }}" alt="Contact GenOuest" width=111 height=11 style="vertical-align:middle" /> with this reference: "{{ job.jobUid }}".
+              Your job is finished but we could not find the blast output. This usually means Blast crashed. Check your request parameters, especially the format of your sequence(s) (or prosite pattern and PSSM if you are using PHI-BLAST or PSI-BLAST), and if the problem persists, contact the administrators of this website, with this reference: "{{ job.jobUid }}".
           </p>
         {% else %}
             {% autoescape false %}
