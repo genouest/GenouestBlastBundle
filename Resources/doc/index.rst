@@ -64,6 +64,9 @@ The following configuration keys are available (with their default values)::
 
     # app/config/config.yml
     genouest_blast:
+        # Version of BLAST+ used by the form. Optional
+        version:         2.2.25+
+        
         # The form type class. Change this if you want to use a custom one.
         form_type:       Genouest\Bundle\BlastBundle\Form\BlastType
         

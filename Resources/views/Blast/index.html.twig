@@ -14,7 +14,11 @@
 {% extends "::base.html.twig" %}
 
 {% block content %}
-    <h1>Blast 2.2.25+</h1>
+    <h1>Blast
+    {% if blast_version %}
+        {{ blast_version }}
+    {% endif %}
+    </h1>
 
     {{ form_errors(form) }}
 

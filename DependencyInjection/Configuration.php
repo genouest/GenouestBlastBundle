@@ -34,6 +34,7 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
+                ->scalarNode('version')->end()
                 ->scalarNode('form_type')
                     ->cannotBeEmpty()
                     ->defaultValue('Genouest\Bundle\BlastBundle\Form\BlastType')

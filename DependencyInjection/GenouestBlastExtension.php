@@ -37,7 +37,11 @@ class GenouestBlastExtension extends Extension
         $configuration = new Configuration();
         $config = $processor->processConfiguration($configuration, $configs);        
         
+        if (isset($config['version']))
+            $container->setParameter('blast.version', $config['version']);
+        
         $container->setParameter('blast.form.type.class', $config['form_type']);
+        
         $container->setParameter('blast.request.class', $config['request_class']);
         
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
