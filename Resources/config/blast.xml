@@ -6,8 +6,31 @@
     
     <services>
         <service id="blast.form.type" class="%blast.form.type.class%"></service>
+        
         <service id="blast.request" class="%blast.request.class%">
             <argument type="service" id="service_container" />
+        </service>
+        
+        <service id="blast.db.list.constraint.validator" class="Genouest\Bundle\CommonsBundle\Constraints\BiomajValidator">
+            <argument type="collection">
+                <argument key="dbtype" type="collection">
+                    <argument>nucleic</argument>
+                    <argument>genome/procaryotic</argument>
+                    <argument>genome/eucaryotic</argument>
+                </argument>
+                <argument key="dbformat">blast</argument>
+            </argument>
+        </service>
+        
+        <service id="blast.db.list.constraint" class="Genouest\Bundle\CommonsBundle\Constraints\Biomaj">
+            <argument type="collection">
+                <argument key="dbtype" type="collection">
+                    <argument>nucleic</argument>
+                    <argument>genome/procaryotic</argument>
+                    <argument>genome/eucaryotic</argument>
+                </argument>
+                <argument key="dbformat">blast</argument>
+            </argument>
         </service>
         
         <service id="twig.extension.split" class="Genouest\Bundle\BlastBundle\Extension\SplitExtension">
