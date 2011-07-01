@@ -14,8 +14,9 @@
 namespace Genouest\Bundle\BlastBundle\Constraints;
 
 use Symfony\Component\Validator\Exception\ConstraintDefinitionException;
+use Symfony\Component\Validator\Constraints\File;
 
-class FastaFile extends \Symfony\Component\Validator\Constraints\File
+class FastaFile extends File
 {
     static protected $seqTypes = array('ADN', 'PROT', 'PROT_OR_ADN', 'PROSITE');
     
