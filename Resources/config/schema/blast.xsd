@@ -10,6 +10,7 @@
   <xsd:complexType name="config">
     <xsd:all>
       <xsd:element name="form_type" type="xsd:string" minOccurs="0" maxOccurs="1" />
+      <xsd:element name="request_class" type="xsd:string" minOccurs="0" maxOccurs="1" />
     </xsd:all>
 </xsd:schema>
 
