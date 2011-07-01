@@ -18,12 +18,16 @@ use Genouest\Bundle\SchedulerBundle\Entity\ResultFile;
 use Genouest\Bundle\SchedulerBundle\Entity\ResultViewer;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\ExecutionContext;
 
 use Genouest\Bundle\SchedulerBundle\Scheduler\SchedulerInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
-use Symfony\Component\Validator\Constraints as Assert;
-
+/**
+ * @Assert\Callback(methods = {"isDbPathValid"})
+ */
 class BlastRequest implements BlastRequestInterface
 {
     /**
@@ -81,9 +85,6 @@ class BlastRequest implements BlastRequestInterface
      */
     public $persoBankFile;
     
-    /**
-     * @Genouest\Bundle\CommonsBundle\Constraints\Biomaj(dbtype = {"nucleic", "proteic", "genome/procaryotic", "genome/eucaryotic"}, dbformat = "blast"))
-     */
     public $dbPath;
 
     /**
@@ -226,6 +227,26 @@ class BlastRequest implements BlastRequestInterface
     
     public function __construct(ContainerInterface $container) {
         $this->container = $container;
+    }
+
+    /**
+     * Validate dbPath with validator set as a service
+     */
+    public function isDbPathValid(ExecutionContext $context)
+    {
+        $validator = $this->container->get('blast.db.list.constraint.validator');
+        $constraint = $this->container->get('blast.db.list.constraint');
+        $validator->initialize($context);
+        
+        // check if the name is actually a fake name
+        if (!$validator->isValid($this->dbPath, $constraint)) {
+            $property_path = $context->getPropertyPath() . '.dbPath';
+            $context->setPropertyPath($property_path);
+            $context->addViolation(
+                $validator->getMessageTemplate(),
+                $validator->getMessageParameters(),
+                $this->dbPath);
+        }
     }
     
     /**
