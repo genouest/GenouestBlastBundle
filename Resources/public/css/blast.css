@@ -43,3 +43,39 @@ form#blast p.formPart img {
   vertical-align:middle;
 }
 
+em {
+    font-style: italic;
+}
+strong {
+    font-weight: bold;
+}
+
+form, fieldset {
+    margin-top: 2em;
+    margin-bottom: 2em;
+    margin-left:auto;
+    margin-right:auto;
+    padding: 1em;
+    text-align:center;
+}
+
+input, button, select {
+    vertical-align: middle;
+}
+
+table {
+    margin: 0;
+    border: 1px solid #ddd;
+    border-collapse: collapse;
+    border-spacing: 0;
+    background-color:#eeeeee;
+    margin-left:auto;
+    margin-right:auto;
+}
+table td, table th {
+    padding: 8px;
+    border: 1px solid #ddd;
+    vertical-align: top;
+    text-align: left;
+}
+
