@@ -70,11 +70,23 @@ The following configuration keys are available (with their default values)::
         # The blast request object. Change this if you want to use a custom one (it should implement Genouest\Bundle\BlastBundle\Entity\BlastRequestInterface).
         request_class:   Genouest\Bundle\BlastBundle\Entity\BlastRequest
 
-Usage
------
+Customization
+-------------
 
-Cutomizing the Blast+ command
+Customizing the Blast+ command
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The blast command line is generated using a twig template. To customize it, you only need to
+override the 'GenouestBlastBundle:Blast:command.txt.twig' template.
 
 Customizing the form
 ~~~~~~~~~~~~~~~~~~~~
+
+It is possible to customize the way this form work. In the configuration, you can change the form type class
+to a custom one. This will allow you to change the fields displayed in the form.
+There is also a possibility to replace the default BlastRequest entity: with this you can for example change
+the constraints applied to each parameters, or their default values.
+
+You can customize the template displaying the form itself: GenouestBlastBundle:Blast:index.html.twig
+
+Finally, this bundle brings a specific result page for the scheduler bundle. You can override it: GenouestBlastBundle:Blast:results.html.twig
