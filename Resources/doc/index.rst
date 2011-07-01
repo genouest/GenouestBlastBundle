@@ -93,3 +93,25 @@ the constraints applied to each parameters, or their default values.
 You can customize the template displaying the form itself: GenouestBlastBundle:Blast:index.html.twig
 
 Finally, this bundle brings a specific result page for the scheduler bundle. You can override it: GenouestBlastBundle:Blast:results.html.twig
+
+Fasta validation
+~~~~~~~~~~~~~~~~
+
+This bundle comes with specific Constraints to validate fata sequences in a form.
+You can use them like this:
+
+    /**
+     * @Genouest\Bundle\BlastBundle\Constraints\Fasta(seqType = "PROT_OR_ADN")
+     */
+    public $pastedSeq; // To validate a fasta sequence pasted in a textarea
+    
+    /**
+     * @Genouest\Bundle\BlastBundle\Constraints\FastaFile(maxSize = "104857600", seqType = "PROT_OR_ADN")
+     */
+    public $fileSeq; // To validate a fasta file uploaded
+
+In this example, PROT_OR_ADN can be replaced by ADN, PROT or PROSITE depending on the type of sequence you want to validate.
+The Genouest\Bundle\BlastBundle\Constraints\FastaFileValidator extends Symfony\Component\Validator\Constraints\FileValidator, so you can use the same
+validation options with it (maxSize in this example).
+
+By default, the blast form allow sequences as big as 100Mb. Keep it mind that this limitation is also affected by apache configuration.
