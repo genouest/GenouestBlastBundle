@@ -60,7 +60,6 @@ class BlastType extends AbstractType
     public function getDefaultOptions(array $options)
     {
         return array(
-            'data_class' => 'Genouest\Bundle\BlastBundle\Entity\BlastRequest',
             'csrf_protection' => false
         );
     }
