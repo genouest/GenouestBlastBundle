@@ -120,10 +120,6 @@
     {%- endspaceless %}
 {%- endset %}
 
-
-
-. /local/env/envblast+.sh;
-
 echo "{{ blastCommand }}" > {{ workDir }}blast_command.txt;
 
 {% if makeDb %}
