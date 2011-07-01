@@ -19,9 +19,12 @@ use Genouest\Bundle\SchedulerBundle\Entity\ResultViewer;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
+use Genouest\Bundle\SchedulerBundle\Scheduler\SchedulerInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
 use Symfony\Component\Validator\Constraints as Assert;
 
-class BlastRequest
+class BlastRequest implements BlastRequestInterface
 {
     /**
      * @Assert\MaxLength(255)
@@ -219,6 +222,12 @@ class BlastRequest
      */
     public $phiPattern;
     
+    protected $container;
+    
+    public function __construct(ContainerInterface $container) {
+        $this->container = $container;
+    }
+    
     /**
      * @Assert\True(message = "Please paste or upload a query sequence")
      */
@@ -251,7 +260,7 @@ class BlastRequest
      */
     public function isSequenceSingleForPsi() {
         if ($this->program == 'blastp' && $this->blastpType == 'psiblast')
-            return ($this->isSequencePresentForPsi() && (!empty($this->pastedSeq) XOR !empty($this->fileSeq) XOR !empty($this->psiPSSM))) || !$this->isSequencePresentForPsi();
+            return ($this->isSequencePresentForPsi() && (intval(!empty($this->pastedSeq)) + intval(!empty($this->fileSeq)) + intval(!empty($this->psiPSSM)) == 1)) || !$this->isSequencePresentForPsi();
 
         return true;
     }
@@ -262,6 +271,8 @@ class BlastRequest
     public function isDatabankOk() {
         if ($this->hasPersoDb())
             return !empty($this->persoBankFile);
+        else
+            return !empty($this->dbPath);
         
         return true;
     }
@@ -558,158 +569,44 @@ class BlastRequest
      * Generate a Job object corresponding to this blast request
      *
      * @param Genouest\Bundle\SchedulerBundle\Scheduler\SchedulerInterface A job scheduler instance
-     * @param string $back_url The url to get back to this application
      * @return Genouest\Bundle\SchedulerBundle\Entity\Job A job instance
      */
-    public function getJob($scheduler, $back_url) {
+    public function getJob(SchedulerInterface $scheduler) {
+    
         $job = new Job();
         $job->setProgramName('blast'); // It is important to set program name *before* generating the uid
-        $outputFilePrefix = $job->generateJobUid();
+        $uid = $job->generateJobUid();
         $job->setTitle($this->title);
         $job->setEmail($this->email);
-        $job->setBackUrl($back_url);// Add an url to come back to the application
         
-        $jobCommand = ". /local/env/envblast+.sh;";
-    
-        // Construct the job command
-        $formatdbCommand = "";
-        $dbPath = "";
         $workDir = $scheduler->getWorkDir($job);
         
-        // Add databank path
-        if (!$this->hasPersoDb())
-            $dbPath = $dbPath;
-        else {
-            $formatDbWithProt = in_array($this->program, array('blastp', 'blastx')) ? 'prot' : 'nuc';
-
-            $formatdbCommand = " makeblastdb -in $dbFilePath -dbtype $formatDbWithProt -out ".$workDir."uploadedDB -title uploadedDB; ";
-            $dbPath = $workDir."uploadedDB";
-        }
-        
-        $jobCommand .= "$formatdbCommand";
-        
-        if ($this->program == 'blastp' && ($this->blastpType == 'psiblast' || $this->blastpType == 'phiblast'))
-            $blastCommand = "psiblast";
-        else
-            $blastCommand = $this->program;
-        
-        if ($this->program == 'blastn')
-            $blastCommand .=  " -task ".$this->blastnType;
-        else if ($this->program == 'blastp' && $this->blastpType != 'psiblast' && $this->blastpType != 'phiblast')
-            $blastCommand .=  " -task ".$this->blastpType;
-          
-        if (!empty($this->fileSeq) || !empty($this->pastedSeq))
-            $blastCommand .= " -query ".$workDir.'input.fasta';
-        
-        $blastCommand .= " -db ".$this->dbPath." -evalue ".$this->expect." -max_target_seqs ".$this->maxTargetSequences." -soft_masking ".($this->softMasking ? "true" : "false" );
-        
-        if ($this->lowerCase)
-            $blastCommand .= " -lcase_masking";
-        
-        if ($this->program == 'blastn' && $this->blastnType == "megablast")
-            $blastCommand .= " -word_size ".$this->wordSizesMegablast;
-        else if ($this->program == 'blastn' && $this->blastnType == "dc-megablast")
-            $blastCommand .= " -word_size ".$this->wordSizesDcMegablast;
-        else if ($this->program == 'blastn')
-            $blastCommand .= " -word_size ".$this->wordSizesBlastn;
-        else
-            $blastCommand .= " -word_size ".$this->wordSizesProt;
-        
-        if ($this->program == 'tblastx' || $this->program == 'blastx')
-            $blastCommand .= " -query_gencode ".$this->queryCode;
-        if ($this->program == 'tblastx' || $this->program == 'tblastn')
-            $blastCommand .= " -db_gencode ".$this->dbCode;
-        
-        if ($this->program == 'blastn') {
-            if ($this->blastnType == "megablast")
-              $nucMatrix = explode(',', $this->matricesMegablast);
-            else
-              $nucMatrix = explode(',', $this->matricesNuc);
-            $blastCommand .= " -reward ".$nucMatrix[0];
-            $blastCommand .= " -penalty ".$nucMatrix[1];
-        }
-        else
-            $blastCommand .= " -matrix ".$this->matricesProt;
-        
-        if ($this->program == 'blastn' && $this->blastnType == "megablast")
-            $gaps = explode(',', $this->gapCostsMegablast);
-        else if ($this->program == 'blastn')
-            $gaps = explode(',', $this->gapCostsBlastn);
-        else if ($this->program != 'tblastx')
-            $gaps = explode(',', $this->gapCostsProt);
-        
-        if ($this->program != 'tblastx') {
-            $blastCommand .= " -gapopen ".$gaps[0];
-            $blastCommand .= " -gapextend ".$gaps[1];
-        }
-        
-        if ($this->program == 'blastp' || $this->program == 'tblastn')
-            $blastCommand .= " -comp_based_stats ".$this->compositionalAdjustments;
-          
-        if ($this->program == 'blastn')
-            $blastCommand .= " -dust ".($this->lowComplex ? "yes" : "no");
-        else
-            $blastCommand .= " -seg ".($this->lowComplex ? "yes" : "no");
-        
-        // PSI/PHI-BLAST parameters
-        if (($this->program == 'blastp') && (($this->blastpType == 'psiblast') || ($this->blastpType == 'phiblast'))) {
-            $blastCommand .= " -inclusion_ethresh ".$this->psiThreshold;
-            $blastCommand .= " -num_iterations ".$this->psiIterationNb;
-            $blastCommand .= " -pseudocount ".$this->psiPseudoCount;
-          
-            if ($this->blastpType == 'psiblast') {
-                $blastCommand .= " -out_pssm ".$workDir.$outputFilePrefix.".pssm";
-                $blastCommand .= " -out_ascii_pssm ".$workDir.$outputFilePrefix.".pssm.ascii";
-            }
-          
-            if ($this->blastpType == 'psiblast' && $this->psiPSSM) {
-                $blastCommand .= " -in_pssm ".$workDir.'input.pssm';
-            }
-            
-            if ($this->blastpType == 'phiblast' && $this->phiPattern) {
-                $blastCommand .= " -phi_pattern ".$workDir.'input.pattern';
-            }
-        }
-        
-        $blastCommand .= " -num_threads 4";
+        $command = $this->container->get('templating')->render('GenouestBlastBundle:Blast:command.txt.twig', array('request' => $this,
+            'workDir' => $workDir,
+            'job' => $job,
+            ));
         
         // Create an array containing the name of each result file
         $resultFiles = array();
         $resultViewers = array();
         if ($this->program == 'blastp' && $this->blastpType == 'psiblast') {
-          $resultFiles = array('HTML blast output' => $outputFilePrefix.'.html',
-                               'PSSM' => $outputFilePrefix.'.pssm',
-                               'PSSM ASCII' => $outputFilePrefix.'.pssm.ascii',
+          $resultFiles = array('HTML blast output' => $uid.'.html',
+                               'PSSM' => $uid.'.pssm',
+                               'PSSM ASCII' => $uid.'.pssm.ascii',
                                'Executed command' => "blast_command.txt");
-                                                          
-          $blastCommand .= " -outfmt 0 -html -out ".$workDir.$outputFilePrefix.".html ;";
-          $jobCommand .= $blastCommand;
         }
         else if ($this->program == 'blastp' && $this->blastpType == 'phiblast') {
-          $resultFiles = array('HTML blast output' => $outputFilePrefix.'.html',
+          $resultFiles = array('HTML blast output' => $uid.'.html',
                                'Executed command' => "blast_command.txt");
-                               
-          $blastCommand .= " -outfmt 0 -html -out ".$workDir.$outputFilePrefix.".html ;";
-          $jobCommand .= $blastCommand;
         }
         else {          
-          $resultFiles = array('HTML blast output' => $outputFilePrefix.'.html',
-                               'Text blast output' => $outputFilePrefix.'.txt',
-                               'Comma-separated blast output' => $outputFilePrefix.'.csv',
-                               'Tabular blast output' => $outputFilePrefix.'.tsv',
-                               'XML blast output' => $outputFilePrefix.'.xml',
-                               'ASN.1 archive blast output' => $outputFilePrefix.'.asn',
+          $resultFiles = array('HTML blast output' => $uid.'.html',
+                               'Text blast output' => $uid.'.txt',
+                               'Comma-separated blast output' => $uid.'.csv',
+                               'Tabular blast output' => $uid.'.tsv',
+                               'XML blast output' => $uid.'.xml',
+                               'ASN.1 archive blast output' => $uid.'.asn',
                                'Executed command' => "blast_command.txt");
-
-          $blastCommand .= " -outfmt 11 -out ".$workDir.$outputFilePrefix.".asn ;"; // Format 11 = blast archive format
-          $jobCommand .= $blastCommand;
-          
-          // Reformat the blast output in txt, xml, html ...
-          $jobCommand .= "blast_formatter -archive ".$workDir.$outputFilePrefix.".asn -outfmt 5 -out ".$workDir.$outputFilePrefix.".xml;";
-          $jobCommand .= "blast_formatter -archive ".$workDir.$outputFilePrefix.".asn -outfmt 0 -html -out ".$workDir.$outputFilePrefix.".html;";
-          $jobCommand .= "blast_formatter -archive ".$workDir.$outputFilePrefix.".asn -outfmt 0 -out ".$workDir.$outputFilePrefix.".txt;";
-          $jobCommand .= "blast_formatter -archive ".$workDir.$outputFilePrefix.".asn -outfmt 6 -out ".$workDir.$outputFilePrefix.".tsv;";
-          $jobCommand .= "blast_formatter -archive ".$workDir.$outputFilePrefix.".asn -outfmt 10 -out ".$workDir.$outputFilePrefix.".csv;";
         }
         
         // Move uploaded files
@@ -719,9 +616,9 @@ class BlastRequest
             $this->fileSeq->move($workDir, 'input.fasta');
         if (!empty($this->pastedSeq)) {
             $seqFile = @fopen($workDir.'input.fasta','w');
-            $fError = $seqFiles === false;
+            $fError = $seqFile === false;
             if ($seqFile) {
-                $fError = $fError || (false === @fwrite($seqFile,$this->pastedSeq));
+                $fError = $fError || (false === @fwrite($seqFile, $this->pastedSeq));
                 $fError = $fError || (false === @fclose($seqFile));
             }
             
@@ -734,31 +631,22 @@ class BlastRequest
             $this->psiPSSM->move($workDir, 'input.pssm');
         if ($this->blastpType == 'phiblast' && $this->phiPattern)
             $this->phiPattern->move($workDir, 'input.pattern');
-    
-        // Write command line in case the user wants to see it
-        $fp = @fopen($workDir."blast_command.txt", 'w');
-        $fError = $fp === false;
-        if ($fp) {
-            $fError = $fError || (false === @fwrite($fp, $blastCommand));
-            $fError = $fError || (false === @fclose($fp));
-        }
-
-        if ($fError) {
-            $error = error_get_last();
-            throw new FileException(sprintf('Could not create file %s (%s)', $workDir.'blast_command.txt', strip_tags($error['message'])));
-        }
 
         // Save files and viewers in db
         $job->addResultFilesArray($resultFiles);
         $job->addResultViewersArray($resultViewers);
 
+        // FIXME this is genouest specific
+        if ($this->hasPersoDb())
+            $dbPath = $this->dbPath;
+        else
+            $dbPath = $workDir.'uploadedDB';
         \BankManager::sendStats($job->getProgramName(), $dbPath);
 
         // Store generated command line
-        $job->setCommand($jobCommand);
+        $job->setCommand($command);
         
         return $job;
     }
-    
 }
 
