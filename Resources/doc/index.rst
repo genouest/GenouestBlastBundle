@@ -10,15 +10,19 @@ It uses GenouestSchedulerBundle to run BLAST+ jobs on different scheduling syste
 How does it work?
 -----------------
 
-This bundle contains a ready-to-use BLAST+ form.
+This bundle contains a ready-to-use BLAST+ form (tested with blast+ 2.2.25+).
 The BLAST+ jobs are launched on computation machines (SGE cluster for example) using GenouestSchedulerBundle.
 The results can be viewed and downloaded in different formats (html, txt, csv, xml, ...)
+The CSRF protection is disable by default on this blast form, as there is no particular security risk with it.
 
 
 .. _installation-label:
 Installation
 ------------
-First install GenouestSchedulerBundle which is required by this bundle.
+
+You need to have blast+ installed and properly configured. Blast+ binaries should be in the PATH of the computing machines.
+
+Install GenouestSchedulerBundle which is required by this bundle.
 
 Checkout a copy of the bundle code::
 
@@ -59,10 +63,18 @@ Don't forget to configure properly the GenouestSchedulerBundle too.
 The following configuration keys are available (with their default values)::
 
     # app/config/config.yml
-    blast_scheduler:
+    genouest_blast:
         # The form type class. Change this if you want to use a custom one.
-        form_type:            Genouest\Bundle\BlastBundle\Form\BlastType
+        form_type:       Genouest\Bundle\BlastBundle\Form\BlastType
+        
+        # The blast request object. Change this if you want to use a custom one (it should implement Genouest\Bundle\BlastBundle\Entity\BlastRequestInterface).
+        request_class:   Genouest\Bundle\BlastBundle\Entity\BlastRequest
 
 Usage
 -----
 
+Cutomizing the Blast+ command
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Customizing the form
+~~~~~~~~~~~~~~~~~~~~
