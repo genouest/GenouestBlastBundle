@@ -25,16 +25,14 @@ class BlastController extends Controller
     /**
      * Main blast form
      *
-     * @Route("/", name = "_welcome")
+     * @Route("/", name = "_blast_form")
      * @Template()
      */
     public function indexAction()
     {
-        $blastRequest = new BlastRequest();
+        $blastRequest = $this->get('blast.request');
         
-        $form = $this->get('form.factory')->create($this->get('blast.form.type'));
-        
-        $form->setData($blastRequest); // Default values
+        $form = $this->createForm($this->get('blast.form.type'), $blastRequest);
         
         $request = $this->get('request');
         
@@ -42,8 +40,11 @@ class BlastController extends Controller
             $form->bindRequest($request);
             
             if ($form->isValid()) {
-                $job = $blastRequest->getJob($this->get('scheduler.scheduler'), $this->generateUrl('_welcome', array(), true));
+                // Prepare the job
+                $job = $blastRequest->getJob($this->get('scheduler.scheduler'));
+                $job->setBackUrl($this->generateUrl('_blast_form', array(), true)); // Add an url to come back to the application
                 
+                // Let the scheduler launch the job and guide us
                 return $this->forward('GenouestSchedulerBundle:Scheduler:launchJob', array('job' => $job));
             }
 
