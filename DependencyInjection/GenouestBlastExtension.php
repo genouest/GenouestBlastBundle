@@ -44,6 +44,24 @@ class GenouestBlastExtension extends Extension
         
         $container->setParameter('blast.request.class', $config['request_class']);
         
+        // Db providers
+        
+        // Unset list if empty
+        if (empty($config['db_provider']['list'])) {
+            unset($config['db_provider']['list']);
+        }
+        
+        if (count($config['db_provider']) != 1) {
+            throw new \InvalidArgumentException('There should only be one "db_provider"');
+        }
+
+        if (isset($config['db_provider']['biomaj'])) { // Use db list from a biomaj server
+        }
+        else if (isset($config['db_provider']['list'])) { // Use a list of databases
+        }
+        else if (isset($config['db_provider']['custom'])) { // Use a provider
+        }
+        
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('blast.xml');
     }
