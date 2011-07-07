@@ -10,37 +10,37 @@
  */
  
 tr.headFields td {
-  border: 0;
+    border: 0;
 }
 
 tr.headFields td.emailField {
-  text-align: right;
+    text-align: right;
 }
 
 form#blast table {
-  width: 80%;
-  margin-top: 0;
-  margin-bottom: 1em;
+    width: 80%;
+    margin-top: 0;
+    margin-bottom: 1em;
 }
 
 form#blast th {
-  width: 20%;
+    width: 20%;
 }
 
 form#blast p.formPart {
-  width:80%;
-  margin-left:auto;
-  margin-right:auto;
-  padding:0;
-  padding-left: 5px;
-  text-align:left;
-  font-style:italic;
-  font-weight:bold;
-  color: #32639A;
+    width:80%;
+    margin-left:auto;
+    margin-right:auto;
+    padding:0;
+    padding-left: 5px;
+    text-align:left;
+    font-style:italic;
+    font-weight:bold;
+    color: #32639A;
 }
 
 form#blast p.formPart img {
-  vertical-align:middle;
+    vertical-align:middle;
 }
 
 em {
@@ -77,5 +77,10 @@ table td, table th {
     border: 1px solid #ddd;
     vertical-align: top;
     text-align: left;
+}
+
+img.dbpath_loader {
+    vertical-align:middle;
+    display: none;
 }
 
