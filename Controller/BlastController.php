@@ -53,6 +53,8 @@ class BlastController extends Controller
         return $this->render('GenouestBlastBundle:Blast:index.html.twig', array(
             'form' => $form->createView(),
             'blast_version' => $this->container->hasParameter('blast.version') ? $this->container->getParameter('blast.version') : '',
+            'db_provider' => $this->container->getParameter('blast.db.list.provider'),
+            'db_provider_options' => $this->container->getParameter('blast.db.list.provider.options'),
         ));
     }
 
