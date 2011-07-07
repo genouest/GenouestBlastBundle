@@ -98,7 +98,7 @@ class GenouestBlastExtension extends Extension
             
             $container->setDefinition('blast.db.list.constraint', 
                 new Definition('%blast.db.list.list.constraint.class%', array(
-                    array('choices' => $allTypes))
+                    array('choices' => array_keys($allTypes)))
                     )
             );
             
@@ -109,7 +109,33 @@ class GenouestBlastExtension extends Extension
                 ));
         }
         else if (isset($config['db_provider']['callback'])) { // Use a provider
-            // Same as list, but first get the choices using the callback
+            
+            $container->setDefinition('blast.db.list.callback',
+                new Definition($config['db_provider']['callback'], array())
+            );
+            
+            $nucType = $container->get('blast.db.list.callback')->getNucleicDatabanks();
+            $protType = $container->get('blast.db.list.callback')->getProteicDatabanks();
+            $allTypes = array_merge($nucType, $protType);
+            
+            $container->setParameter('blast.db.list.widget', 'choice');
+            $container->setParameter('blast.db.list.widget.options', array('choices' => $nucType));
+            
+            $container->setDefinition('blast.db.list.constraint.validator',
+                new Definition('%blast.db.list.list.constraint.validator.class%', array())
+            );
+            
+            $container->setDefinition('blast.db.list.constraint', 
+                new Definition('%blast.db.list.list.constraint.class%', array(
+                    array('choices' => array_keys($allTypes)))
+                    )
+            );
+            
+            $container->setParameter('blast.db.list.provider', 'list');
+            $container->setParameter('blast.db.list.provider.options', array(
+                'list_nucleic' => $nucType,
+                'list_proteic' => $protType,
+                ));
         }
         
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
