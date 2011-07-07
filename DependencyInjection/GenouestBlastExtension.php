@@ -46,9 +46,6 @@ class GenouestBlastExtension extends Extension
         $container->setParameter('blast.request.class', $config['request_class']);
         
         // Db providers
-        
-        var_dump($config);
-        
         if (count($config['db_provider']) != 1) {
             throw new \InvalidArgumentException('There should exactly one "db_provider"');
         }
@@ -77,6 +74,16 @@ class GenouestBlastExtension extends Extension
                         )
                     )
                 );
+
+            $container->setParameter('blast.db.list.provider', 'biomaj');
+            $container->setParameter('blast.db.list.provider.options', array(
+                'type_nucleic' => $config['db_provider']['biomaj']['type']['nucleic'],
+                'type_proteic' => $config['db_provider']['biomaj']['type']['proteic'],
+                'format' => $config['db_provider']['biomaj']['format'],
+                'autoload' => $config['db_provider']['biomaj']['autoload'],
+                'cleanup' => $config['db_provider']['biomaj']['cleanup'],
+                'filterall' => $config['db_provider']['biomaj']['filterall'],
+                ));
         }
         else if (isset($config['db_provider']['list'])) { // Use a list of databases
             
@@ -94,6 +101,12 @@ class GenouestBlastExtension extends Extension
                     array('choices' => $allTypes))
                     )
             );
+            
+            $container->setParameter('blast.db.list.provider', 'list');
+            $container->setParameter('blast.db.list.provider.options', array(
+                'list_nucleic' => $config['db_provider']['list']['nucleic'],
+                'list_proteic' => $config['db_provider']['list']['proteic'],
+                ));
         }
         else if (isset($config['db_provider']['callback'])) { // Use a provider
             // Same as list, but first get the choices using the callback
