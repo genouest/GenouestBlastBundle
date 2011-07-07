@@ -13,6 +13,13 @@
 
 {% extends "GenouestBlastBundle:Blast:layout.html.twig" %}
 
+{% block head %}
+    {{ parent() }}
+    {% if db_provider == 'biomaj' %}
+        {% include 'GenouestBiomajBundle::js.html.twig' %}
+    {% endif %}
+{% endblock %}
+
 {% block title %}
     Blast
     {% if blast_version %}
@@ -79,7 +86,7 @@
           <br />File size is limited to 20Mb{{ form_errors(form.persoBankFile) }}</td>
         </tr>
         <tr>
-          <th>{{ form_label(form.dbPath, 'Databank') }}</th><td>{{ form_widget(form.dbPath) }}{{ form_errors(form.dbPath) }}</td>
+          <th>{{ form_label(form.dbPath, 'Databank') }}</th><td>{{ form_widget(form.dbPath) }}{{ form_errors(form.dbPath) }} <img id="blast_dbPath_loader" class="dbpath_loader" src="{{ asset('bundles/genouestscheduler/images/loader_small.gif') }}" width="16" height="16" alt="Please wait while loading the databank list" title="Please wait while loading the databank list" /></td>
         </tr>
         <tr>
           <th>{{ form_label(form.dbCode, 'Databank genetic code') }}</th><td>{{ form_widget(form.dbCode) }}{{ form_errors(form.dbCode) }}</td>
@@ -194,11 +201,5 @@
       <input type="submit" />
     </form>
 
-    <script type="text/javascript">
-        //<![CDATA[
-        // TODO define 2 new functions: loadNucleicBlastDb() {generated code = biomaj ajax or simple replacement from array} and loadProteicBlastDb() {generated code = biomaj ajax or simple replacement from array}
-        
-        jQuery(document).ready(blastLoaded('blast_dbPath'));
-        //]]>
-    </script>
+    {% include 'GenouestBlastBundle:Blast:dblist.html.twig' with {'provider': db_provider, 'provider_options' : db_provider_options} %}
 {% endblock %}
