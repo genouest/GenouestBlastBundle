@@ -8,35 +8,20 @@
  * http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt
  *
  */
- 
-function blastLoaded(dbPathId) {
+
+/**
+ * Prepare initial state of the form and register event handlers and different select boxes.
+ * Called when the page is fully loaded.
+ * 'updateDbList' is defined in the html body as it is dynamic
+ */
+function blastLoaded() {
     refreshControls();
-    
-    program = jQuery('#blast_program').val();
-    if ((program == "blastn") || (program == "tblastn"))
-      bankType = jQuery('#blast_bankTypeNuc').val();
-    else
-      bankType = jQuery('#blast_bankTypeProt').val();
-     
-    reloadDbList('#'+dbPathId, getDbTypeFromBlastBankType(bankType, program), 'blast', 'false', 'true');
-    
-    jQuery('#blast_bankTypeNuc').change(function() {
-      reloadDbList('#'+dbPathId, getDbTypeFromBlastBankType(jQuery(this).val(), jQuery('#blast_program').val()), 'blast', 'false', 'true');
-      refreshControls();
-    });
-    
-    jQuery('#blast_bankTypeProt').change(function() {
-      reloadDbList('#'+dbPathId, getDbTypeFromBlastBankType(jQuery(this).val(), jQuery('#blast_program').val()), 'blast', 'false', 'true');
-      refreshControls();
-    });
-    
-    
-    jQuery('#blast_program').change(function() {
-      reloadDbList('#'+dbPathId, getDbTypeFromBlastProgram(jQuery(this).val()), 'blast', 'false', 'true');
-      
-      refreshControls();
-    });
-    
+
+    updateDbList();
+
+    jQuery('#blast_bankTypeNuc').change(updateDbList);
+    jQuery('#blast_bankTypeProt').change(updateDbList);
+    jQuery('#blast_program').change(updateDbList);
     jQuery('#blast_blastnType').change(refreshControls);
     jQuery('#blast_blastpType').change(refreshControls);
 }
@@ -193,59 +178,4 @@ function refreshControls() {
     jQuery('#blast_softMasking').attr('checked', !(program != "blastn"));
 }
 
-function getDbTypeFromBlastProgram(program)
-{
-  if ((program == 'blastp') || (program == 'blastx')) {
-    return 'proteic';
-  }
 
-  return 'nucleic';
-}
-
-function getDbTypeFromBlastBankType(bankType, program)
-{
-  if (bankType == 'procgenome') {
-    return 'genome/procaryotic';
-  }
-  else if (bankType == 'eucgenome') {
-    return 'genome/eucaryotic';
-  }
-
-  return getDbTypeFromBlastProgram(program)
-}
-
-function getDbTypeFromBlastProgramLepidoDB(program)
-{
-  if ((program == 'blastp') || (program == 'blastx')) {
-    return 'lepidodb/proteic';
-  }
-
-  return 'lepidodb/nucleic';
-}
-
-function getDbTypeFromBlastProgramAphidBase(program)
-{
-  if ((program == 'blastp') || (program == 'blastx')) {
-    return 'aphidbase/proteic';
-  }
-
-  return 'aphidbase/nucleic';
-}
-
-function getDbTypeFromBlastProgramSpodoblast(program)
-{
-  if ((program == 'blastp') || (program == 'blastx')) {
-    return 'spodoblast/proteic';
-  }
-
-  return 'spodoblast/nucleic';
-}
-
-function getDbTypeFromBlastProgramSlitblast(program)
-{
-  if ((program == 'blastp') || (program == 'blastx')) {
-    return 'slitblast/proteic';
-  }
-
-  return 'slitblast/nucleic';
-}
