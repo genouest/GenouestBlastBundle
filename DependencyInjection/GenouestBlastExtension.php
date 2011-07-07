@@ -17,6 +17,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Definition\Processor;
 
@@ -46,20 +47,56 @@ class GenouestBlastExtension extends Extension
         
         // Db providers
         
-        // Unset list if empty
-        if (empty($config['db_provider']['list'])) {
-            unset($config['db_provider']['list']);
-        }
+        var_dump($config);
         
         if (count($config['db_provider']) != 1) {
-            throw new \InvalidArgumentException('There should only be one "db_provider"');
+            throw new \InvalidArgumentException('There should exactly one "db_provider"');
         }
 
         if (isset($config['db_provider']['biomaj'])) { // Use db list from a biomaj server
+            
+            $allTypes = array_merge($config['db_provider']['biomaj']['type']['nucleic'], $config['db_provider']['biomaj']['type']['proteic']);
+            
+            $container->setParameter('blast.db.list.widget', 'choice');
+            $container->setParameter('blast.db.list.widget.options', array(
+                            'choices' => array("" => "Loading, please wait...") // Empty for performance reason. We get the db list using ajax once the page is loaded
+                            ));
+            
+            $container->setDefinition('blast.db.list.constraint.validator',
+                new Definition('%blast.db.list.biomaj.constraint.validator.class%', array())
+                );
+                
+            $container->setDefinition('blast.db.list.constraint', 
+                new Definition('%blast.db.list.biomaj.constraint.class%', array(
+                        array('type' => $allTypes,
+                            'format' => $config['db_provider']['biomaj']['format'],
+                            'autoload' => $config['db_provider']['biomaj']['autoload'],
+                            'cleanup' => $config['db_provider']['biomaj']['cleanup'],
+                            'filterall' => $config['db_provider']['biomaj']['filterall'],
+                            )
+                        )
+                    )
+                );
         }
         else if (isset($config['db_provider']['list'])) { // Use a list of databases
+            
+            $allTypes = array_merge($config['db_provider']['list']['nucleic'], $config['db_provider']['list']['proteic']);
+            
+            $container->setParameter('blast.db.list.widget', 'choice');
+            $container->setParameter('blast.db.list.widget.options', array('choices' => $config['db_provider']['list']['nucleic']));
+            
+            $container->setDefinition('blast.db.list.constraint.validator',
+                new Definition('%blast.db.list.list.constraint.validator.class%', array())
+            );
+            
+            $container->setDefinition('blast.db.list.constraint', 
+                new Definition('%blast.db.list.list.constraint.class%', array(
+                    array('choices' => $allTypes))
+                    )
+            );
         }
-        else if (isset($config['db_provider']['custom'])) { // Use a provider
+        else if (isset($config['db_provider']['callback'])) { // Use a provider
+            // Same as list, but first get the choices using the callback
         }
         
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));

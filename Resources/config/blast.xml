@@ -6,37 +6,21 @@
 
     <parameters>
         <!-- Db Provider classes -->
-        <parameter key="blast.db.list.biomaj.constraint.validator.class">Genouest\Bundle\CommonsBundle\Constraints\BiomajValidator</parameter>
-        <parameter key="blast.db.list.list.constraint.validator.class">Genouest\Bundle\BlastBundle\Constraints\DbListValidator</parameter>
+        <parameter key="blast.db.list.biomaj.constraint.validator.class">Genouest\Bundle\BiomajBundle\Constraints\BiomajValidator</parameter>
+        <parameter key="blast.db.list.list.constraint.validator.class">Symfony\Component\Validator\Constraints\ChoiceValidator</parameter>
         <parameter key="blast.db.list.custom.constraint.validator.class">Genouest\Bundle\BlastBundle\Constraints\DbCustomValidator</parameter>
-        <parameter key="blast.db.list.biomaj.constraint.class">Genouest\Bundle\CommonsBundle\Constraints\Biomaj</parameter>
-        <parameter key="blast.db.list.list.constraint.class">Genouest\Bundle\BlastBundle\Constraints\DbList</parameter>
+        <parameter key="blast.db.list.biomaj.constraint.class">Genouest\Bundle\BiomajBundle\Constraints\Biomaj</parameter>
+        <parameter key="blast.db.list.list.constraint.class">Symfony\Component\Validator\Constraints\Choice</parameter>
         <parameter key="blast.db.list.custom.constraint.class">Genouest\Bundle\BlastBundle\Constraints\DbCustom</parameter>
     </parameters>
     
     <services>
-        <service id="blast.form.type" class="%blast.form.type.class%"></service>
-        
-        <service id="blast.request" class="%blast.request.class%">
+        <service id="blast.form.type" class="%blast.form.type.class%">
             <argument type="service" id="service_container" />
         </service>
         
-        <service id="blast.db.list.constraint.validator" class="Genouest\Bundle\CommonsBundle\Constraints\BiomajValidator">
-            <argument type="collection">
-                <argument key="type" type="collection">%blast.db.list.biomaj.type%</argument>
-                <argument key="format">%blast.db.list.biomaj.type%</argument>
-            </argument>
-        </service>
-        
-        <service id="blast.db.list.constraint" class="Genouest\Bundle\CommonsBundle\Constraints\Biomaj">
-            <argument type="collection">
-                <argument key="dbtype" type="collection">
-                    <argument>nucleic</argument>
-                    <argument>genome/procaryotic</argument>
-                    <argument>genome/eucaryotic</argument>
-                </argument>
-                <argument key="dbformat">blast</argument>
-            </argument>
+        <service id="blast.request" class="%blast.request.class%">
+            <argument type="service" id="service_container" />
         </service>
         
         <service id="twig.extension.split" class="Genouest\Bundle\BlastBundle\Extension\SplitExtension">

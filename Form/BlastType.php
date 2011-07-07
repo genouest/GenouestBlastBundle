@@ -15,10 +15,18 @@ namespace Genouest\Bundle\BlastBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
 use Genouest\Bundle\BlastBundle\Entity\BlastRequest;
 
 class BlastType extends AbstractType
 {
+    protected $container;
+    
+    public function __construct(ContainerInterface $container) {
+        $this->container = $container;
+    }
+    
     public function buildForm(FormBuilder $builder, array $options)
     {
         $builder->add('title');
@@ -31,7 +39,7 @@ class BlastType extends AbstractType
         $builder->add('bankTypeNuc', 'choice', array('choices' => BlastRequest::getNucBankTypeLabels(true)));
         $builder->add('bankTypeProt', 'choice', array('choices' => BlastRequest::getProtBankTypeLabels(true)));
         $builder->add('persoBankFile', 'file', array('required' => false));
-        $builder->add('dbPath', 'biomaj', array('dbtype' => array('nucleic', 'proteic', 'genome/procaryotic', 'genome/eucaryotic'), 'dbformat' => 'blast', 'autoload' => false));
+        $builder->add('dbPath', $this->container->getParameter('blast.db.list.widget'), $this->container->getParameter('blast.db.list.widget.options'));
         $builder->add('maxTargetSequences', 'choice', array('choices' => BlastRequest::getMaxTargetSequenceLabels(true)));
         $builder->add('expect', 'choice', array('choices' => BlastRequest::getExpectLabels(true)));
         $builder->add('wordSizesProt', 'choice', array('choices' => BlastRequest::getProtWordSizeLabels(true)));
