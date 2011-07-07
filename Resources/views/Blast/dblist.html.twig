@@ -1,0 +1,88 @@
+<script type="text/javascript">
+    //<![CDATA[
+    
+    function updateDbList() {
+        loaderId = 'img.dbpath_loader';
+        jQuery(loaderId).show();
+        
+        {% if db_provider == 'biomaj' %}
+        
+            reloadBiomajDbList('#blast_dbPath', guessBiomajDbType(), '{{ db_provider_options['format'] }}', 'false', 'true');
+            
+        {% elseif db_provider == 'list' %}
+        
+            loadStaticDbList('#blast_dbPath');
+            
+        {% else %}
+        
+            alert('Unsupported blast databank provider ('+db_provider+')');
+            
+        {% endif %}
+        
+        jQuery(loaderId).hide();
+        refreshControls();
+    }
+
+    {% if db_provider == 'biomaj' %}
+        /**
+         * Guess the biomaj db type corresponding to the selected program and bankType
+         */
+        function guessBiomajDbType() {
+            program = jQuery('#blast_program').val();
+            if ((program == "blastn") || (program == "tblastn"))
+              bankType = jQuery('#blast_bankTypeNuc').val();
+            else
+              bankType = jQuery('#blast_bankTypeProt').val();
+
+            types = new Array();
+            if ((program == 'blastp') || (program == 'blastx')) {
+                {% for type in db_provider_options['type_proteic'] %}
+                    types.push('{{ type }}');
+                {% endfor %}
+                return types;
+            }
+
+            {% for type in db_provider_options['type_nucleic'] %}
+                types.push('{{ type }}');
+            {% endfor %}
+            return types;
+        }
+    {% elseif db_provider == 'list' %}
+        /**
+         * Update the static db list corresponding to the selected program and bankType
+         */
+        function loadStaticDbList(idField) {
+            
+            program = jQuery('#blast_program').val();
+            if ((program == "blastn") || (program == "tblastn"))
+              bankType = jQuery('#blast_bankTypeNuc').val();
+            else
+              bankType = jQuery('#blast_bankTypeProt').val();
+
+            newList = '';
+            if ((program == 'blastp') || (program == 'blastx')) {
+                {% for path, label in db_provider_options['list_proteic'] %}
+                    newList += "<option value=\"{{ path }}\">{{ label }}</option>";
+                {% endfor %}
+            }
+            else {
+                {% for path, label in db_provider_options['list_nucleic'] %}
+                        newList += "<option value=\"{{ path }}\">{{ label }}</option>";
+                {% endfor %}
+            }
+            
+
+            if (newList.replace(/\r|\n|\r\n/g, '') != jQuery(idField).html().replace(/\r|\n|\r\n| selected=\"selected\"/g, '')) {
+                // Only update if the list is different
+                selectedPath = jQuery(idField).val();
+                newList = newList.replace("value=\""+selectedPath+"\"", "value=\""+selectedPath+"\" selected=\"selected\"");
+                jQuery(idField).html(newList);
+            }
+        }
+    {% endif %}
+    
+    jQuery(document).ready(blastLoaded());
+
+    //]]>
+</script>
+
