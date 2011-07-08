@@ -67,7 +67,6 @@ class GenouestBlastExtension extends Extension
                 new Definition('%blast.db.list.biomaj.constraint.class%', array(
                         array('type' => $allTypes,
                             'format' => $config['db_provider']['biomaj']['format'],
-                            'autoload' => $config['db_provider']['biomaj']['autoload'],
                             'cleanup' => $config['db_provider']['biomaj']['cleanup'],
                             )
                         )
@@ -79,7 +78,6 @@ class GenouestBlastExtension extends Extension
                 'type_nucleic' => $config['db_provider']['biomaj']['type']['nucleic'],
                 'type_proteic' => $config['db_provider']['biomaj']['type']['proteic'],
                 'format' => $config['db_provider']['biomaj']['format'],
-                'autoload' => $config['db_provider']['biomaj']['autoload'],
                 'cleanup' => $config['db_provider']['biomaj']['cleanup'],
                 ));
         }

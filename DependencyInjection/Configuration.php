@@ -74,7 +74,6 @@ class Configuration implements ConfigurationInterface
                                     ->cannotBeEmpty()
                                     ->defaultValue('blast')
                                 ->end()
-                                ->booleanNode('autoload')->defaultTrue()->end()
                                 ->booleanNode('cleanup')->defaultTrue()->end()
                             ->end()
                         ->end()
