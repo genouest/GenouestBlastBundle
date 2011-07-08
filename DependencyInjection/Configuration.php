@@ -76,7 +76,6 @@ class Configuration implements ConfigurationInterface
                                 ->end()
                                 ->booleanNode('autoload')->defaultTrue()->end()
                                 ->booleanNode('cleanup')->defaultTrue()->end()
-                                ->booleanNode('filterall')->defaultFalse()->end()
                             ->end()
                         ->end()
                         ->arrayNode('list')

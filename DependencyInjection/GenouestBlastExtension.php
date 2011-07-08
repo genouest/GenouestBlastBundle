@@ -69,7 +69,6 @@ class GenouestBlastExtension extends Extension
                             'format' => $config['db_provider']['biomaj']['format'],
                             'autoload' => $config['db_provider']['biomaj']['autoload'],
                             'cleanup' => $config['db_provider']['biomaj']['cleanup'],
-                            'filterall' => $config['db_provider']['biomaj']['filterall'],
                             )
                         )
                     )
@@ -82,7 +81,6 @@ class GenouestBlastExtension extends Extension
                 'format' => $config['db_provider']['biomaj']['format'],
                 'autoload' => $config['db_provider']['biomaj']['autoload'],
                 'cleanup' => $config['db_provider']['biomaj']['cleanup'],
-                'filterall' => $config['db_provider']['biomaj']['filterall'],
                 ));
         }
         else if (isset($config['db_provider']['list'])) { // Use a list of databases
