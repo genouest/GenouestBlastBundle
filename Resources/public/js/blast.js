@@ -31,17 +31,17 @@ function refreshControls() {
     blastnType = jQuery(blastFormPrefix+'blastnType').val();
     blastpType = jQuery(blastFormPrefix+'blastpType').val();
     
-    if ((program == "blastn") || (program == "tblastn"))
+    if ((program != "blastp") && (program != "blastx"))
       bankType = jQuery(blastFormPrefix+'bankTypeNuc').val();
     else
       bankType = jQuery(blastFormPrefix+'bankTypeProt').val();
     
-    if ((program == "blastn") || (program == "tblastn"))
+    if ((program != "blastp") && (program != "blastx"))
       jQuery(blastFormPrefix+'bankTypeNuc').parent().parent().show();
     else
       jQuery(blastFormPrefix+'bankTypeNuc').parent().parent().hide();
     
-    if ((program == "blastn") || (program == "tblastn"))
+    if ((program != "blastp") && (program != "blastx"))
       jQuery(blastFormPrefix+'bankTypeProt').parent().parent().hide();
     else
       jQuery(blastFormPrefix+'bankTypeProt').parent().parent().show();
