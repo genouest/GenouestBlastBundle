@@ -658,11 +658,11 @@ class BlastRequest implements BlastRequestInterface
         $job->addResultViewersArray($resultViewers);
 
         // FIXME this is genouest specific
-        if ($this->hasPersoDb())
+        /*if ($this->hasPersoDb())
             $dbPath = $this->dbPath;
         else
             $dbPath = $workDir.'uploadedDB';
-        \BankManager::sendStats($job->getProgramName(), $dbPath);
+        \BankManager::sendStats($job->getProgramName(), $dbPath);*/
 
         // Store generated command line
         $job->setCommand($command);
