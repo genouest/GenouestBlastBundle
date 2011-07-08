@@ -201,6 +201,6 @@
       <input type="submit" />
     </form>
 
-    {% include 'GenouestBlastBundle:Blast:dblist.html.twig' with {'provider': db_provider, 'provider_options' : db_provider_options} %}
+    {% include 'GenouestBlastBundle:Blast:dblist.html.twig' with {'provider': db_provider, 'provider_options' : db_provider_options, 'form': form} %}
 
 {% endblock %}

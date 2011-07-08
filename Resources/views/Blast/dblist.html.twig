@@ -1,17 +1,19 @@
 <script type="text/javascript">
     //<![CDATA[
     
+    blastFormPrefix = '#{{ form.get('name') }}_';
+    
     function updateDbList() {
         loaderId = 'img.dbpath_loader';
         jQuery(loaderId).show();
         
         {% if db_provider == 'biomaj' %}
         
-            reloadBiomajDbList('#blast_dbPath', guessBiomajDbType(), '{{ db_provider_options['format'] }}', 'false', 'true');
+            reloadBiomajDbList(blastFormPrefix+'dbPath', guessBiomajDbType(), '{{ db_provider_options['format'] }}', 'false', 'true');
             
         {% elseif db_provider == 'list' %}
         
-            loadStaticDbList('#blast_dbPath');
+            loadStaticDbList(blastFormPrefix+'dbPath');
             
         {% else %}
         
@@ -28,11 +30,11 @@
          * Guess the biomaj db type corresponding to the selected program and bankType
          */
         function guessBiomajDbType() {
-            program = jQuery('#blast_program').val();
+            program = jQuery(blastFormPrefix+'dbPath').val();
             if ((program == "blastn") || (program == "tblastn"))
-              bankType = jQuery('#blast_bankTypeNuc').val();
+              bankType = jQuery(blastFormPrefix+'bankTypeNuc').val();
             else
-              bankType = jQuery('#blast_bankTypeProt').val();
+              bankType = jQuery(blastFormPrefix+'bankTypeProt').val();
 
             types = new Array();
             if ((program == 'blastp') || (program == 'blastx')) {
@@ -53,11 +55,11 @@
          */
         function loadStaticDbList(idField) {
             
-            program = jQuery('#blast_program').val();
+            program = jQuery(blastFormPrefix+'program').val();
             if ((program == "blastn") || (program == "tblastn"))
-              bankType = jQuery('#blast_bankTypeNuc').val();
+              bankType = jQuery(blastFormPrefix+'bankTypeNuc').val();
             else
-              bankType = jQuery('#blast_bankTypeProt').val();
+              bankType = jQuery(blastFormPrefix+'bankTypeProt').val();
 
             newList = '';
             if ((program == 'blastp') || (program == 'blastx')) {

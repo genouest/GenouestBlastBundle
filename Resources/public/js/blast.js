@@ -19,128 +19,128 @@ function blastLoaded() {
 
     updateDbList();
 
-    jQuery('#blast_bankTypeNuc').change(updateDbList);
-    jQuery('#blast_bankTypeProt').change(updateDbList);
-    jQuery('#blast_program').change(updateDbList);
-    jQuery('#blast_blastnType').change(refreshControls);
-    jQuery('#blast_blastpType').change(refreshControls);
+    jQuery(blastFormPrefix+'bankTypeNuc').change(updateDbList);
+    jQuery(blastFormPrefix+'bankTypeProt').change(updateDbList);
+    jQuery(blastFormPrefix+'program').change(updateDbList);
+    jQuery(blastFormPrefix+'blastnType').change(refreshControls);
+    jQuery(blastFormPrefix+'blastpType').change(refreshControls);
 }
 
 function refreshControls() {
-    program = jQuery('#blast_program').val();
-    blastnType = jQuery('#blast_blastnType').val();
-    blastpType = jQuery('#blast_blastpType').val();
+    program = jQuery(blastFormPrefix+'program').val();
+    blastnType = jQuery(blastFormPrefix+'blastnType').val();
+    blastpType = jQuery(blastFormPrefix+'blastpType').val();
     
     if ((program == "blastn") || (program == "tblastn"))
-      bankType = jQuery('#blast_bankTypeNuc').val();
+      bankType = jQuery(blastFormPrefix+'bankTypeNuc').val();
     else
-      bankType = jQuery('#blast_bankTypeProt').val();
+      bankType = jQuery(blastFormPrefix+'bankTypeProt').val();
     
     if ((program == "blastn") || (program == "tblastn"))
-      jQuery('#blast_bankTypeNuc').parent().parent().show();
+      jQuery(blastFormPrefix+'bankTypeNuc').parent().parent().show();
     else
-      jQuery('#blast_bankTypeNuc').parent().parent().hide();
+      jQuery(blastFormPrefix+'bankTypeNuc').parent().parent().hide();
     
     if ((program == "blastn") || (program == "tblastn"))
-      jQuery('#blast_bankTypeProt').parent().parent().hide();
+      jQuery(blastFormPrefix+'bankTypeProt').parent().parent().hide();
     else
-      jQuery('#blast_bankTypeProt').parent().parent().show();
+      jQuery(blastFormPrefix+'bankTypeProt').parent().parent().show();
       
     
     if (program == "blastn")
-      jQuery('#blast_blastnType').parent().parent().show();
+      jQuery(blastFormPrefix+'blastnType').parent().parent().show();
     else
-      jQuery('#blast_blastnType').parent().parent().hide();
+      jQuery(blastFormPrefix+'blastnType').parent().parent().hide();
     
     if (program == "blastp")
-      jQuery('#blast_blastpType').parent().parent().show();
+      jQuery(blastFormPrefix+'blastpType').parent().parent().show();
     else
-      jQuery('#blast_blastpType').parent().parent().hide();
+      jQuery(blastFormPrefix+'blastpType').parent().parent().hide();
     
     
     if ((program == "blastn") && (blastnType == "megablast"))
-      jQuery('#blast_wordSizesMegablast').parent().parent().show();
+      jQuery(blastFormPrefix+'wordSizesMegablast').parent().parent().show();
     else
-      jQuery('#blast_wordSizesMegablast').parent().parent().hide();
+      jQuery(blastFormPrefix+'wordSizesMegablast').parent().parent().hide();
       
     if ((program == "blastn") && (blastnType == "dc-megablast"))
-      jQuery('#blast_wordSizesDcMegablast').parent().parent().show();
+      jQuery(blastFormPrefix+'wordSizesDcMegablast').parent().parent().show();
     else
-      jQuery('#blast_wordSizesDcMegablast').parent().parent().hide();
+      jQuery(blastFormPrefix+'wordSizesDcMegablast').parent().parent().hide();
       
     if ((program == "blastn") && (blastnType == "blastn"))
-      jQuery('#blast_wordSizesBlastn').parent().parent().show();
+      jQuery(blastFormPrefix+'wordSizesBlastn').parent().parent().show();
     else
-      jQuery('#blast_wordSizesBlastn').parent().parent().hide();
+      jQuery(blastFormPrefix+'wordSizesBlastn').parent().parent().hide();
       
     if (program != "blastn")
-      jQuery('#blast_wordSizesProt').parent().parent().show();
+      jQuery(blastFormPrefix+'wordSizesProt').parent().parent().show();
     else
-      jQuery('#blast_wordSizesProt').parent().parent().hide();
+      jQuery(blastFormPrefix+'wordSizesProt').parent().parent().hide();
       
       
     if ((program == "blastn") && (blastnType == "megablast"))
-      jQuery('#blast_matricesMegablast').parent().parent().show();
+      jQuery(blastFormPrefix+'matricesMegablast').parent().parent().show();
     else
-      jQuery('#blast_matricesMegablast').parent().parent().hide();
+      jQuery(blastFormPrefix+'matricesMegablast').parent().parent().hide();
       
     if ((program == "blastn") && (blastnType != "megablast"))
-      jQuery('#blast_matricesNuc').parent().parent().show();
+      jQuery(blastFormPrefix+'matricesNuc').parent().parent().show();
     else
-      jQuery('#blast_matricesNuc').parent().parent().hide();
+      jQuery(blastFormPrefix+'matricesNuc').parent().parent().hide();
       
     if (program != "blastn")
-      jQuery('#blast_matricesProt').parent().parent().show();
+      jQuery(blastFormPrefix+'matricesProt').parent().parent().show();
     else
-      jQuery('#blast_matricesProt').parent().parent().hide();
+      jQuery(blastFormPrefix+'matricesProt').parent().parent().hide();
       
       
     if ((program == "blastn") && (blastnType == "megablast"))
-      jQuery('#blast_gapCostsMegablast').parent().parent().show();
+      jQuery(blastFormPrefix+'gapCostsMegablast').parent().parent().show();
     else
-      jQuery('#blast_gapCostsMegablast').parent().parent().hide();
+      jQuery(blastFormPrefix+'gapCostsMegablast').parent().parent().hide();
       
     if ((program == "blastn") && (blastnType != "megablast"))
-      jQuery('#blast_gapCostsBlastn').parent().parent().show();
+      jQuery(blastFormPrefix+'gapCostsBlastn').parent().parent().show();
     else
-      jQuery('#blast_gapCostsBlastn').parent().parent().hide();
+      jQuery(blastFormPrefix+'gapCostsBlastn').parent().parent().hide();
       
     if ((program != "blastn") && (program != 'tblastx'))
-      jQuery('#blast_gapCostsProt').parent().parent().show();
+      jQuery(blastFormPrefix+'gapCostsProt').parent().parent().show();
     else
-      jQuery('#blast_gapCostsProt').parent().parent().hide();
+      jQuery(blastFormPrefix+'gapCostsProt').parent().parent().hide();
     
     
     if (program == 'tblastx') {
-      jQuery('#blast_queryCode').parent().parent().show();
-      jQuery('#blast_dbCode').parent().parent().show();
+      jQuery(blastFormPrefix+'queryCode').parent().parent().show();
+      jQuery(blastFormPrefix+'dbCode').parent().parent().show();
     }
     else if (program == 'blastx') {
-      jQuery('#blast_queryCode').parent().parent().show();
-      jQuery('#blast_dbCode').parent().parent().hide();
+      jQuery(blastFormPrefix+'queryCode').parent().parent().show();
+      jQuery(blastFormPrefix+'dbCode').parent().parent().hide();
     }
     else if (program == 'tblastn') {
-      jQuery('#blast_queryCode').parent().parent().hide();
-      jQuery('#blast_dbCode').parent().parent().show();
+      jQuery(blastFormPrefix+'queryCode').parent().parent().hide();
+      jQuery(blastFormPrefix+'dbCode').parent().parent().show();
     }
     else {
-      jQuery('#blast_queryCode').parent().parent().hide();
-      jQuery('#blast_dbCode').parent().parent().hide();
+      jQuery(blastFormPrefix+'queryCode').parent().parent().hide();
+      jQuery(blastFormPrefix+'dbCode').parent().parent().hide();
     }
     
     if ((program == "blastp") && (blastpType != "blastp")) {
-      if (jQuery('#blast_maxTargetSequences').val() == 100)
-        jQuery('#blast_maxTargetSequences').val(500);
+      if (jQuery(blastFormPrefix+'maxTargetSequences').val() == 100)
+        jQuery(blastFormPrefix+'maxTargetSequences').val(500);
     }
     else {
-      if (jQuery('#blast_maxTargetSequences').val() == 500)
-        jQuery('#blast_maxTargetSequences').val(100);
+      if (jQuery(blastFormPrefix+'maxTargetSequences').val() == 500)
+        jQuery(blastFormPrefix+'maxTargetSequences').val(100);
     }
     
     if (((program == "blastp") && (blastpType != "phiblast")) || (program == "tblastn"))
-      jQuery('#blast_compositionalAdjustments').parent().parent().show();
+      jQuery(blastFormPrefix+'compositionalAdjustments').parent().parent().show();
     else
-      jQuery('#blast_compositionalAdjustments').parent().parent().hide();
+      jQuery(blastFormPrefix+'compositionalAdjustments').parent().parent().hide();
       
     if ((program == "blastp") && ((blastpType == "phiblast") || (blastpType == "psiblast")))
       jQuery('.psiFormPart').show();
@@ -148,14 +148,14 @@ function refreshControls() {
       jQuery('.psiFormPart').hide();
       
     if ((program == "blastp") && (blastpType == "psiblast"))
-      jQuery('#blast_psiPSSM').parent().parent().show();
+      jQuery(blastFormPrefix+'psiPSSM').parent().parent().show();
     else
-      jQuery('#blast_psiPSSM').parent().parent().hide();
+      jQuery(blastFormPrefix+'psiPSSM').parent().parent().hide();
       
     if ((program == "blastp") && (blastpType == "phiblast"))
-      jQuery('#blast_phiPattern').parent().parent().show();
+      jQuery(blastFormPrefix+'phiPattern').parent().parent().show();
     else
-      jQuery('#blast_phiPattern').parent().parent().hide();
+      jQuery(blastFormPrefix+'phiPattern').parent().parent().hide();
       
       
     if ((program == "blastp") && (blastpType == "phiblast"))
@@ -166,16 +166,16 @@ function refreshControls() {
     
     
     if (bankType == 'persodb') {
-      jQuery('#blast_persoBankFile').parent().parent().show();
-      jQuery('#blast_dbPath').parent().parent().hide();
+      jQuery(blastFormPrefix+'persoBankFile').parent().parent().show();
+      jQuery(blastFormPrefix+'dbPath').parent().parent().hide();
     }
     else {
-      jQuery('#blast_persoBankFile').parent().parent().hide();
-      jQuery('#blast_dbPath').parent().parent().show();
+      jQuery(blastFormPrefix+'persoBankFile').parent().parent().hide();
+      jQuery(blastFormPrefix+'dbPath').parent().parent().show();
     }
     
-    jQuery('#blast_lowComplex').attr('checked', !((program == "blastp") || ((program == "blastn") && (blastnType == "megablast"))));
-    jQuery('#blast_softMasking').attr('checked', !(program != "blastn"));
+    jQuery(blastFormPrefix+'lowComplex').attr('checked', !((program == "blastp") || ((program == "blastn") && (blastnType == "megablast"))));
+    jQuery(blastFormPrefix+'softMasking').attr('checked', !(program != "blastn"));
 }
 
 
