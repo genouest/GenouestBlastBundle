@@ -317,7 +317,7 @@ class BlastRequest implements BlastRequestInterface
     
     public static function getPrograms()
     {
-        return array_map(create_function('$value', 'return (string) $value;'),array_keys(self::getProgramLabels()));
+        return array_keys(self::getProgramLabels());
     }
     
     
@@ -330,7 +330,7 @@ class BlastRequest implements BlastRequestInterface
     
     public static function getBlastnTypes()
     {
-        return array_map(create_function('$value', 'return (string) $value;'),array_keys(self::getBlastnTypeLabels()));
+        return array_keys(self::getBlastnTypeLabels());
     }
     
     public static function getBlastpTypeLabels()
@@ -342,7 +342,7 @@ class BlastRequest implements BlastRequestInterface
     
     public static function getBlastpTypes()
     {
-        return array_map(create_function('$value', 'return (string) $value;'),array_keys(self::getBlastpTypeLabels()));
+        return array_keys(self::getBlastpTypeLabels());
     }
     
     public static function getNucBankTypeLabels()
@@ -355,7 +355,7 @@ class BlastRequest implements BlastRequestInterface
     
     public static function getNucBankTypes()
     {
-        return array_map(create_function('$value', 'return (string) $value;'),array_keys(self::getNucBankTypeLabels()));
+        return array_keys(self::getNucBankTypeLabels());
     }
     
     public static function getProtBankTypeLabels()
@@ -366,7 +366,7 @@ class BlastRequest implements BlastRequestInterface
     
     public static function getProtBankTypes()
     {
-        return array_map(create_function('$value', 'return (string) $value;'),array_keys(self::getProtBankTypeLabels()));
+        return array_keys(self::getProtBankTypeLabels());
     }
     
     public static function getExpectLabels()
@@ -382,7 +382,10 @@ class BlastRequest implements BlastRequestInterface
     
     public static function getExpects()
     {
-        return array_map(create_function('$value', 'return (string) $value;'),array_keys(self::getExpectLabels()));
+        // The choice validator uses in_array() in strict mode which means the type is important.
+        // array_keys converts string keys that looks like integer to int in the resulting array.
+        // So we're forced to check that the array_keys result contains only strings.
+        return array_map(create_function('$value', 'return (string) $value;'), array_keys(self::getExpectLabels()));
     }
     
     public static function getNucMatriceLabels()
@@ -397,7 +400,7 @@ class BlastRequest implements BlastRequestInterface
     
     public static function getNucMatrices()
     {
-        return array_map(create_function('$value', 'return (string) $value;'),array_keys(self::getNucMatriceLabels()));
+        return array_keys(self::getNucMatriceLabels());
     }
     
     public static function getMegablastMatriceLabels()
@@ -412,7 +415,7 @@ class BlastRequest implements BlastRequestInterface
     
     public static function getMegablastMatrices()
     {
-        return array_map(create_function('$value', 'return (string) $value;'),array_keys(self::getMegablastMatriceLabels()));
+        return array_keys(self::getMegablastMatriceLabels());
     }
     
     public static function getProtMatriceLabels()
@@ -426,7 +429,7 @@ class BlastRequest implements BlastRequestInterface
     
     public static function getProtMatrices()
     {
-        return array_map(create_function('$value', 'return (string) $value;'),array_keys(self::getProtMatriceLabels()));
+        return array_keys(self::getProtMatriceLabels());
     }
     
     public static function getGeneticCodeLabels()
@@ -452,7 +455,10 @@ class BlastRequest implements BlastRequestInterface
     
     public static function getGeneticCodes()
     {
-        return array_map(create_function('$value', 'return (string) $value;'),array_keys(self::getGeneticCodeLabels()));
+        // The choice validator uses in_array() in strict mode which means the type is important.
+        // array_keys converts string keys that looks like integer to int in the resulting array.
+        // So we're forced to check that the array_keys result contains only strings.
+        return array_map(create_function('$value', 'return (string) $value;'), array_keys(self::getGeneticCodeLabels()));
     }
     
     public static function getMaxTargetSequenceLabels()
@@ -470,7 +476,10 @@ class BlastRequest implements BlastRequestInterface
     
     public static function getMaxTargetSequences()
     {
-        return array_map(create_function('$value', 'return (string) $value;'),array_keys(self::getMaxTargetSequenceLabels()));
+        // The choice validator uses in_array() in strict mode which means the type is important.
+        // array_keys converts string keys that looks like integer to int in the resulting array.
+        // So we're forced to check that the array_keys result contains only strings.
+        return array_map(create_function('$value', 'return (string) $value;'), array_keys(self::getMaxTargetSequenceLabels()));
     }
     
     public static function getProtWordSizeLabels()
@@ -481,7 +490,10 @@ class BlastRequest implements BlastRequestInterface
     
     public static function getProtWordSizes()
     {
-        return array_map(create_function('$value', 'return (string) $value;'),array_keys(self::getProtWordSizeLabels()));
+        // The choice validator uses in_array() in strict mode which means the type is important.
+        // array_keys converts string keys that looks like integer to int in the resulting array.
+        // So we're forced to check that the array_keys result contains only strings.
+        return array_map(create_function('$value', 'return (string) $value;'), array_keys(self::getProtWordSizeLabels()));
     }
     
     public static function getBlastnWordSizeLabels()
@@ -493,7 +505,10 @@ class BlastRequest implements BlastRequestInterface
     
     public static function getBlastnWordSizes()
     {
-        return array_map(create_function('$value', 'return (string) $value;'),array_keys(self::getBlastnWordSizeLabels()));
+        // The choice validator uses in_array() in strict mode which means the type is important.
+        // array_keys converts string keys that looks like integer to int in the resulting array.
+        // So we're forced to check that the array_keys result contains only strings.
+        return array_map(create_function('$value', 'return (string) $value;'), array_keys(self::getBlastnWordSizeLabels()));
     }
     
     public static function getMegablastWordSizeLabels()
@@ -511,7 +526,10 @@ class BlastRequest implements BlastRequestInterface
     
     public static function getMegablastWordSizes()
     {
-        return array_map(create_function('$value', 'return (string) $value;'),array_keys(self::getMegablastWordSizeLabels()));
+        // The choice validator uses in_array() in strict mode which means the type is important.
+        // array_keys converts string keys that looks like integer to int in the resulting array.
+        // So we're forced to check that the array_keys result contains only strings.
+        return array_map(create_function('$value', 'return (string) $value;'), array_keys(self::getMegablastWordSizeLabels()));
     }
     
     public static function getDcMegablastWordSizeLabels()
@@ -522,7 +540,10 @@ class BlastRequest implements BlastRequestInterface
     
     public static function getDcMegablastWordSizes()
     {
-        return array_map(create_function('$value', 'return (string) $value;'),array_keys(self::getDcMegablastWordSizeLabels()));
+        // The choice validator uses in_array() in strict mode which means the type is important.
+        // array_keys converts string keys that looks like integer to int in the resulting array.
+        // So we're forced to check that the array_keys result contains only strings.
+        return array_map(create_function('$value', 'return (string) $value;'), array_keys(self::getDcMegablastWordSizeLabels()));
     }
     
     public static function getBlastnGapCostLabels()
@@ -539,7 +560,7 @@ class BlastRequest implements BlastRequestInterface
     
     public static function getBlastnGapCosts()
     {
-        return array_map(create_function('$value', 'return (string) $value;'),array_keys(self::getBlastnGapCostLabels()));
+        return array_keys(self::getBlastnGapCostLabels());
     }
     
     public static function getMegablastGapCostLabels()
@@ -556,7 +577,7 @@ class BlastRequest implements BlastRequestInterface
     
     public static function getMegablastGapCosts()
     {
-        return array_map(create_function('$value', 'return (string) $value;'),array_keys(self::getMegablastGapCostLabels()));
+        return array_keys(self::getMegablastGapCostLabels());
     }
     
     public static function getProtGapCostLabels()
@@ -571,7 +592,7 @@ class BlastRequest implements BlastRequestInterface
     
     public static function getProtGapCosts()
     {
-        return array_map(create_function('$value', 'return (string) $value;'),array_keys(self::getProtGapCostLabels()));
+        return array_keys(self::getProtGapCostLabels());
     }
     
     public static function getCompositionalAdjustmentLabels()
@@ -584,7 +605,10 @@ class BlastRequest implements BlastRequestInterface
     
     public static function getCompositionalAdjustments()
     {
-        return array_map(create_function('$value', 'return (string) $value;'),array_keys(self::getCompositionalAdjustmentLabels()));
+        // The choice validator uses in_array() in strict mode which means the type is important.
+        // array_keys converts string keys that looks like integer to int in the resulting array.
+        // So we're forced to check that the array_keys result contains only strings.
+        return array_map(create_function('$value', 'return (string) $value;'), array_keys(self::getCompositionalAdjustmentLabels()));
     }
     
     /**
