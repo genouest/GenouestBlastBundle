@@ -59,19 +59,30 @@ class GenouestBlastExtension extends Extension
                             'choices' => array("" => "Loading, please wait...") // Empty for performance reason. We get the db list using ajax once the page is loaded
                             ));
             
-            $container->setDefinition('blast.db.list.constraint.validator',
-                new Definition('%blast.db.list.biomaj.constraint.validator.class%', array())
-                );
-                
-            $container->setDefinition('blast.db.list.constraint', 
-                new Definition('%blast.db.list.biomaj.constraint.class%', array(
-                        array('type' => $allTypes,
-                            'format' => $config['db_provider']['biomaj']['format'],
-                            'cleanup' => $config['db_provider']['biomaj']['cleanup'],
+            if (!empty($config['db_provider']['biomaj']['prefix'])) {
+                $container->setAlias('blast.db.list.constraint.validator', 'biomaj.prefix.constraint.validator');
+                    
+                $container->setDefinition('blast.db.list.constraint', 
+                    new Definition('%biomaj.prefix.constraint.class%', array(
+                            array('prefix' => $config['db_provider']['biomaj']['prefix']
+                                )
                             )
                         )
-                    )
-                );
+                    );
+            }
+            else {
+                $container->setAlias('blast.db.list.constraint.validator', 'biomaj.constraint.validator');
+                    
+                $container->setDefinition('blast.db.list.constraint', 
+                    new Definition('%biomaj.constraint.class%', array(
+                            array('type' => $allTypes,
+                                'format' => $config['db_provider']['biomaj']['format'],
+                                'cleanup' => $config['db_provider']['biomaj']['cleanup'],
+                                )
+                            )
+                        )
+                    );
+            }
 
             $container->setParameter('blast.db.list.provider', 'biomaj');
             $container->setParameter('blast.db.list.provider.options', array(

@@ -6,10 +6,9 @@
 
     <parameters>
         <!-- Db Provider classes -->
-        <parameter key="blast.db.list.biomaj.constraint.validator.class">Genouest\Bundle\BiomajBundle\Constraints\BiomajValidator</parameter>
         <parameter key="blast.db.list.list.constraint.validator.class">Symfony\Component\Validator\Constraints\ChoiceValidator</parameter>
         <parameter key="blast.db.list.custom.constraint.validator.class">Genouest\Bundle\BlastBundle\Constraints\DbCustomValidator</parameter>
-        <parameter key="blast.db.list.biomaj.constraint.class">Genouest\Bundle\BiomajBundle\Constraints\Biomaj</parameter>
+        
         <parameter key="blast.db.list.list.constraint.class">Symfony\Component\Validator\Constraints\Choice</parameter>
         <parameter key="blast.db.list.custom.constraint.class">Genouest\Bundle\BlastBundle\Constraints\DbCustom</parameter>
     </parameters>
