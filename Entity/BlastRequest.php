@@ -16,7 +16,6 @@ namespace Genouest\Bundle\BlastBundle\Entity;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\ExecutionContext;
 
@@ -24,7 +23,6 @@ use Genouest\Bundle\SchedulerBundle\Entity\Job;
 use Genouest\Bundle\SchedulerBundle\Entity\ResultFile;
 use Genouest\Bundle\SchedulerBundle\Entity\ResultViewer;
 use Genouest\Bundle\SchedulerBundle\Scheduler\SchedulerInterface;
-use Genouest\Bundle\CommonsBundle\Biomaj\BankStats;
 
 /**
  * @Assert\Callback(methods = {"isDbPathValid"})
@@ -348,8 +346,6 @@ class BlastRequest implements BlastRequestInterface
     public static function getNucBankTypeLabels()
     {
         return array('pubdb' => 'Public databank',
-                    'procgenome' => 'Procaryotic genome',
-                    'eucgenome' => 'Eucaryotic genome',
                     'persodb' => 'Personal databank');
     }
     
@@ -681,14 +677,6 @@ class BlastRequest implements BlastRequestInterface
         // Save files and viewers in db
         $job->addResultFilesArray($resultFiles);
         $job->addResultViewersArray($resultViewers);
-
-        // FIXME this is genouest specific
-        if ($this->hasPersoDb())
-            $dbPath = $this->dbPath;
-        else
-            $dbPath = $workDir.'uploadedDB';
-        BankStats::sendStats($job->getProgramName(), $dbPath);
-        
 
         // Store generated command line
         $job->setCommand($command);
