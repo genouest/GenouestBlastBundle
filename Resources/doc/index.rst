@@ -10,7 +10,7 @@ It uses GenouestSchedulerBundle to run BLAST+ jobs on different scheduling syste
 How does it work?
 -----------------
 
-This bundle contains a ready-to-use BLAST+ form (tested with blast+ 2.2.25+).
+This bundle contains a ready-to-use BLAST+ form (tested with BLAST+ 2.2.25+).
 The BLAST+ jobs are launched on computation machines (SGE cluster for example) using GenouestSchedulerBundle.
 The results can be viewed and downloaded in different formats (html, txt, csv, xml, ...)
 The CSRF protection is disable by default on this blast form, as there is no particular security risk with it.
@@ -20,9 +20,10 @@ The CSRF protection is disable by default on this blast form, as there is no par
 Installation
 ------------
 
-You need to have blast+ installed and properly configured. Blast+ binaries should be in the PATH of the computing machines.
+You need to have BLAST+ installed and properly configured (download from ftp://ftp.ncbi.nih.gov/blast/executables/blast+/LATEST/).
+BLAST+ binaries should be in the PATH of the computing machines.
 
-Install GenouestSchedulerBundle which is required by this bundle.
+Install and configure GenouestSchedulerBundle which is required by this bundle.
 
 Checkout a copy of the bundle code::
 
@@ -72,6 +73,23 @@ The following configuration keys are available (with their default values)::
         
         # The blast request object. Change this if you want to use a custom one (it should implement Genouest\Bundle\BlastBundle\Entity\BlastRequestInterface).
         request_class:   Genouest\Bundle\BlastBundle\Entity\BlastRequest
+        
+        # Define how to retrieve the databank list. Choose only one of the three available method
+        db_provider:
+            # Use a BioMAJ server. Requires the GenouestBiomajBundle installed and configured.
+            biomaj:
+                type:
+                    nucleic:      ['nucleic', 'foo'] # List of biomaj bank types for nucleic banks
+                    proteic:      ['proteic', 'bar'] # List of biomaj bank types for proteic banks
+                format:     blast # Biomaj bank format
+                cleanup:    true # Should the bank names be cleaned up
+                prefix:     "/db/" # Use the BiomajPrefix constraint for performance reason. Delete this line to use the standard Biomaj constraint.
+            # Specify the list of banks directly in the config file
+            list:
+                nucleic:      {"/db/some/nucl/db" : "My cool nucleic db!", "/db/some/other/nucl/db" : "Another nucleic db!"}
+                proteic:      {"/db/some/prot/db" : "My cool proteic db!", "/db/some/other/prot/db" : "Another proteic db!"}
+            # Use a PHP class implementing Genouest\Bundle\BlastBundle\Entity\DbProviderInterface. See DummyDbProvider class for an example.
+            callback:        Genouest\Bundle\BlastBundle\Entity\DummyDbProvider
 
 Customization
 -------------
@@ -81,6 +99,7 @@ Customizing the Blast+ command
 
 The blast command line is generated using a twig template. To customize it, you only need to
 override the 'GenouestBlastBundle:Blast:command.txt.twig' template.
+Be careful not to add unwanted line breaks that would break the bash script.
 
 Customizing the form
 ~~~~~~~~~~~~~~~~~~~~
@@ -97,7 +116,7 @@ Finally, this bundle brings a specific result page for the scheduler bundle. You
 Fasta validation
 ~~~~~~~~~~~~~~~~
 
-This bundle comes with specific Constraints to validate fata sequences in a form.
+This bundle comes with specific Constraints to validate fasta sequences in a form.
 You can use them like this:
 
     /**
@@ -114,4 +133,5 @@ In this example, PROT_OR_ADN can be replaced by ADN, PROT or PROSITE depending o
 The Genouest\Bundle\BlastBundle\Constraints\FastaFileValidator extends Symfony\Component\Validator\Constraints\FileValidator, so you can use the same
 validation options with it (maxSize in this example).
 
-By default, the blast form allow sequences as big as 100Mb. Keep it mind that this limitation is also affected by apache configuration.
+By default, the blast form allow sequences as big as 100Mb. Keep it mind that this limitation is also affected by the PHP server configuration.
+
