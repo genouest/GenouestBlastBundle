@@ -53,6 +53,7 @@ Finally, import the routes defined in the bundle. Make sure to add these lines B
     // ...
     _blast:
         resource: "@GenouestBlastBundle/Controller/BlastController.php"
+        prefix: /blast
         type: annotation
     // ...
 
