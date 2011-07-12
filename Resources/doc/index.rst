@@ -47,7 +47,7 @@ Make sure that you also register the namespaces with the autoloader::
         // ...
     ));
 
-Finally, import the routes defined in the bundle. Make sure to add these lines BEFORE the GenouestSchedulerBundle routes import::
+Import the routes defined in the bundle. Make sure to add these lines BEFORE the GenouestSchedulerBundle routes import::
 
     // app/config/routing.yml
     // ...
@@ -57,6 +57,9 @@ Finally, import the routes defined in the bundle. Make sure to add these lines B
         type: annotation
     // ...
 
+Publish the assets in the web dir:
+
+    app/console assets:install --symlink web/
 
 Configuration
 -------------
