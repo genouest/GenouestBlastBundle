@@ -31,10 +31,10 @@ abstract class DbProvider extends ContainerAware implements DbProviderInterface
         $all = array();
         
         if (!empty($this->nucleic_banks))
-            $all = array_merge($all, $this->nucleic_banks);
+            $all = $all + $this->nucleic_banks; // Not using array_merge to avoir array reindexing
 
         if (!empty($this->proteic_banks))
-            $all = array_merge($all, $this->proteic_banks);
+            $all = $all + $this->proteic_banks; // Not using array_merge to avoir array reindexing
         
         return $all;
     }

@@ -34,7 +34,11 @@ class DbCallbackProviderValidator extends ConstraintValidator
         }
 
         $choices = $this->container->get('blast.db.list.provider')->getAllDatabanks();
-        $choices = array_keys($choices);
+        
+        // This validator uses in_array() in strict mode which means the type is important.
+        // array_keys converts string keys that looks like integer to int in the resulting array.
+        // So we're forced to check that the array_keys result contains only strings.
+        $choices = array_map(create_function('$value', 'return (string) $value;'), array_keys($choices));
 
         if (!in_array($value, $choices, true)) {
             $this->setMessage($constraint->message, array('{{ value }}' => $value));
