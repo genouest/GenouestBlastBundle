@@ -616,7 +616,7 @@ class BlastRequest implements BlastRequestInterface
     public function getJob(SchedulerInterface $scheduler) {
     
         $job = new Job();
-        $job->setProgramName('blast'); // It is important to set program name *before* generating the uid
+        $job->setProgramName($this->container->getParameter('blast.scheduler.name')); // It is important to set program name *before* generating the uid
         $uid = $job->generateJobUid();
         $job->setTitle($this->title);
         $job->setEmail($this->email);

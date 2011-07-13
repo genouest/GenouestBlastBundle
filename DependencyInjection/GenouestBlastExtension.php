@@ -45,6 +45,8 @@ class GenouestBlastExtension extends Extension
         
         $container->setParameter('blast.request.class', $config['request_class']);
         
+        $container->setParameter('blast.scheduler.name', $config['scheduler_name']);
+        
         // Db providers
         if (count($config['db_provider']) != 1) {
             throw new \InvalidArgumentException('There should exactly one "db_provider"');
