@@ -39,7 +39,7 @@ class BlastType extends AbstractType
         $builder->add('bankTypeNuc', 'choice', array('choices' => BlastRequest::getNucBankTypeLabels()));
         $builder->add('bankTypeProt', 'choice', array('choices' => BlastRequest::getProtBankTypeLabels()));
         $builder->add('persoBankFile', 'file', array('required' => false));
-        $builder->add('dbPath', $this->container->getParameter('blast.db.list.widget'), $this->container->getParameter('blast.db.list.widget.options'));
+        $builder->add('dbPath', $this->container->get('blast.db.list.provider')->getWidgetType(), $this->container->get('blast.db.list.provider')->getWidgetOptions());
         $builder->add('maxTargetSequences', 'choice', array('choices' => BlastRequest::getMaxTargetSequenceLabels()));
         $builder->add('expect', 'choice', array('choices' => BlastRequest::getExpectLabels()));
         $builder->add('wordSizesProt', 'choice', array('choices' => BlastRequest::getProtWordSizeLabels()));

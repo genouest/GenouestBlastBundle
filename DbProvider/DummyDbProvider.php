@@ -11,22 +11,30 @@
  *
  */
 
-namespace Genouest\Bundle\BlastBundle\Entity;
+namespace Genouest\Bundle\BlastBundle\DbProvider;
 
-interface DbProviderInterface
+class DummyDbProvider extends CallbackDbProvider
 {
     /**
-     * Get a list of nucleic databank
+     * Compute a list of nucleic databank
      *
      * @return array An associative array of nucleic databank (key: path, value: label)
      */
-    public function getNucleicDatabanks();
+    public function computeNucleicDatabanks() {
+    
+        return array('/some/path' => 'Nucleic db 1',
+                     '/some/other/path' => 'Nucleic db 2');
+    }
     
     /**
-     * Get a list of proteic databank
+     * Compute a list of proteic databank
      *
      * @return array An associative array of proteic databank (key: path, value: label)
      */
-    public function getProteicDatabanks();
+    public function computeProteicDatabanks() {
+    
+        return array('/db/some/path' => 'Proteic db 1',
+                     '/db/some/other/path' => 'Proteic db 2');
+    }
 }
 

@@ -92,8 +92,8 @@ The following configuration keys are available (with their default values)::
             list:
                 nucleic:      {"/db/some/nucl/db" : "My cool nucleic db!", "/db/some/other/nucl/db" : "Another nucleic db!"}
                 proteic:      {"/db/some/prot/db" : "My cool proteic db!", "/db/some/other/prot/db" : "Another proteic db!"}
-            # Use a PHP class implementing Genouest\Bundle\BlastBundle\Entity\DbProviderInterface. See DummyDbProvider class for an example.
-            callback:        Genouest\Bundle\BlastBundle\Entity\DummyDbProvider
+            # Use a PHP class implementing Genouest\Bundle\BlastBundle\DbProvider\CallbackDbProvider. See DummyDbProvider class for an example.
+            callback:        Genouest\Bundle\BlastBundle\DbProvider\DummyDbProvider
 
 Customization
 -------------

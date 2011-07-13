@@ -15,7 +15,7 @@
 
 {% block head %}
     {{ parent() }}
-    {% if db_provider == 'biomaj' %}
+    {% if db_provider_name == 'biomaj' %}
         {% include 'GenouestBiomajBundle::js.html.twig' %}
     {% endif %}
 {% endblock %}
@@ -201,6 +201,6 @@
       <input type="submit" />
     </form>
 
-    {% include 'GenouestBlastBundle:Blast:dblist.html.twig' with {'provider': db_provider, 'provider_options' : db_provider_options, 'form': form} %}
+    {% include 'GenouestBlastBundle:Blast:dblist.html.twig' with {'db_provider': db_provider, 'db_provider_name' : db_provider_name, 'form': form} %}
 
 {% endblock %}

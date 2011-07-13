@@ -5,12 +5,17 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
+        
         <!-- Db Provider classes -->
+        <parameter key="blast.db.list.provider.biomaj.class">Genouest\Bundle\BlastBundle\DbProvider\BiomajDbProvider</parameter>
+        <parameter key="blast.db.list.provider.list.class">Genouest\Bundle\BlastBundle\DbProvider\ListDbProvider</parameter>
+    
+        <!-- Db Provider validation classes -->
         <parameter key="blast.db.list.list.constraint.validator.class">Symfony\Component\Validator\Constraints\ChoiceValidator</parameter>
-        <parameter key="blast.db.list.custom.constraint.validator.class">Genouest\Bundle\BlastBundle\Constraints\DbCustomValidator</parameter>
+        <parameter key="blast.db.list.callback.constraint.validator.class">Genouest\Bundle\BlastBundle\Constraints\DbCallbackProviderValidator</parameter>
         
         <parameter key="blast.db.list.list.constraint.class">Symfony\Component\Validator\Constraints\Choice</parameter>
-        <parameter key="blast.db.list.custom.constraint.class">Genouest\Bundle\BlastBundle\Constraints\DbCustom</parameter>
+        <parameter key="blast.db.list.callback.constraint.class">Genouest\Bundle\BlastBundle\Constraints\DbCallbackProvider</parameter>
     </parameters>
     
     <services>
@@ -24,6 +29,11 @@
         
         <service id="twig.extension.split" class="Genouest\Bundle\BlastBundle\Extension\SplitExtension">
             <tag name="twig.extension" />
+        </service>
+        
+        <service id="blast.db.list.callback.constraint.validator" class="%blast.db.list.callback.constraint.validator.class%">
+            <argument type="service" id="service_container" />
+            <tag name="validator.constraint_validator" alias="dbcallback" />
         </service>
     </services>
 

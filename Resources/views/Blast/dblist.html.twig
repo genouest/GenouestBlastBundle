@@ -7,17 +7,17 @@
         loaderId = 'img.dbpath_loader';
         jQuery(loaderId).show();
         
-        {% if db_provider == 'biomaj' %}
+        {% if db_provider_name == 'biomaj' %}
         
-            reloadBiomajDbList(blastFormPrefix+'dbPath', guessBiomajDbType(), '{{ db_provider_options['format'] }}', 'false', 'true');
+            reloadBiomajDbList(blastFormPrefix+'dbPath', guessBiomajDbType(), '{{ db_provider.getFormat() }}', 'false', 'true');
             
-        {% elseif db_provider == 'list' %}
+        {% elseif db_provider_name == 'list' or db_provider_name == 'callback' %}
         
             loadStaticDbList(blastFormPrefix+'dbPath');
             
         {% else %}
         
-            alert('Unsupported blast databank provider ('+db_provider+')');
+            alert('Unsupported blast databank provider ({{db_provider_name}})');
             
         {% endif %}
         
@@ -25,7 +25,7 @@
         refreshControls();
     }
 
-    {% if db_provider == 'biomaj' %}
+    {% if db_provider_name == 'biomaj' %}
         /**
          * Guess the biomaj db type corresponding to the selected program and bankType
          */
@@ -39,19 +39,19 @@
 
             types = new Array();
             if ((program == 'blastp') || (program == 'blastx')) { // proteic blast
-                {% for type in db_provider_options['type_proteic'] %}
+                {% for type in db_provider.getProteicType() %}
                     types.push('{{ type }}');
                 {% endfor %}
                 return types;
             }
             else { // nucleic blast
-                {% for type in db_provider_options['type_nucleic'] %}
+                {% for type in db_provider.getNucleicType() %}
                     types.push('{{ type }}');
                 {% endfor %}
                 return types;
             }
         }
-    {% elseif db_provider == 'list' %}
+    {% elseif db_provider_name == 'list' or db_provider_name == 'callback' %}
         /**
          * Update the static db list corresponding to the selected program and bankType
          */
@@ -65,12 +65,12 @@
 
             newList = '';
             if ((program == 'blastp') || (program == 'blastx')) {
-                {% for path, label in db_provider_options['list_proteic'] %}
+                {% for path, label in db_provider.getProteicDatabanks() %}
                     newList += "<option value=\"{{ path }}\">{{ label }}</option>";
                 {% endfor %}
             }
             else {
-                {% for path, label in db_provider_options['list_nucleic'] %}
+                {% for path, label in db_provider.getNucleicDatabanks() %}
                         newList += "<option value=\"{{ path }}\">{{ label }}</option>";
                 {% endfor %}
             }

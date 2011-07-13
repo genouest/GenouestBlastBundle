@@ -16,6 +16,7 @@ namespace Genouest\Bundle\BlastBundle\Constraints;
 use Symfony\Component\Validator\Exception\ConstraintDefinitionException;
 use Symfony\Component\Validator\Constraints\File;
 
+/** @Annotation */
 class FastaFile extends File
 {
     static protected $seqTypes = array('ADN', 'PROT', 'PROT_OR_ADN', 'PROSITE');
@@ -33,11 +34,5 @@ class FastaFile extends File
         if (!in_array($this->seqType, self::$seqTypes)) {
             throw new ConstraintDefinitionException(sprintf('The option "seqType" must be one of "%s"', implode('", "', self::$seqTypes)));
         }
-    }
-    
-    public function getTargets()
-    {
-    
-        return self::PROPERTY_CONSTRAINT;
     }
 }

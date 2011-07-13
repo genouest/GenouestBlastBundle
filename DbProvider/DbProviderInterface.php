@@ -11,30 +11,36 @@
  *
  */
 
-namespace Genouest\Bundle\BlastBundle\Entity;
+namespace Genouest\Bundle\BlastBundle\DbProvider;
 
-class DummyDbProvider implements DbProviderInterface
+interface DbProviderInterface
 {
     /**
      * Get a list of nucleic databank
      *
      * @return array An associative array of nucleic databank (key: path, value: label)
      */
-    public function getNucleicDatabanks() {
-    
-        return array('/some/path' => 'Nucleic db 1',
-                     '/some/other/path' => 'Nucleic db 2');
-    }
+    public function getNucleicDatabanks();
     
     /**
      * Get a list of proteic databank
      *
      * @return array An associative array of proteic databank (key: path, value: label)
      */
-    public function getProteicDatabanks() {
+    public function getProteicDatabanks();
     
-        return array('/db/some/path' => 'Proteic db 1',
-                     '/db/some/other/path' => 'Proteic db 2');
-    }
+    /**
+     * Get the widget type name ('choice' for example)
+     *
+     * @return strign The type name of the field
+     */
+    public function getWidgetType();
+    
+    /**
+     * Get the widget options array
+     *
+     * @return array An associative array of widget option
+     */
+    public function getWidgetOptions();
 }
 
