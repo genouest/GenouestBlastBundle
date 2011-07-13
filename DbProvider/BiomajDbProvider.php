@@ -42,7 +42,7 @@ class BiomajDbProvider extends DbProvider
     public function getWidgetOptions() {
     
         // Don't load the list now to speed up the page loading
-        return array('choice' => array("" => "Loading, please wait..."));
+        return array('choices' => array("" => "Loading, please wait..."));
     }
     
     /**
