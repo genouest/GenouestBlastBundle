@@ -16,8 +16,6 @@ namespace Genouest\Bundle\BlastBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Genouest\Bundle\BlastBundle\Form\BlastType;
-use Genouest\Bundle\BlastBundle\Entity\BlastRequest;
 use Genouest\Bundle\SchedulerBundle\Entity\Job;
 
 class BlastController extends Controller
