@@ -64,9 +64,9 @@
         
         {%- if request.program == 'blastn' %}
             {%- if request.blastnType == 'megablast' %}
-                {%- set nucMatrix = request.matricesMegablast|split %}
+                {%- set nucMatrix = request.matricesMegablast|split(',') %}
             {%- else %}
-                {%- set nucMatrix = request.matricesNuc|split %}
+                {%- set nucMatrix = request.matricesNuc|split(',') %}
             {%- endif %}
             {{- "" }} -reward {{ nucMatrix[0] }} -penalty {{ nucMatrix[1] }}
         {%- else %}
@@ -75,11 +75,11 @@
         
         {%- if request.program != 'tblastx' %}
             {%- if request.program == 'blastn' and request.blastnType == 'megablast' %}
-                {%- set gaps = request.gapCostsMegablast|split %}
+                {%- set gaps = request.gapCostsMegablast|split(',') %}
             {%- elseif request.program == 'blastn' %}
-                {%- set gaps = request.gapCostsBlastn|split %}
+                {%- set gaps = request.gapCostsBlastn|split(',') %}
             {%- elseif request.program != 'tblastx' %}
-                {%- set gaps = request.gapCostsProt|split %}
+                {%- set gaps = request.gapCostsProt|split(',') %}
             {%- endif %}
             {{- "" }} -gapopen {{ gaps[0] }} -gapextend {{ gaps[1] }}
         {%- endif %}

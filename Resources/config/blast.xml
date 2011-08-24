@@ -27,10 +27,6 @@
             <argument type="service" id="service_container" />
         </service>
         
-        <service id="twig.extension.split" class="Genouest\Bundle\BlastBundle\Extension\SplitExtension">
-            <tag name="twig.extension" />
-        </service>
-        
         <service id="blast.db.list.callback.constraint.validator" class="%blast.db.list.callback.constraint.validator.class%">
             <argument type="service" id="service_container" />
             <tag name="validator.constraint_validator" alias="dbcallback" />
