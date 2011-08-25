@@ -9,7 +9,7 @@
         
         {% if db_provider_name == 'biomaj' %}
         
-            reloadBiomajDbList(blastFormPrefix+'dbPath', guessBiomajDbType(), '{{ db_provider.getFormat() }}', 'false', 'true');
+            reloadBiomajDbList(blastFormPrefix+'dbPath', guessBiomajDbType(), '{{ db_provider.getFormat() }}', 'false', '{{ db_provider.getCleanUp() ? 'true' : 'false' }}');
             
         {% elseif db_provider_name == 'list' or db_provider_name == 'callback' %}
         
