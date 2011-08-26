@@ -1,11 +1,9 @@
-========
 Overview
 ========
 
 This bundle allows you to run BLAST+ from a convenient web interface.
 
 It uses GenouestSchedulerBundle to run BLAST+ jobs on different scheduling system (SGE for example)
-
 
 How does it work?
 -----------------
@@ -16,7 +14,6 @@ The results can be viewed and downloaded in different formats (html, txt, csv, x
 The CSRF protection is disable by default on this blast form, as there is no particular security risk with it.
 
 
-.. _installation-label:
 Installation
 ------------
 
@@ -25,11 +22,15 @@ BLAST+ binaries should be in the PATH of the computing machines.
 
 Install and configure GenouestSchedulerBundle and GenouestBioinfoBundle which are required by this bundle.
 
-Checkout a copy of the bundle code::
+Checkout a copy of the bundle code:
 
-    git submodule add gitolite@chili.genouest.org:sf2-blastbundle vendor/bundles/Genouest/Bundle/BlastBundle
+.. code-block:: bash
+
+    git submodule add git@github.com:genouest/GenouestBlastBundle.git vendor/bundles/Genouest/Bundle/BlastBundle
     
-Then register the bundle with your kernel::
+Then register the bundle with your kernel:
+
+.. code-block:: php
 
     // in AppKernel::registerBundles()
     $bundles = array(
@@ -38,7 +39,9 @@ Then register the bundle with your kernel::
         // ...
     );
 
-Make sure that you also register the namespaces with the autoloader::
+Make sure that you also register the namespaces with the autoloader:
+
+.. code-block:: php
 
     // app/autoload.php
     $loader->registerNamespaces(array(
@@ -47,7 +50,9 @@ Make sure that you also register the namespaces with the autoloader::
         // ...
     ));
 
-Import the routes defined in the bundle. Make sure to add these lines BEFORE the GenouestSchedulerBundle routes import::
+Import the routes defined in the bundle. Make sure to add these lines BEFORE the GenouestSchedulerBundle routes import:
+
+.. code-block:: yaml
 
     // app/config/routing.yml
     // ...
@@ -59,13 +64,17 @@ Import the routes defined in the bundle. Make sure to add these lines BEFORE the
 
 Publish the assets in the web dir:
 
+.. code-block:: bash
+
     app/console assets:install --symlink web/
 
 Configuration
 -------------
 
 Don't forget to configure properly the GenouestSchedulerBundle too.
-The following configuration keys are available (with their default values)::
+The following configuration keys are available (with their default values):
+
+.. code-block:: yaml
 
     # app/config/config.yml
     genouest_blast:
