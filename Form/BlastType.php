@@ -52,7 +52,6 @@ class BlastType extends AbstractType
         $builder->add('queryCode', 'choice', array('choices' => BlastRequest::getGeneticCodeLabels()));
         $builder->add('dbCode', 'choice', array('choices' => BlastRequest::getGeneticCodeLabels()));
         $builder->add('gapCostsBlastn', 'choice', array('choices' => BlastRequest::getBlastnGapCostLabels()));
-        $builder->add('gapCostsMegablast', 'choice', array('choices' => BlastRequest::getMegablastGapCostLabels()));
         $builder->add('gapCostsProt', 'choice', array('choices' => BlastRequest::getProtGapCostLabels()));
         $builder->add('compositionalAdjustments', 'choice', array('choices' => BlastRequest::getCompositionalAdjustmentLabels()));
         $builder->add('lowComplex');
