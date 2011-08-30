@@ -367,7 +367,9 @@ class BlastRequest implements BlastRequestInterface
                        '0.01' => '0.01',
                        '0.1' => '0.1',
                        '1' => '1',
-                       '10' => '10');
+                       '10' => '10',
+                       '100' => '100',
+                       '1000' => '1000');
     }
     
     public static function getExpects()
