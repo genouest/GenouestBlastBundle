@@ -23,12 +23,16 @@ class BiomajDbProvider extends DbProvider
     protected $proteicTypes;
     protected $format;
     protected $cleanUp;
+    protected $nucleicDefault;
+    protected $proteicDefault;
     
-    public function __construct(array $nucleicTypes, array $proteicTypes, $format, $cleanUp) {
+    public function __construct(array $nucleicTypes, array $proteicTypes, $format, $cleanUp, $nucleicDefault, $proteicDefault) {
         $this->nucleicTypes = $nucleicTypes;
         $this->proteicTypes = $proteicTypes;
         $this->format = $format;
         $this->cleanUp = $cleanUp;
+        $this->nucleicDefault = $nucleicDefault;
+        $this->proteicDefault = $proteicDefault;
     
         $this->nucleic_banks = $this->getNucleicDatabanks();
         $this->proteic_banks = $this->getProteicDatabanks();
@@ -79,6 +83,24 @@ class BiomajDbProvider extends DbProvider
      */
     public function getCleanUp() {
         return $this->cleanUp;
+    }
+    
+    /**
+     * Get the default nucleic bank
+     *
+     * @return string The default nucleic bank
+     */
+    public function getNucleicDefault() {
+        return $this->nucleicDefault;
+    }
+    
+    /**
+     * Get the default proteic bank
+     *
+     * @return string The default proteic bank
+     */
+    public function getProteicDefault() {
+        return $this->proteicDefault;
     }
 }
 

@@ -97,6 +97,9 @@ The following configuration keys are available (with their default values):
                 format:     blast # Biomaj bank format
                 cleanup:    true # Should the bank names be cleaned up
                 prefix:     "/db/" # Use the BiomajPrefix constraint for performance reason. Delete this line to use the standard Biomaj constraint.
+                default:
+                    nucleic:      '/db/mybank/*/blast/some/file' # Default nucleic bank. Wildchar (*) is allowed (for the bank version in particular).
+                    proteic:      '/db/myproteicbank/*/blast/some/file' # Default proteic bank. Wildchar (*) is allowed (for the bank version in particular).
             # Specify the list of banks directly in the config file
             list:
                 nucleic:      {"/db/some/nucl/db" : "My cool nucleic db!", "/db/some/other/nucl/db" : "Another nucleic db!"}

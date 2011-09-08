@@ -9,7 +9,7 @@
         
         {% if db_provider_name == 'biomaj' %}
         
-            reloadBiomajDbList(blastFormPrefix+'dbPath', guessBiomajDbType(), '{{ db_provider.getFormat() }}', 'false', '{{ db_provider.getCleanUp() ? 'true' : 'false' }}');
+            reloadBiomajDbList(blastFormPrefix+'dbPath', guessBiomajDbType(), '{{ db_provider.getFormat() }}', 'false', '{{ db_provider.getCleanUp() ? 'true' : 'false' }}', guessBiomajDefault());
             
         {% elseif db_provider_name == 'list' or db_provider_name == 'callback' %}
         
@@ -39,17 +39,29 @@
 
             types = new Array();
             if ((program == 'blastp') || (program == 'blastx')) { // proteic blast
-                {% for type in db_provider.getProteicType() %}
+                {% for type in db_provider.getProteicTypes() %}
                     types.push('{{ type }}');
                 {% endfor %}
                 return types;
             }
             else { // nucleic blast
-                {% for type in db_provider.getNucleicType() %}
+                {% for type in db_provider.getNucleicTypes() %}
                     types.push('{{ type }}');
                 {% endfor %}
                 return types;
             }
+        }
+        
+        /**
+         * Guess the biomaj default value corresponding to the selected program and bankType
+         */
+        function guessBiomajDefault() {
+        
+            program = jQuery(blastFormPrefix+'program').val();
+            if ((program == "blastp") || (program == "blastx"))
+              return "{{ db_provider.getProteicDefault() }}";
+            else
+              return "{{ db_provider.getNucleicDefault() }}";
         }
     {% elseif db_provider_name == 'list' or db_provider_name == 'callback' %}
         /**

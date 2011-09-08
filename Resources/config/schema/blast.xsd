@@ -18,12 +18,24 @@
         </xsd:all>
     </xsd:complexType>
     
+    <xsd:complexType name="biomaj_default">
+        <xsd:all>
+            <xsd:element name="nucleic">
+                <xsd:element name="default" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            </xsd:element>
+            <xsd:element name="proteic">
+                <xsd:element name="default" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            </xsd:element>
+        </xsd:all>
+    </xsd:complexType>
+    
     <xsd:complexType name="biomaj">
         <xsd:all>
             <xsd:element name="prefix" type="xsd:string" minOccurs="0" maxOccurs="1" />
             <xsd:element name="format" type="xsd:string" minOccurs="0" maxOccurs="1" />
             <xsd:element name="cleanup" type="xsd:boolean" minOccurs="0" maxOccurs="1" />
             <xsd:element name="type" type="biomaj_type" />
+            <xsd:element name="default" type="biomaj_default" />
         </xsd:all>
     </xsd:complexType>
     
