@@ -50,7 +50,7 @@ Make sure that you also register the namespaces with the autoloader:
         // ...
     ));
 
-Import the routes defined in the bundle. Make sure to add these lines BEFORE the GenouestSchedulerBundle routes import:
+Import the routes defined in the bundle. Make sure to add these lines AFTER the GenouestSchedulerBundle routes import:
 
 .. code-block:: yaml
 
