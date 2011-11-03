@@ -87,7 +87,7 @@ class BlastRequest implements BlastRequestInterface
     public $dbPath;
 
     /**
-     * @Assert\Choice(callback = "getMaxTargetSequences")
+     * @Assert\Choice(callback = "getMaxTargetSequenceChoices")
      * @Assert\NotBlank
      */
     public $maxTargetSequences = '100';
@@ -165,7 +165,7 @@ class BlastRequest implements BlastRequestInterface
     public $gapCostsProt = '11,1';
 
     /**
-     * @Assert\Choice(callback = "getCompositionalAdjustments")
+     * @Assert\Choice(callback = "getCompositionalAdjustmentChoices")
      * @Assert\NotBlank
      */
     public $compositionalAdjustments = '2';
@@ -466,7 +466,7 @@ class BlastRequest implements BlastRequestInterface
                       '20000' => '20000');
     }
     
-    public static function getMaxTargetSequences()
+    public static function getMaxTargetSequenceChoices()
     {
         // The choice validator uses in_array() in strict mode which means the type is important.
         // array_keys converts string keys that looks like integer to int in the resulting array.
@@ -610,7 +610,7 @@ class BlastRequest implements BlastRequestInterface
                     '3' => 'Universal compositional score matrix adjustment');
     }
     
-    public static function getCompositionalAdjustments()
+    public static function getCompositionalAdjustmentChoices()
     {
         // The choice validator uses in_array() in strict mode which means the type is important.
         // array_keys converts string keys that looks like integer to int in the resulting array.
