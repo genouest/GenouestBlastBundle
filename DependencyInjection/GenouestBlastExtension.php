@@ -56,8 +56,15 @@ class GenouestBlastExtension extends Extension
             
             $container->setParameter('blast.db.list.provider.name', 'biomaj');
             
+            $defaultNuc = '';
+            $defaultProt = '';
+            if (array_key_exists('default', $config['db_provider']['biomaj'])) {
+                $defaultNuc = $config['db_provider']['biomaj']['default']['nucleic'];
+                $defaultProt = $config['db_provider']['biomaj']['default']['proteic'];
+            }
+            
             $container->setDefinition('blast.db.list.provider',
-                new Definition('%blast.db.list.provider.biomaj.class%', array($config['db_provider']['biomaj']['type']['nucleic'], $config['db_provider']['biomaj']['type']['proteic'],  $config['db_provider']['biomaj']['format'], $config['db_provider']['biomaj']['cleanup'], $config['db_provider']['biomaj']['default']['nucleic'], $config['db_provider']['biomaj']['default']['proteic']))
+                new Definition('%blast.db.list.provider.biomaj.class%', array($config['db_provider']['biomaj']['type']['nucleic'], $config['db_provider']['biomaj']['type']['proteic'],  $config['db_provider']['biomaj']['format'], $config['db_provider']['biomaj']['cleanup'], $defaultNuc, $defaultProt))
             )->addMethodCall('setContainer', array(new Reference('service_container')));
             
             // Validation
