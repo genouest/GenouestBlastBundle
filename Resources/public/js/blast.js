@@ -62,6 +62,11 @@ function refreshControls() {
       jQuery(blastFormPrefix+'blastpType').parent().parent().hide();
     
     
+    if ((program == "blastn") && (blastnType == "dc-megablast"))
+      jQuery('.discontiguousFormPart').show();
+    else
+      jQuery('.discontiguousFormPart').hide();
+    
     if ((program == "blastn") && (blastnType == "megablast"))
       jQuery(blastFormPrefix+'wordSizesMegablast').parent().parent().show();
     else
@@ -147,12 +152,20 @@ function refreshControls() {
         jQuery(blastFormPrefix+'maxTargetSequences').val(100);
     }
     
-    if (((program == "blastp") && (blastpType != "phiblast")) || (program == "tblastn"))
+    if (((program == "blastp") && (blastpType != "phiblast") && (blastpType != "deltablast")) || (program == "tblastn")) {
       jQuery(blastFormPrefix+'compositionalAdjustments').parent().parent().show();
-    else
+      jQuery(blastFormPrefix+'compositionalAdjustmentsDelta').parent().parent().hide();
+    }
+    else if ((program == "blastp") && (blastpType == "deltablast")) {
       jQuery(blastFormPrefix+'compositionalAdjustments').parent().parent().hide();
+      jQuery(blastFormPrefix+'compositionalAdjustmentsDelta').parent().parent().show();
+    }
+    else {
+      jQuery(blastFormPrefix+'compositionalAdjustments').parent().parent().hide();
+      jQuery(blastFormPrefix+'compositionalAdjustmentsDelta').parent().parent().hide();
+    }
       
-    if ((program == "blastp") && ((blastpType == "phiblast") || (blastpType == "psiblast")))
+    if ((program == "blastp") && ((blastpType == "phiblast") || (blastpType == "psiblast") || (blastpType == "deltablast")))
       jQuery('.psiFormPart').show();
     else
       jQuery('.psiFormPart').hide();
@@ -167,11 +180,12 @@ function refreshControls() {
     else
       jQuery(blastFormPrefix+'phiPattern').parent().parent().hide();
       
-      
-    if ((program == "blastp") && (blastpType == "phiblast"))
-      jQuery('#phiwarn').show();
-    else
-      jQuery('#phiwarn').hide();
+    if ((program == "blastp") && (blastpType == "deltablast")) {
+      jQuery(blastFormPrefix+'deltaThreshold').parent().parent().show();
+    }
+    else {
+      jQuery(blastFormPrefix+'deltaThreshold').parent().parent().hide();
+    }
       
     
     

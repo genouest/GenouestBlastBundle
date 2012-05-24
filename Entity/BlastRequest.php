@@ -165,10 +165,28 @@ class BlastRequest implements BlastRequestInterface
     public $gapCostsProt = '11,1';
 
     /**
+     * @Assert\Choice(callback = "getTemplateTypeChoices")
+     * @Assert\NotBlank
+     */
+    public $templateTypes = 'coding';
+
+    /**
+     * @Assert\Choice(callback = "getTemplateLengthChoices")
+     * @Assert\NotBlank
+     */
+    public $templateLengths = '18';
+
+    /**
      * @Assert\Choice(callback = "getCompositionalAdjustmentChoices")
      * @Assert\NotBlank
      */
     public $compositionalAdjustments = '2';
+
+    /**
+     * @Assert\Choice(callback = "getCompositionalAdjustmentDeltaChoices")
+     * @Assert\NotBlank
+     */
+    public $compositionalAdjustmentsDelta = '2';
     
     /**
      * @Assert\Type("bool")
@@ -191,6 +209,13 @@ class BlastRequest implements BlastRequestInterface
      * @Assert\Max(1000)
      */
     public $psiThreshold = 0.005;
+    
+    /**
+     * @Assert\Type("float")
+     * @Assert\Min(0)
+     * @Assert\Max(1000)
+     */
+    public $deltaThreshold = 0.05;
     
     /**
      * @Assert\Type("integer")
@@ -329,7 +354,8 @@ class BlastRequest implements BlastRequestInterface
     {
         return array('blastp' => 'Normal blastp',
                       'psiblast' => 'PSI-BLAST (Position-Specific Iterated BLAST)',
-                      'phiblast' => 'PHI-BLAST (Pattern Hit Initiated BLAST)');
+                      'phiblast' => 'PHI-BLAST (Pattern Hit Initiated BLAST)',
+                      'deltablast' => 'DELTA-BLAST (Domain Enhanced Lookup Time Accelerated BLAST)');
     }
     
     public static function getBlastpTypes()
@@ -429,20 +455,16 @@ class BlastRequest implements BlastRequestInterface
         return array('1' => 'Standard',
                     '2' => 'Vertebrate Mitochondrial',
                     '3' => 'Yeast Mitochondrial',
-                    '4' => 'Mold Mitochondrial',
+                    '4' => 'Mold Mitochondrial; ...',
                     '5' => 'Invertebrate Mitochondrial',
-                    '6' => 'Ciliate Nuclear',
-                    '9' => 'Echinoderm and Flatworm Mitochondrial',
+                    '6' => 'Ciliate Nuclear; ...',
+                    '9' => 'Echinoderm Mitochondrial',
                     '10' => 'Euplotid Nuclear',
-                    '11' => 'Bacterial, Archaeal and Plant Plastid',
+                    '11' => 'Bacteria and Archaea',
                     '12' => 'Alternative Yeast Nuclear',
                     '13' => 'Ascidian Mitochondrial',
-                    '14' => 'Alternative Flatworm Mitochondrial',
-                    '15' => 'Blepharisma Nuclear',
-                    '16' => 'Chlorophycean Mitochondrial',
-                    '21' => 'Trematode Mitochondrial',
-                    '22' => 'Scenedesmus obliquus mitochondrial',
-                    '23' => 'Thraustochytrium Mitochondrial');
+                    '14' => 'Flatworm Mitochondrial',
+                    '15' => 'Blepharisma Macrouclear');
     }
     
     public static function getGeneticCodes()
@@ -602,6 +624,21 @@ class BlastRequest implements BlastRequestInterface
         return array_keys(self::getProtGapCostLabels());
     }
     
+    public static function getTemplateTypeLabels()
+    {
+        return array('coding' => 'Coding',
+                    'optimal' => 'Maximal',
+                    'coding_and_optimal' => 'Two templates');
+    }
+    
+    public static function getTemplateLengthLabels()
+    {
+        return array('0' => 'None',
+                    '16' => '16',
+                    '18' => '18',
+                    '21' => '21');
+    }
+    
     public static function getCompositionalAdjustmentLabels()
     {
         return array('0' => 'No adjustment',
@@ -610,12 +647,42 @@ class BlastRequest implements BlastRequestInterface
                     '3' => 'Universal compositional score matrix adjustment');
     }
     
+    public static function getCompositionalAdjustmentDeltaLabels()
+    {
+        return array('0' => 'No adjustment',
+                    '1' => 'Composition-based statistics');
+    }
+    
+    public static function getTemplateTypeChoices()
+    {
+        // The choice validator uses in_array() in strict mode which means the type is important.
+        // array_keys converts string keys that looks like integer to int in the resulting array.
+        // So we're forced to check that the array_keys result contains only strings.
+        return array_map(create_function('$value', 'return (string) $value;'), array_keys(self::getTemplateTypeLabels()));
+    }
+    
+    public static function getTemplateLengthChoices()
+    {
+        // The choice validator uses in_array() in strict mode which means the type is important.
+        // array_keys converts string keys that looks like integer to int in the resulting array.
+        // So we're forced to check that the array_keys result contains only strings.
+        return array_map(create_function('$value', 'return (string) $value;'), array_keys(self::getTemplateLengthLabels()));
+    }
+    
     public static function getCompositionalAdjustmentChoices()
     {
         // The choice validator uses in_array() in strict mode which means the type is important.
         // array_keys converts string keys that looks like integer to int in the resulting array.
         // So we're forced to check that the array_keys result contains only strings.
         return array_map(create_function('$value', 'return (string) $value;'), array_keys(self::getCompositionalAdjustmentLabels()));
+    }
+    
+    public static function getCompositionalAdjustmentDeltaChoices()
+    {
+        // The choice validator uses in_array() in strict mode which means the type is important.
+        // array_keys converts string keys that looks like integer to int in the resulting array.
+        // So we're forced to check that the array_keys result contains only strings.
+        return array_map(create_function('$value', 'return (string) $value;'), array_keys(self::getCompositionalAdjustmentDeltaLabels()));
     }
     
     /**
@@ -637,29 +704,30 @@ class BlastRequest implements BlastRequestInterface
         $command = $this->container->get('templating')->render('GenouestBlastBundle:Blast:command.txt.twig', array('request' => $this,
             'workDir' => $workDir,
             'job' => $job,
+            'cdd_delta' => $this->container->getParameter('blast.cdd_delta.path')
             ));
         
         // Create an array containing the name of each result file
         $resultFiles = array();
         $resultViewers = array();
-        if ($this->program == 'blastp' && $this->blastpType == 'psiblast') {
-          $resultFiles = array('HTML blast output' => $uid.'.html',
-                               'PSSM' => $uid.'.pssm',
-                               'PSSM ASCII' => $uid.'.pssm.ascii',
-                               'Executed command' => "blast_command.txt");
+        
+        if ($this->program == 'blastp' && $this->blastpType == 'phiblast') {
+            $resultFiles = array('HTML blast output' => $uid.'.html',
+                                 'Executed command' => "blast_command.txt");
         }
-        else if ($this->program == 'blastp' && $this->blastpType == 'phiblast') {
-          $resultFiles = array('HTML blast output' => $uid.'.html',
-                               'Executed command' => "blast_command.txt");
+        else {
+            $resultFiles = array('HTML blast output' => $uid.'.html',
+                                   'Text blast output' => $uid.'.txt',
+                                   'Comma-separated blast output' => $uid.'.csv',
+                                   'Tabular blast output' => $uid.'.tsv',
+                                   'XML blast output' => $uid.'.xml',
+                                   'ASN.1 archive blast output' => $uid.'.asn',
+                                   'Executed command' => "blast_command.txt");
         }
-        else {          
-          $resultFiles = array('HTML blast output' => $uid.'.html',
-                               'Text blast output' => $uid.'.txt',
-                               'Comma-separated blast output' => $uid.'.csv',
-                               'Tabular blast output' => $uid.'.tsv',
-                               'XML blast output' => $uid.'.xml',
-                               'ASN.1 archive blast output' => $uid.'.asn',
-                               'Executed command' => "blast_command.txt");
+        
+        if ($this->program == 'blastp' && (($this->blastpType == 'psiblast') || ($this->blastpType == 'deltablast'))) {
+            $resultFiles['PSSM'] = $uid.'.pssm';
+            $resultFiles['PSSM ASCII'] = $uid.'.pssm.ascii';
         }
         
         // Move uploaded files

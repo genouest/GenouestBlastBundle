@@ -53,11 +53,15 @@ class BlastType extends AbstractType
         $builder->add('dbCode', 'choice', array('choices' => BlastRequest::getGeneticCodeLabels()));
         $builder->add('gapCostsBlastn', 'choice', array('choices' => BlastRequest::getBlastnGapCostLabels()));
         $builder->add('gapCostsProt', 'choice', array('choices' => BlastRequest::getProtGapCostLabels()));
+        $builder->add('templateTypes', 'choice', array('choices' => BlastRequest::getTemplateTypeLabels()));
+        $builder->add('templateLengths', 'choice', array('choices' => BlastRequest::getTemplateLengthLabels()));
         $builder->add('compositionalAdjustments', 'choice', array('choices' => BlastRequest::getCompositionalAdjustmentLabels()));
+        $builder->add('compositionalAdjustmentsDelta', 'choice', array('choices' => BlastRequest::getCompositionalAdjustmentDeltaLabels()));
         $builder->add('lowComplex');
         $builder->add('softMasking');
         $builder->add('lowerCase');
         $builder->add('psiThreshold', 'number', array('precision' => 10));
+        $builder->add('deltaThreshold', 'number', array('precision' => 10));
         $builder->add('psiIterationNb', 'integer');
         $builder->add('psiPseudoCount', 'integer');
         $builder->add('psiPSSM', 'file', array('required' => false));

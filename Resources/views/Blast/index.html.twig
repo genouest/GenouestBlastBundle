@@ -54,7 +54,7 @@
         </tr>
         <tr>
           <th>{{ form_label(form.blastpType, 'Search type') }}</th><td>{{ form_widget(form.blastpType) }}
-          <br />PSI-BLAST and PHI-BLAST can be used to find distantly related sequences{{ form_errors(form.blastpType) }}</td>
+          <br />PSI-BLAST, PHI-BLAST and DELTA-BLAST can be used to find distantly related sequences{{ form_errors(form.blastpType) }}</td>
         </tr>
       </table>
       
@@ -150,6 +150,10 @@
           <th>{{ form_label(form.compositionalAdjustments, 'Compositional adjustments') }}</th><td>{{ form_widget(form.compositionalAdjustments) }}
           <br />Matrix adjustment method to compensate for amino acid composition of sequences.{{ form_errors(form.compositionalAdjustments) }}</td>
         </tr>
+        <tr>
+          <th>{{ form_label(form.compositionalAdjustmentsDelta, 'Compositional adjustments') }}</th><td>{{ form_widget(form.compositionalAdjustmentsDelta) }}
+          <br />Matrix adjustment method to compensate for amino acid composition of sequences.{{ form_errors(form.compositionalAdjustmentsDelta) }}</td>
+        </tr>
       </table>
       
       <p class="formPart"><img src="{{ asset('bundles/genouestblast/images/item.png') }}" width=16 height=16 alt="Filters and masking" /> Filters and masking</p>
@@ -171,12 +175,17 @@
       <p class="formPart psiFormPart"><img src="{{ asset('bundles/genouestblast/images/item.png') }}" width=16 height=16 alt="PSI-BLAST and PHI-BLAST" /> PSI-BLAST and PHI-BLAST</p>
       <table class="psiFormPart">
         <tr>
-          <th>{{ form_label(form.psiThreshold, 'Inclusion threshold') }}</th><td>{{ form_widget(form.psiThreshold) }}
+          <th>{{ form_label(form.psiThreshold, 'PSI-BLAST threshold') }}</th><td>{{ form_widget(form.psiThreshold) }}
           <br />Set the statistical significance threshold to include a sequence in the model used by PSI-BLAST to create the PSSM on the next iteration. {{ form_errors(form.psiThreshold) }}</td>
         </tr>
         <tr>
+          <th>{{ form_label(form.deltaThreshold, 'DELTA-BLAST threshold') }}</th><td>{{ form_widget(form.deltaThreshold) }}
+          <br />Set the statistical significance threshold to include a domain in the model used by DELTA-BLAST to create the PSSM
+. {{ form_errors(form.deltaThreshold) }}</td>
+        </tr>
+        <tr>
           <th>{{ form_label(form.psiIterationNb, 'Iteration number') }}</th><td>{{ form_widget(form.psiIterationNb) }}
-          <br />Number of PSI-BLAST iterations{{ form_errors(form.psiIterationNb) }}</td>
+          <br />Number of iterations{{ form_errors(form.psiIterationNb) }}</td>
         </tr>
         <tr>
           <th>{{ form_label(form.psiPseudoCount, 'Pseudocount') }}</th><td>{{ form_widget(form.psiPseudoCount) }}
@@ -189,6 +198,18 @@
         <tr>
           <th>{{ form_label(form.phiPattern, 'PHI-BLAST pattern') }}</th><td>{{ form_widget(form.phiPattern) }}
           <br />Enter a PHI pattern (PROSITE format) to start the search. PHI-BLAST may perform better than simple pattern searching because it filters out false positives (pattern matches that are probably random and not indicative of homology).{{ form_errors(form.phiPattern) }}</td>
+        </tr>
+      </table>
+      
+      <p class="formPart discontiguousFormPart"><img src="{{ asset('bundles/genouestblast/images/item.png') }}" width=16 height=16 alt="Discontiguous Word Options" /> Discontiguous Word Options</p>
+      <table class="discontiguousFormPart">
+        <tr>
+          <th>{{ form_label(form.templateLengths, 'Template length') }}</th><td>{{ form_widget(form.templateLengths) }}
+          <br />Total number of bases in a seed that ignores some positions. {{ form_errors(form.templateLengths) }}</td>
+        </tr>
+        <tr>
+          <th>{{ form_label(form.templateTypes, 'Template type') }}</th><td>{{ form_widget(form.templateTypes) }}
+          <br />Specifies which bases are ignored in scanning the database. {{ form_errors(form.templateTypes) }}</td>
         </tr>
       </table>
       
