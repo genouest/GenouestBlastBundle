@@ -79,13 +79,17 @@ The following configuration keys are available (with their default values):
     # app/config/config.yml
     genouest_blast:
         # Version of BLAST+ used by the form. Optional
-        version:         2.2.25+
+        version:         2.2.26+
         
         # The form type class. Change this if you want to use a custom one.
         form_type:       Genouest\Bundle\BlastBundle\Form\BlastType
         
         # The blast request object. Change this if you want to use a custom one (it should implement Genouest\Bundle\BlastBundle\Entity\BlastRequestInterface).
         request_class:   Genouest\Bundle\BlastBundle\Entity\BlastRequest
+        
+        # The path to the CDD_DELTA databank
+        # Downloaded from ftp://ftp.ebi.ac.uk/pub/databases/ncbi/blast/db/cdd_delta.tar.gz and unzipped in /some/path/to/cdd_delta/
+        cdd_delta_path:  /some/path/to/cdd_delta/cdd_delta
         
         # Define how to retrieve the databank list. Choose only one of the three available method
         db_provider:

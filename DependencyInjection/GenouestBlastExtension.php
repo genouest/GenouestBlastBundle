@@ -36,7 +36,7 @@ class GenouestBlastExtension extends Extension
     {
         $processor = new Processor();
         $configuration = new Configuration();
-        $config = $processor->processConfiguration($configuration, $configs);        
+        $config = $processor->processConfiguration($configuration, $configs);
         
         if (isset($config['version']))
             $container->setParameter('blast.version', $config['version']);
@@ -46,6 +46,8 @@ class GenouestBlastExtension extends Extension
         $container->setParameter('blast.request.class', $config['request_class']);
         
         $container->setParameter('blast.scheduler.name', $config['scheduler_name']);
+        
+        $container->setParameter('blast.cdd_delta.path', $config['cdd_delta_path']);
         
         // Db providers
         if (count($config['db_provider']) != 1) {
