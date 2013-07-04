@@ -21,15 +21,5 @@
             "Genouest\\Bundle\\BlastBundle": ""
         }
     },
-    "target-dir" : "Genouest/Bundle/BlastBundle",
-    "repositories": [
-        {
-            "type": "vcs",
-            "url":  "gitolite@chili.genouest.org:sf2-bioinfobundle"
-        },
-        {
-            "type": "vcs",
-            "url":  "gitolite@chili.genouest.org:sf2-schedulerbundle"
-        }
-    ]
+    "target-dir" : "Genouest/Bundle/BlastBundle"
 }
