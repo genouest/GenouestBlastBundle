@@ -76,10 +76,10 @@
       <p class="formPart"><img src="{{ asset('bundles/genouestblast/images/item.png') }}" width=16 height=16 alt="Databank selection" /> Databank selection</p>
       <table>
         <tr>
-          <th>{{ form_label(form.bankTypeNuc, 'Databank type') }}</th><td>{{ form_widget(form.bankTypeNuc) }}{{ form_errors(form.bankTypeNuc) }}</td>
+          <th>{{ form_label(form.bankTypeNuc, 'Databank type') }}</th><td>{{ form_widget(form.bankTypeNuc) }}{{ form_errors(form.bankTypeNuc) }}{{ form_errors(form.bankTypeProt) }}</td>
         </tr>
         <tr>
-          <th>{{ form_label(form.bankTypeProt, 'Databank type') }}</th><td>{{ form_widget(form.bankTypeProt) }}{{ form_errors(form.bankTypeProt) }}</td>
+          <th>{{ form_label(form.bankTypeProt, 'Databank type') }}</th><td>{{ form_widget(form.bankTypeProt) }}{{ form_errors(form.bankTypeProt) }}{{ form_errors(form.bankTypeNuc) }}</td>
         </tr>
         <tr>
           <th>{{ form_label(form.persoBankFile, 'Select a personal databank (FASTA format)') }}</th><td>{{ form_widget(form.persoBankFile) }}

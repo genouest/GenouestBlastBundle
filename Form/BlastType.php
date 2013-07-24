@@ -14,8 +14,9 @@
 namespace Genouest\Bundle\BlastBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use Genouest\Bundle\BlastBundle\Entity\BlastRequest;
 
@@ -27,7 +28,7 @@ class BlastType extends AbstractType
         $this->container = $container;
     }
     
-    public function buildForm(FormBuilder $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('title');
         $builder->add('email');
@@ -67,12 +68,20 @@ class BlastType extends AbstractType
         $builder->add('psiPSSM', 'file', array('required' => false));
         $builder->add('phiPattern', 'file', array('required' => false));
     }
-    
-    public function getDefaultOptions(array $options)
+
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        return array(
-            'csrf_protection' => false
-        );
+        $resolver->setDefaults(array(
+            'csrf_protection' => false,
+            'error_mapping' => array(
+                'sequencePresent' => 'pastedSeq',
+                'sequencePresentForPsi' => 'pastedSeq',
+                'sequenceSingle' => 'pastedSeq',
+                'sequenceSingleForPsi' => 'pastedSeq',
+                'databankOk' => 'bankTypeNuc',
+                'dbPathValid' => 'bankTypeNuc',
+            ),
+        ));
     }
     
     public function getName()

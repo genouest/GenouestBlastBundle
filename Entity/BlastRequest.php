@@ -30,7 +30,7 @@ use Genouest\Bundle\SchedulerBundle\Scheduler\SchedulerInterface;
 class BlastRequest implements BlastRequestInterface
 {
     /**
-     * @Assert\MaxLength(255)
+     * @Assert\Length(max = 255)
      */
     public $title;
 
@@ -83,7 +83,7 @@ class BlastRequest implements BlastRequestInterface
      * @Genouest\Bundle\BioinfoBundle\Constraints\FastaFile(maxSize = "104857600", seqType = "PROT_OR_ADN")
      */
     public $persoBankFile;
-    
+
     public $dbPath;
 
     /**
@@ -205,29 +205,25 @@ class BlastRequest implements BlastRequestInterface
     
     /**
      * @Assert\Type("float")
-     * @Assert\Min(0)
-     * @Assert\Max(1000)
+     * @Assert\Range(min = 0, max = 1000)
      */
     public $psiThreshold = 0.005;
     
     /**
      * @Assert\Type("float")
-     * @Assert\Min(0)
-     * @Assert\Max(1000)
+     * @Assert\Range(min = 0, max = 1000)
      */
     public $deltaThreshold = 0.05;
     
     /**
      * @Assert\Type("integer")
-     * @Assert\Min(0)
-     * @Assert\Max(1000)
+     * @Assert\Range(min = 0, max = 1000)
      */
     public $psiIterationNb = 10;
     
     /**
      * @Assert\Type("integer")
-     * @Assert\Min(0)
-     * @Assert\Max(1000)
+     * @Assert\Range(min = 0, max = 1000)
      */
     public $psiPseudoCount = 0;
     
@@ -252,15 +248,19 @@ class BlastRequest implements BlastRequestInterface
      */
     public function isDbPathValid(ExecutionContext $context)
     {
+        if ($this->hasPersoDb())
+            return; // Nothing to check if using a custom db
+
         $validator = $this->container->get('blast.db.list.constraint.validator');
         $constraint = $this->container->get('blast.db.list.constraint');
         $validator->initialize($context);
         
         // check if the name is actually a fake name
-        if (!$validator->isValid($this->dbPath, $constraint)) {
-            $property_path = $context->getPropertyPath() . '.dbPath';
-            $context->setPropertyPath($property_path);
-            $context->addViolation(
+        $validator->validate($this->dbPath, $constraint);
+        $violations = $context->getViolations();
+        if (count($violations) > 0 ) {
+            $context->addViolationAtSubPath(
+                'dbPath',
                 $validator->getMessageTemplate(),
                 $validator->getMessageParameters(),
                 $this->dbPath);

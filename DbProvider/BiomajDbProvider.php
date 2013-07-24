@@ -13,6 +13,8 @@
 
 namespace Genouest\Bundle\BlastBundle\DbProvider;
 
+use Genouest\Bundle\BiomajBundle\Form\Extension\BiomajLazyChoiceList;
+
 class BiomajDbProvider extends DbProvider
 {
     
@@ -46,7 +48,7 @@ class BiomajDbProvider extends DbProvider
     public function getWidgetOptions() {
     
         // Don't load the list now to speed up the page loading
-        return array('choices' => array("" => "Loading, please wait..."));
+        return array('choice_list' => new BiomajLazyChoiceList(), 'required' => false);
     }
     
     /**

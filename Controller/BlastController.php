@@ -35,8 +35,8 @@ class BlastController extends Controller
         
         $request = $this->get('request');
         
-        if ($request->getMethod() == 'POST') {
-            $form->bindRequest($request);
+        if ($request->isMethod('POST')) {
+            $form->bind($request);
             
             if ($form->isValid()) {
                 // Prepare the job

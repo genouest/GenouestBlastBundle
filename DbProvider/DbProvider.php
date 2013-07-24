@@ -76,9 +76,9 @@ abstract class DbProvider extends ContainerAware implements DbProviderInterface
     public function getWidgetOptions() {
         
         if (!empty($this->nucleic_banks))
-            return array('choices' => $this->getNucleicDatabanks());
+            return array('choices' => $this->getNucleicDatabanks(), 'required' => false);
         else
-            return array('choices' => $this->getProteicDatabanks());
+            return array('choices' => $this->getProteicDatabanks(), 'required' => false);
     }
 }
 

@@ -27,10 +27,10 @@ class DbCallbackProviderValidator extends ConstraintValidator
         $this->container = $container;
     }
     
-    public function isValid($value, Constraint $constraint)
+    public function validate($value, Constraint $constraint)
     {
         if (null === $value) {
-            return true;
+            return;
         }
 
         $choices = $this->container->get('blast.db.list.provider')->getAllDatabanks();
@@ -41,11 +41,11 @@ class DbCallbackProviderValidator extends ConstraintValidator
         $choices = array_map(create_function('$value', 'return (string) $value;'), array_keys($choices));
 
         if (!in_array($value, $choices, true)) {
-            $this->setMessage($constraint->message, array('{{ value }}' => $value));
-
-            return false;
+            $this->context->addViolation($constraint->message, array(
+                '{{ value }}' => $value,
+            ));
+            
+            return;
         }
-
-        return true;
     }
 }
