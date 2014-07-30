@@ -80,7 +80,7 @@ class BlastRequest implements BlastRequestInterface
      * @Genouest\Bundle\BioinfoBundle\Constraints\FastaFile(maxSize = "104857600", seqType = "PROT_OR_ADN")
      */
     public $persoBankFile;
-
+    
     public $dbPath;
 
     /**
@@ -243,7 +243,7 @@ class BlastRequest implements BlastRequestInterface
     /**
      * Validate dbPath with validator set as a service
      */
-     
+
     /**
      * @Assert\Callback
      */
@@ -259,12 +259,15 @@ class BlastRequest implements BlastRequestInterface
         // check if the name is actually a fake name
         $validator->validate($this->dbPath, $constraint);
         $violations = $context->getViolations();
-        if (count($violations) > 0 ) {
-            $context->addViolationAtSubPath(
+        $c = 0;
+        foreach ($violations as $viol) {
+            $context->addViolationAt(
                 'dbPath',
-                $validator->getMessageTemplate(),
-                $validator->getMessageParameters(),
+                $viol->getMessageTemplate(),
+                $viol->getParameters(),
                 $this->dbPath);
+            $violations->remove($c);
+            $c++;
         }
     }
     
