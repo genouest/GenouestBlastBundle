@@ -35,17 +35,17 @@
         {%- else %}
             {{- request.program }}{{ request.program == 'blastn' ? ' -task ' ~ request.blastnType : '' }}{{ request.program == 'blastp' ? ' -task ' ~ request.blastpType : '' }}
         {%- endif %}
-        
+
         {%- if request.fileSeq or request.pastedSeq %}
             {{- "" }} -query {{ workDir }}input.fasta
         {%- endif %}
-        
+
         {{- "" }} -db {{ dbPath }} -evalue {{ request.expect }} -max_target_seqs {{ request.maxTargetSequences }} -soft_masking {{ request.softMasking ? 'true' : 'false' }}
-        
+
         {%- if request.lowerCase %}
             {{- "" }} -lcase_masking
         {%- endif %}
-        
+
         {%- if request.program == 'blastn' and request.blastnType == 'megablast' %}
             {{- "" }} -word_size {{ request.wordSizesMegablast }}
         {%- elseif request.program == 'blastn' and request.blastnType == 'dc-megablast' %}
@@ -55,19 +55,19 @@
         {%- else %}
             {{- "" }} -word_size {{ request.wordSizesProt }}
         {%- endif %}
-        
+
         {%- if request.program == 'blastn' and request.blastnType == 'dc-megablast' and request.templateLengths != 0 %}
             {{- "" }} -template_length {{ request.templateLengths }} -template_type {{ request.templateTypes }}
         {%- endif %}
-        
+
         {%- if request.program == 'tblastx' or request.program == 'blastx' %}
             {{- "" }} -query_gencode {{ request.queryCode }}
         {%- endif %}
-        
+
         {%- if request.program == 'tblastx' or request.program == 'tblastn' %}
             {{- "" }} -db_gencode {{ request.dbCode }}
         {%- endif %}
-        
+
         {%- if request.program == 'blastn' %}
             {%- if request.blastnType == 'megablast' %}
                 {%- set nucMatrix = request.matricesMegablast|split(',') %}
@@ -78,7 +78,7 @@
         {%- else %}
             {{- "" }} -matrix {{ request.matricesProt }}
         {%- endif %}
-        
+
         {%- if request.program != 'tblastx' %}
             {%- if request.program == 'blastn' %}
                 {%- set gaps = request.gapCostsBlastn|split(',') %}
@@ -87,41 +87,41 @@
             {%- endif %}
             {{- "" }} -gapopen {{ gaps[0] }} -gapextend {{ gaps[1] }}
         {%- endif %}
-        
+
         {%- if (request.program == 'blastp' and request.blastpType != 'deltablast') or request.program == 'tblastn' %}
             {{- "" }} -comp_based_stats {{ request.compositionalAdjustments }}
         {%- elseif request.program == 'blastp' and request.blastpType == 'deltablast' %}
             {{- "" }} -comp_based_stats {{ request.compositionalAdjustmentsDelta }}
         {%- endif %}
-        
+
         {%- if request.program == 'blastn' %}
             {{- "" }} -dust {{ request.lowComplex ? 'yes' : 'no' }}
         {%- else %}
             {{- "" }} -seg {{ request.lowComplex ? 'yes' : 'no' }}
         {%- endif %}
-        
+
         {#- PSI/PHI/DELTA-BLAST parameters #}
         {%- if request.program == 'blastp' and (request.blastpType == 'psiblast' or request.blastpType == 'phiblast' or request.blastpType == 'deltablast') %}
             {{- "" }} -inclusion_ethresh {{ request.psiThreshold }} -num_iterations {{ request.psiIterationNb }} -pseudocount {{ request.psiPseudoCount }}
             {%- if request.blastpType == 'psiblast' or request.blastpType == 'deltablast' %}
                 {{- "" }} -out_pssm {{ workDir }}{{ job.jobuid }}.pssm -out_ascii_pssm {{ workDir }}{{ job.jobuid }}.pssm.ascii
             {%- endif %}
-          
+
             {%- if request.blastpType == 'psiblast' and request.psiPSSM %}
                 {{- "" }} -in_pssm {{ workDir }}input.pssm
             {%- endif %}
-            
+
             {%- if request.blastpType == 'phiblast' and request.phiPattern %}
                  {{- "" }} -phi_pattern {{ workDir }}input.pattern
             {%- endif %}
-            
+
             {%- if request.blastpType == 'deltablast' %}
                  {{- "" }} -rpsdb {{ cdd_delta }}
             {%- endif %}
         {%- endif %}
-        
+
         {{- "" }} -num_threads 4
-        
+
         {%- if request.program == 'blastp' and request.blastpType == 'phiblast' %}
             {{- "" }} -outfmt 0 -html -out {{ workDir }}{{ job.jobuid }}.html;
         {%- else %}
@@ -131,8 +131,8 @@
 {%- endset %}
 
 
+{{pre_command}}
 
-. /local/env/envblast+-2.2.26.sh;
 
 echo "{{ blastCommand }}" > {{ workDir }}blast_command.txt;
 

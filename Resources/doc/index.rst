@@ -27,7 +27,7 @@ Checkout a copy of the bundle code:
 .. code-block:: bash
 
     git submodule add git@github.com:genouest/GenouestBlastBundle.git vendor/bundles/Genouest/Bundle/BlastBundle
-    
+
 Then register the bundle with your kernel:
 
 .. code-block:: php
@@ -80,17 +80,22 @@ The following configuration keys are available (with their default values):
     genouest_blast:
         # Version of BLAST+ used by the form. Optional
         version:         2.2.26+
-        
+
         # The form type class. Change this if you want to use a custom one.
         form_type:       Genouest\Bundle\BlastBundle\Form\BlastType
-        
+
         # The blast request object. Change this if you want to use a custom one (it should implement Genouest\Bundle\BlastBundle\Entity\BlastRequestInterface).
         request_class:   Genouest\Bundle\BlastBundle\Entity\BlastRequest
-        
+
         # The path to the CDD_DELTA databank
         # Downloaded from ftp://ftp.ebi.ac.uk/pub/databases/ncbi/blast/db/cdd_delta.tar.gz and unzipped in /some/path/to/cdd_delta/
+        # Deltablast will be unavailable if this option is not populated
         cdd_delta_path:  /some/path/to/cdd_delta/cdd_delta
-        
+
+        # If you need you can add a command that will be executed just before running the blast job.
+        # It is a good place to add the blast binaries to the path
+        pre_command: "export PATH=/some/blast/bin:$PATH"
+
         # Define how to retrieve the databank list. Choose only one of the three available method
         db_provider:
             # Use a BioMAJ server. Requires the GenouestBiomajBundle installed and configured.
@@ -132,4 +137,3 @@ the constraints applied to each parameters, or their default values.
 You can customize the template displaying the form itself: GenouestBlastBundle:Blast:index.html.twig
 
 Finally, this bundle brings a specific result page for the scheduler bundle. You can override it: GenouestBlastBundle:Blast:results.html.twig
-

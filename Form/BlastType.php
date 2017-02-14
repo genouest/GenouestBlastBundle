@@ -23,18 +23,18 @@ use Genouest\Bundle\BlastBundle\Entity\BlastRequest;
 class BlastType extends AbstractType
 {
     protected $container;
-    
+
     public function __construct(ContainerInterface $container) {
         $this->container = $container;
     }
-    
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('title');
         $builder->add('email');
         $builder->add('program', 'choice', array('choices' => BlastRequest::getProgramLabels()));
         $builder->add('blastnType', 'choice', array('choices' => BlastRequest::getBlastnTypeLabels()));
-        $builder->add('blastpType', 'choice', array('choices' => BlastRequest::getBlastpTypeLabels()));
+        $builder->add('blastpType', 'choice', array('choices' => BlastRequest::getBlastpTypeLabels($this->container->getParameter('blast.cdd_delta.path'))));
         $builder->add('pastedSeq', 'textarea', array('required' => false));
         $builder->add('fileSeq', 'file', array('required' => false));
         $builder->add('bankTypeNuc', 'choice', array('choices' => BlastRequest::getNucBankTypeLabels()));
@@ -83,11 +83,10 @@ class BlastType extends AbstractType
             ),
         ));
     }
-    
+
     public function getName()
     {
         return 'blast';
     }
 
 }
-

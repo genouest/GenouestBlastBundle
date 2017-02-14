@@ -354,17 +354,21 @@ class BlastRequest implements BlastRequestInterface
         return array_keys(self::getBlastnTypeLabels());
     }
 
-    public static function getBlastpTypeLabels()
+    public static function getBlastpTypeLabels($cdd_delta)
     {
-        return array('blastp' => 'Normal blastp',
+        $options = array('blastp' => 'Normal blastp',
                       'psiblast' => 'PSI-BLAST (Position-Specific Iterated BLAST)',
-                      'phiblast' => 'PHI-BLAST (Pattern Hit Initiated BLAST)',
-                      'deltablast' => 'DELTA-BLAST (Domain Enhanced Lookup Time Accelerated BLAST)');
+                      'phiblast' => 'PHI-BLAST (Pattern Hit Initiated BLAST)');
+
+        if (!empty($cdd_delta)) {
+            $options['deltablast'] = 'DELTA-BLAST (Domain Enhanced Lookup Time Accelerated BLAST)';
+        }
+        return $options;
     }
 
     public static function getBlastpTypes()
     {
-        return array_keys(self::getBlastpTypeLabels());
+        return array_keys(self::getBlastpTypeLabels('yes')); // Passing yes to ensure deltablast will be accepted
     }
 
     public static function getNucBankTypeLabels()
@@ -708,7 +712,8 @@ class BlastRequest implements BlastRequestInterface
         $command = $this->container->get('templating')->render('GenouestBlastBundle:Blast:command.txt.twig', array('request' => $this,
             'workDir' => $workDir,
             'job' => $job,
-            'cdd_delta' => $this->container->getParameter('blast.cdd_delta.path')
+            'cdd_delta' => $this->container->getParameter('blast.cdd_delta.path'),
+            'pre_command' => $this->container->getParameter('blast.pre_command')
             ));
 
         // Create an array containing the name of each result file

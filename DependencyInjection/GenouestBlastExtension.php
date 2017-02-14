@@ -37,41 +37,43 @@ class GenouestBlastExtension extends Extension
         $processor = new Processor();
         $configuration = new Configuration();
         $config = $processor->processConfiguration($configuration, $configs);
-        
+
         if (isset($config['version']))
             $container->setParameter('blast.version', $config['version']);
-        
+
         $container->setParameter('blast.form.type.class', $config['form_type']);
-        
+
         $container->setParameter('blast.request.class', $config['request_class']);
-        
+
         $container->setParameter('blast.scheduler.name', $config['scheduler_name']);
-        
+
         $container->setParameter('blast.cdd_delta.path', $config['cdd_delta_path']);
-        
+
+        $container->setParameter('blast.pre_command', $config['pre_command']);
+
         // Db providers
         if (count($config['db_provider']) != 1) {
             throw new \InvalidArgumentException('There should exactly one "db_provider"');
         }
 
         if (isset($config['db_provider']['biomaj'])) { // Use db list from a biomaj server
-            
+
             $container->setParameter('blast.db.list.provider.name', 'biomaj');
-            
+
             $defaultNuc = '';
             $defaultProt = '';
             if (array_key_exists('default', $config['db_provider']['biomaj'])) {
                 $defaultNuc = $config['db_provider']['biomaj']['default']['nucleic'];
                 $defaultProt = $config['db_provider']['biomaj']['default']['proteic'];
             }
-            
+
             $container->setDefinition('blast.db.list.provider',
                 new Definition('%blast.db.list.provider.biomaj.class%', array($config['db_provider']['biomaj']['type']['nucleic'], $config['db_provider']['biomaj']['type']['proteic'],  $config['db_provider']['biomaj']['format'], $config['db_provider']['biomaj']['cleanup'], $defaultNuc, $defaultProt))
             )->addMethodCall('setContainer', array(new Reference('service_container')));
-            
+
             // Validation
             if (!empty($config['db_provider']['biomaj']['prefix'])) {
-                $container->setDefinition('blast.db.list.constraint', 
+                $container->setDefinition('blast.db.list.constraint',
                     new Definition('%biomaj.prefix.constraint.class%', array(
                             array('prefix' => $config['db_provider']['biomaj']['prefix']
                                 )
@@ -83,7 +85,7 @@ class GenouestBlastExtension extends Extension
             }
             else {
                 $allTypes = array_merge($config['db_provider']['biomaj']['type']['nucleic'], $config['db_provider']['biomaj']['type']['proteic']);
-                $container->setDefinition('blast.db.list.constraint', 
+                $container->setDefinition('blast.db.list.constraint',
                     new Definition('%biomaj.constraint.class%', array(
                             array('type' => $allTypes,
                                 'format' => $config['db_provider']['biomaj']['format'],
@@ -97,41 +99,41 @@ class GenouestBlastExtension extends Extension
             }
         }
         else if (isset($config['db_provider']['list'])) { // Use a list of databases
-            
+
             $container->setParameter('blast.db.list.provider.name', 'list');
-            
+
             $container->setDefinition('blast.db.list.provider',
                 new Definition('%blast.db.list.provider.list.class%', array($config['db_provider']['list']['nucleic'], $config['db_provider']['list']['proteic']))
             )->addMethodCall('setContainer', array(new Reference('service_container')));
-            
+
             // Validation
             $allTypes = array_merge($config['db_provider']['list']['nucleic'], $config['db_provider']['list']['proteic']);
-            
-            $container->setDefinition('blast.db.list.constraint', 
+
+            $container->setDefinition('blast.db.list.constraint',
                 new Definition('%blast.db.list.list.constraint.class%', array(
                     array('choices' => array_keys($allTypes)))
                     )
             );
-            
+
             $container->setDefinition('blast.db.list.constraint.validator',
                 new Definition('%blast.db.list.list.constraint.validator.class%', array())
             );
         }
         else if (isset($config['db_provider']['callback'])) { // Use a provider
-            
+
             $container->setParameter('blast.db.list.provider.name', 'callback');
-            
+
             $container->setDefinition('blast.db.list.provider',
                 new Definition($config['db_provider']['callback'], array())
             )->addMethodCall('setContainer', array(new Reference('service_container')));
-            
+
             // Validation
-            $container->setDefinition('blast.db.list.constraint', 
+            $container->setDefinition('blast.db.list.constraint',
                 new Definition('%blast.db.list.callback.constraint.class%', array()));
-            
+
             $container->setAlias('blast.db.list.constraint.validator','blast.db.list.callback.constraint.validator');
         }
-        
+
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('blast.xml');
     }
