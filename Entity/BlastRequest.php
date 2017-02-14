@@ -53,12 +53,12 @@ class BlastRequest implements BlastRequestInterface
      * @Assert\NotBlank
      */
     public $blastpType = 'blastp';
-    
+
     /**
      * @Genouest\Bundle\BioinfoBundle\Constraints\Fasta(seqType = "PROT_OR_ADN")
      */
     public $pastedSeq;
-    
+
     /**
      * @Genouest\Bundle\BioinfoBundle\Constraints\FastaFile(maxSize = "104857600", seqType = "PROT_OR_ADN")
      */
@@ -75,12 +75,12 @@ class BlastRequest implements BlastRequestInterface
      * @Assert\NotBlank
      */
     public $bankTypeProt = 'pubdb';
-    
+
     /**
      * @Genouest\Bundle\BioinfoBundle\Constraints\FastaFile(maxSize = "104857600", seqType = "PROT_OR_ADN")
      */
     public $persoBankFile;
-    
+
     public $dbPath;
 
     /**
@@ -184,58 +184,58 @@ class BlastRequest implements BlastRequestInterface
      * @Assert\NotBlank
      */
     public $compositionalAdjustmentsDelta = '2';
-    
+
     /**
      * @Assert\Type("bool")
      */
     public $lowComplex = true;
-    
+
     /**
      * @Assert\Type("bool")
      */
     public $softMasking = true;
-    
+
     /**
      * @Assert\Type("bool")
      */
     public $lowerCase = false;
-    
+
     /**
      * @Assert\Type("float")
      * @Assert\Range(min = 0, max = 1000)
      */
     public $psiThreshold = 0.005;
-    
+
     /**
      * @Assert\Type("float")
      * @Assert\Range(min = 0, max = 1000)
      */
     public $deltaThreshold = 0.05;
-    
+
     /**
      * @Assert\Type("integer")
      * @Assert\Range(min = 0, max = 1000)
      */
     public $psiIterationNb = 10;
-    
+
     /**
      * @Assert\Type("integer")
      * @Assert\Range(min = 0, max = 1000)
      */
     public $psiPseudoCount = 0;
-    
+
     /**
      * @Assert\File(maxSize = "104857600")
      */
     public $psiPSSM;
-    
+
     /**
      * @Assert\File(maxSize = "104857600")
      */
     public $phiPattern;
-    
+
     protected $container;
-    
+
     public function __construct(ContainerInterface $container) {
         $this->container = $container;
     }
@@ -255,7 +255,7 @@ class BlastRequest implements BlastRequestInterface
         $validator = $this->container->get('blast.db.list.constraint.validator');
         $constraint = $this->container->get('blast.db.list.constraint');
         $validator->initialize($context);
-        
+
         // check if the name is actually a fake name
         $validator->validate($this->dbPath, $constraint);
         $violations = $context->getViolations();
@@ -270,9 +270,9 @@ class BlastRequest implements BlastRequestInterface
             $c++;
         }
     }
-    
+
     /**
-     * @Assert\True(message = "Please paste or upload a query sequence")
+     * @Assert\IsTrue(message = "Please paste or upload a query sequence")
      */
     public function isSequencePresent() {
         if ($this->program != 'blastp' || $this->blastpType != 'psiblast')
@@ -280,9 +280,9 @@ class BlastRequest implements BlastRequestInterface
 
         return true;
     }
-    
+
     /**
-     * @Assert\True(message = "Please paste or upload a query sequence, or upload a PSSM")
+     * @Assert\IsTrue(message = "Please paste or upload a query sequence, or upload a PSSM")
      */
     public function isSequencePresentForPsi() {
         if ($this->program == 'blastp' && $this->blastpType == 'psiblast')
@@ -290,16 +290,16 @@ class BlastRequest implements BlastRequestInterface
 
         return true;
     }
-    
+
     /**
-     * @Assert\True(message = "You have to choose between pasting or uploading a query sequence")
+     * @Assert\IsTrue(message = "You have to choose between pasting or uploading a query sequence")
      */
     public function isSequenceSingle() {
         return ($this->isSequencePresent() && (empty($this->pastedSeq) || empty($this->fileSeq))) || !$this->isSequencePresent();
     }
-    
+
     /**
-     * @Assert\True(message = "You have to choose between pasting a query sequence, uploading it, or uploading a PSSM")
+     * @Assert\IsTrue(message = "You have to choose between pasting a query sequence, uploading it, or uploading a PSSM")
      */
     public function isSequenceSingleForPsi() {
         if ($this->program == 'blastp' && $this->blastpType == 'psiblast')
@@ -307,26 +307,26 @@ class BlastRequest implements BlastRequestInterface
 
         return true;
     }
-    
+
     /**
-     * @Assert\True(message = "Please upload a personal databank, or choose a public one")
+     * @Assert\IsTrue(message = "Please upload a personal databank, or choose a public one")
      */
     public function isDatabankOk() {
         if ($this->hasPersoDb())
             return !empty($this->persoBankFile);
         else
             return !empty($this->dbPath);
-        
+
         return true;
     }
-    
+
     /**
      * Returns true if this blast request uses a personal databank
      */
     public function hasPersoDb() {
         return (in_array($this->program, array('blastn', 'tblastn')) && $this->bankTypeNuc == 'persodb') || (!in_array($this->program, array('blastn', 'tblastn')) && $this->bankTypeProt == 'persodb');
     }
-    
+
     public static function getProgramLabels()
     {
         return array('blastn' => 'Blastn (nucleotide query, nucleotide databank)',
@@ -335,25 +335,25 @@ class BlastRequest implements BlastRequestInterface
                       'tblastn' => 'Tblastn (protein query, nucleotide databank)',
                       'tblastx' => 'Tblastx (nucleotide query, nucleotide databank, but at protein level)');
     }
-    
+
     public static function getPrograms()
     {
         return array_keys(self::getProgramLabels());
     }
-    
-    
+
+
     public static function getBlastnTypeLabels()
     {
         return array('megablast' => 'Highly similar sequences (megablast)',
                       'dc-megablast' => 'More dissimilar sequences (discontiguous megablast)',
                       'blastn' => 'Somewhat similar sequences (blastn)');
     }
-    
+
     public static function getBlastnTypes()
     {
         return array_keys(self::getBlastnTypeLabels());
     }
-    
+
     public static function getBlastpTypeLabels()
     {
         return array('blastp' => 'Normal blastp',
@@ -361,34 +361,34 @@ class BlastRequest implements BlastRequestInterface
                       'phiblast' => 'PHI-BLAST (Pattern Hit Initiated BLAST)',
                       'deltablast' => 'DELTA-BLAST (Domain Enhanced Lookup Time Accelerated BLAST)');
     }
-    
+
     public static function getBlastpTypes()
     {
         return array_keys(self::getBlastpTypeLabels());
     }
-    
+
     public static function getNucBankTypeLabels()
     {
         return array('pubdb' => 'Public databank',
                     'persodb' => 'Personal databank');
     }
-    
+
     public static function getNucBankTypes()
     {
         return array_keys(self::getNucBankTypeLabels());
     }
-    
+
     public static function getProtBankTypeLabels()
     {
         return array('pubdb' => 'Public databank',
                     'persodb' => 'Personal databank');
     }
-    
+
     public static function getProtBankTypes()
     {
         return array_keys(self::getProtBankTypeLabels());
     }
-    
+
     public static function getExpectLabels()
     {
         return array('1e-20' => '1e-20',
@@ -401,7 +401,7 @@ class BlastRequest implements BlastRequestInterface
                        '100' => '100',
                        '1000' => '1000');
     }
-    
+
     public static function getExpects()
     {
         // The choice validator uses in_array() in strict mode which means the type is important.
@@ -409,7 +409,7 @@ class BlastRequest implements BlastRequestInterface
         // So we're forced to check that the array_keys result contains only strings.
         return array_map(create_function('$value', 'return (string) $value;'), array_keys(self::getExpectLabels()));
     }
-    
+
     public static function getNucMatriceLabels()
     {
         return array('1,-2' => '1,-2',
@@ -419,12 +419,12 @@ class BlastRequest implements BlastRequestInterface
                        '4,-5' => '4,-5',
                        '1,-1' => '1,-1');
     }
-    
+
     public static function getNucMatrices()
     {
         return array_keys(self::getNucMatriceLabels());
     }
-    
+
     public static function getMegablastMatriceLabels()
     {
         return array('1,-2' => '1,-2',
@@ -434,12 +434,12 @@ class BlastRequest implements BlastRequestInterface
                      '4,-5' => '4,-5',
                      '1,-1' => '1,-1');
     }
-    
+
     public static function getMegablastMatrices()
     {
         return array_keys(self::getMegablastMatriceLabels());
     }
-    
+
     public static function getProtMatriceLabels()
     {
         return array('PAM30' => 'PAM30',
@@ -448,12 +448,12 @@ class BlastRequest implements BlastRequestInterface
                     'BLOSUM62' => 'BLOSUM62',
                     'BLOSUM45' => 'BLOSUM45');
     }
-    
+
     public static function getProtMatrices()
     {
         return array_keys(self::getProtMatriceLabels());
     }
-    
+
     public static function getGeneticCodeLabels()
     {
         return array('1' => 'Standard',
@@ -470,7 +470,7 @@ class BlastRequest implements BlastRequestInterface
                     '14' => 'Flatworm Mitochondrial',
                     '15' => 'Blepharisma Macrouclear');
     }
-    
+
     public static function getGeneticCodes()
     {
         // The choice validator uses in_array() in strict mode which means the type is important.
@@ -478,7 +478,7 @@ class BlastRequest implements BlastRequestInterface
         // So we're forced to check that the array_keys result contains only strings.
         return array_map(create_function('$value', 'return (string) $value;'), array_keys(self::getGeneticCodeLabels()));
     }
-    
+
     public static function getMaxTargetSequenceLabels()
     {
         return array('10' => '10',
@@ -491,7 +491,7 @@ class BlastRequest implements BlastRequestInterface
                       '10000' => '10000',
                       '20000' => '20000');
     }
-    
+
     public static function getMaxTargetSequenceChoices()
     {
         // The choice validator uses in_array() in strict mode which means the type is important.
@@ -499,13 +499,13 @@ class BlastRequest implements BlastRequestInterface
         // So we're forced to check that the array_keys result contains only strings.
         return array_map(create_function('$value', 'return (string) $value;'), array_keys(self::getMaxTargetSequenceLabels()));
     }
-    
+
     public static function getProtWordSizeLabels()
     {
         return array('2' => '2',
                      '3' => '3');
     }
-    
+
     public static function getProtWordSizes()
     {
         // The choice validator uses in_array() in strict mode which means the type is important.
@@ -513,14 +513,14 @@ class BlastRequest implements BlastRequestInterface
         // So we're forced to check that the array_keys result contains only strings.
         return array_map(create_function('$value', 'return (string) $value;'), array_keys(self::getProtWordSizeLabels()));
     }
-    
+
     public static function getBlastnWordSizeLabels()
     {
         return array('7' => '7',
                        '11' => '11',
                        '15' => '15');
     }
-    
+
     public static function getBlastnWordSizes()
     {
         // The choice validator uses in_array() in strict mode which means the type is important.
@@ -528,7 +528,7 @@ class BlastRequest implements BlastRequestInterface
         // So we're forced to check that the array_keys result contains only strings.
         return array_map(create_function('$value', 'return (string) $value;'), array_keys(self::getBlastnWordSizeLabels()));
     }
-    
+
     public static function getMegablastWordSizeLabels()
     {
         return array('16' => '16',
@@ -541,7 +541,7 @@ class BlastRequest implements BlastRequestInterface
                       '128' => '128',
                       '256' => '256');
     }
-    
+
     public static function getMegablastWordSizes()
     {
         // The choice validator uses in_array() in strict mode which means the type is important.
@@ -549,13 +549,13 @@ class BlastRequest implements BlastRequestInterface
         // So we're forced to check that the array_keys result contains only strings.
         return array_map(create_function('$value', 'return (string) $value;'), array_keys(self::getMegablastWordSizeLabels()));
     }
-    
+
     public static function getDcMegablastWordSizeLabels()
     {
         return array('11' => '11',
                         '12' => '12');
     }
-    
+
     public static function getDcMegablastWordSizes()
     {
         // The choice validator uses in_array() in strict mode which means the type is important.
@@ -563,7 +563,7 @@ class BlastRequest implements BlastRequestInterface
         // So we're forced to check that the array_keys result contains only strings.
         return array_map(create_function('$value', 'return (string) $value;'), array_keys(self::getDcMegablastWordSizeLabels()));
     }
-    
+
     public static function getBlastnGapCostLabels()
     {
         return array(
@@ -589,12 +589,12 @@ class BlastRequest implements BlastRequestInterface
                       '1,1' => 'Creation: 1 Extension: 1',
                     );
     }
-    
+
     public static function getBlastnGapCosts()
     {
         return array_keys(self::getBlastnGapCostLabels());
     }
-    
+
     public static function getProtGapCostLabels()
     {
         return array(
@@ -622,19 +622,19 @@ class BlastRequest implements BlastRequestInterface
                     '8,1' => 'Creation: 8 Extension: 1',
                     );
     }
-    
+
     public static function getProtGapCosts()
     {
         return array_keys(self::getProtGapCostLabels());
     }
-    
+
     public static function getTemplateTypeLabels()
     {
         return array('coding' => 'Coding',
                     'optimal' => 'Maximal',
                     'coding_and_optimal' => 'Two templates');
     }
-    
+
     public static function getTemplateLengthLabels()
     {
         return array('0' => 'None',
@@ -642,7 +642,7 @@ class BlastRequest implements BlastRequestInterface
                     '18' => '18',
                     '21' => '21');
     }
-    
+
     public static function getCompositionalAdjustmentLabels()
     {
         return array('0' => 'No adjustment',
@@ -650,13 +650,13 @@ class BlastRequest implements BlastRequestInterface
                     '2' => 'Conditional compositional score matrix adjustment',
                     '3' => 'Universal compositional score matrix adjustment');
     }
-    
+
     public static function getCompositionalAdjustmentDeltaLabels()
     {
         return array('0' => 'No adjustment',
                     '1' => 'Composition-based statistics');
     }
-    
+
     public static function getTemplateTypeChoices()
     {
         // The choice validator uses in_array() in strict mode which means the type is important.
@@ -664,7 +664,7 @@ class BlastRequest implements BlastRequestInterface
         // So we're forced to check that the array_keys result contains only strings.
         return array_map(create_function('$value', 'return (string) $value;'), array_keys(self::getTemplateTypeLabels()));
     }
-    
+
     public static function getTemplateLengthChoices()
     {
         // The choice validator uses in_array() in strict mode which means the type is important.
@@ -672,7 +672,7 @@ class BlastRequest implements BlastRequestInterface
         // So we're forced to check that the array_keys result contains only strings.
         return array_map(create_function('$value', 'return (string) $value;'), array_keys(self::getTemplateLengthLabels()));
     }
-    
+
     public static function getCompositionalAdjustmentChoices()
     {
         // The choice validator uses in_array() in strict mode which means the type is important.
@@ -680,7 +680,7 @@ class BlastRequest implements BlastRequestInterface
         // So we're forced to check that the array_keys result contains only strings.
         return array_map(create_function('$value', 'return (string) $value;'), array_keys(self::getCompositionalAdjustmentLabels()));
     }
-    
+
     public static function getCompositionalAdjustmentDeltaChoices()
     {
         // The choice validator uses in_array() in strict mode which means the type is important.
@@ -688,7 +688,7 @@ class BlastRequest implements BlastRequestInterface
         // So we're forced to check that the array_keys result contains only strings.
         return array_map(create_function('$value', 'return (string) $value;'), array_keys(self::getCompositionalAdjustmentDeltaLabels()));
     }
-    
+
     /**
      * Generate a Job object corresponding to this blast request
      *
@@ -696,25 +696,25 @@ class BlastRequest implements BlastRequestInterface
      * @return Genouest\Bundle\SchedulerBundle\Entity\Job A job instance
      */
     public function getJob(SchedulerInterface $scheduler) {
-    
+
         $job = new Job();
         $job->setProgramName($this->container->getParameter('blast.scheduler.name')); // It is important to set program name *before* generating the uid
         $uid = $job->generateJobUid();
         $job->setTitle($this->title);
         $job->setEmail($this->email);
-        
+
         $workDir = $scheduler->getWorkDir($job);
-        
+
         $command = $this->container->get('templating')->render('GenouestBlastBundle:Blast:command.txt.twig', array('request' => $this,
             'workDir' => $workDir,
             'job' => $job,
             'cdd_delta' => $this->container->getParameter('blast.cdd_delta.path')
             ));
-        
+
         // Create an array containing the name of each result file
         $resultFiles = array();
         $resultViewers = array();
-        
+
         if ($this->program == 'blastp' && $this->blastpType == 'phiblast') {
             $resultFiles = array('HTML blast output' => $uid.'.html',
                                  'Executed command' => "blast_command.txt");
@@ -728,12 +728,12 @@ class BlastRequest implements BlastRequestInterface
                                    'ASN.1 archive blast output' => $uid.'.asn',
                                    'Executed command' => "blast_command.txt");
         }
-        
+
         if ($this->program == 'blastp' && (($this->blastpType == 'psiblast') || ($this->blastpType == 'deltablast'))) {
             $resultFiles['PSSM'] = $uid.'.pssm';
             $resultFiles['PSSM ASCII'] = $uid.'.pssm.ascii';
         }
-        
+
         // Move uploaded files
         if ($this->hasPersoDb())
             $this->persoBankFile->move($workDir, 'uploadedDB.fasta');
@@ -746,7 +746,7 @@ class BlastRequest implements BlastRequestInterface
                 $fError = $fError || (false === @fwrite($seqFile, $this->pastedSeq));
                 $fError = $fError || (false === @fclose($seqFile));
             }
-            
+
             if ($fError) {
                 $error = error_get_last();
                 throw new FileException(sprintf('Could not create file %s (%s)', $workDir.'input.fasta', strip_tags($error['message'])));
@@ -763,8 +763,7 @@ class BlastRequest implements BlastRequestInterface
 
         // Store generated command line
         $job->setCommand($command);
-        
+
         return $job;
     }
 }
-
