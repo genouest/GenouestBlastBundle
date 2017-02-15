@@ -329,11 +329,11 @@ class BlastRequest implements BlastRequestInterface
 
     public static function getProgramLabels()
     {
-        return array('blastn' => 'Blastn (nucleotide query, nucleotide databank)',
-                      'blastp' => 'Blastp (protein query, protein databank)',
-                      'blastx' => 'Blastx (nucleotide query, protein databank)',
-                      'tblastn' => 'Tblastn (protein query, nucleotide databank)',
-                      'tblastx' => 'Tblastx (nucleotide query, nucleotide databank, but at protein level)');
+        return array('blastn' => 'blastn (nucleotide vs nucleotide)',
+                      'blastp' => 'blastp (protein vs protein)',
+                      'blastx' => 'blastx (nucleotide vs protein)',
+                      'tblastn' => 'tblastn (protein vs nucleotide)',
+                      'tblastx' => 'tblastx (nucleotide vs nucleotide, but at protein level)');
     }
 
     public static function getPrograms()
