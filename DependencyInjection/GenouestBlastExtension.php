@@ -38,8 +38,8 @@ class GenouestBlastExtension extends Extension
         $configuration = new Configuration();
         $config = $processor->processConfiguration($configuration, $configs);
 
-        if (isset($config['version']))
-            $container->setParameter('blast.version', $config['version']);
+        if (isset($config['title']))
+            $container->setParameter('blast.title', $config['title']);
 
         $container->setParameter('blast.form.type.class', $config['form_type']);
 

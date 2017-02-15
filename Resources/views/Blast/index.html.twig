@@ -21,18 +21,17 @@
 {% endblock %}
 
 {% block title %}
-    Blast
-    {% if blast_version %}
-        {{ blast_version }}
+    {% if main_title %}
+        {{ main_title }}
+    {% else %}
+        Blast server
     {% endif %}
 {% endblock %}
 
 {% block scheduler %}
-    <h1>Blast
-    {% if blast_version %}
-        {{ blast_version }}
+    {% if main_title %}
+        <h1>{{ main_title }}</h1>
     {% endif %}
-    </h1>
 
     {{ form_errors(form) }}
 
@@ -43,7 +42,7 @@
           <td class="emailField" title="Optional, if you want to receive the results by email">{{ form_label(form.email, 'Email address') }} {{ form_widget(form.email) }}{{ form_errors(form.email) }}</td>
         </tr>
       </table>
-      
+
       <p class="formPart"><img src="{{ asset('bundles/genouestblast/images/item.png') }}" width=16 height=16 alt="Program selection" /> Program selection</p>
       <table>
         <tr>
@@ -57,7 +56,7 @@
           <br />PSI-BLAST, PHI-BLAST and DELTA-BLAST can be used to find distantly related sequences{{ form_errors(form.blastpType) }}</td>
         </tr>
       </table>
-      
+
       <p class="formPart"><img src="{{ asset('bundles/genouestblast/images/item.png') }}" width=16 height=16 alt="Query sequence" /> Query sequence</p>
       <table>
         <tr>
@@ -72,7 +71,7 @@
           <th>{{ form_label(form.queryCode, 'Query genetic code') }}</th><td>{{ form_widget(form.queryCode) }}{{ form_errors(form.queryCode) }}</td>
         </tr>
       </table>
-      
+
       <p class="formPart"><img src="{{ asset('bundles/genouestblast/images/item.png') }}" width=16 height=16 alt="Databank selection" /> Databank selection</p>
       <table>
         <tr>
@@ -92,7 +91,7 @@
           <th>{{ form_label(form.dbCode, 'Databank genetic code') }}</th><td>{{ form_widget(form.dbCode) }}{{ form_errors(form.dbCode) }}</td>
         </tr>
       </table>
-      
+
       <p class="formPart"><img src="{{ asset('bundles/genouestblast/images/item.png') }}" width=16 height=16 alt="General parameters" /> General parameters</p>
       <table>
         <tr>
@@ -120,7 +119,7 @@
           <br />Maximum number of aligned sequences to display{{ form_errors(form.maxTargetSequences) }}</td>
         </tr>
       </table>
-      
+
       <p class="formPart"><img src="{{ asset('bundles/genouestblast/images/item.png') }}" width=16 height=16 alt="Scoring parameters" /> Scoring parameters</p>
       <table>
         <tr>
@@ -155,7 +154,7 @@
           <br />Matrix adjustment method to compensate for amino acid composition of sequences.{{ form_errors(form.compositionalAdjustmentsDelta) }}</td>
         </tr>
       </table>
-      
+
       <p class="formPart"><img src="{{ asset('bundles/genouestblast/images/item.png') }}" width=16 height=16 alt="Filters and masking" /> Filters and masking</p>
       <table>
         <tr>
@@ -171,7 +170,7 @@
           <br />Filter regions in lower case in query sequence.{{ form_errors(form.lowerCase) }}</td>
         </tr>
       </table>
-      
+
       <p class="formPart psiFormPart"><img src="{{ asset('bundles/genouestblast/images/item.png') }}" width=16 height=16 alt="PSI-BLAST and PHI-BLAST" /> PSI-BLAST and PHI-BLAST</p>
       <table class="psiFormPart">
         <tr>
@@ -200,7 +199,7 @@
           <br />Enter a PHI pattern (PROSITE format) to start the search. PHI-BLAST may perform better than simple pattern searching because it filters out false positives (pattern matches that are probably random and not indicative of homology).{{ form_errors(form.phiPattern) }}</td>
         </tr>
       </table>
-      
+
       <p class="formPart discontiguousFormPart"><img src="{{ asset('bundles/genouestblast/images/item.png') }}" width=16 height=16 alt="Discontiguous Word Options" /> Discontiguous Word Options</p>
       <table class="discontiguousFormPart">
         <tr>
@@ -212,7 +211,7 @@
           <br />Specifies which bases are ignored in scanning the database. {{ form_errors(form.templateTypes) }}</td>
         </tr>
       </table>
-      
+
       {{ form_rest(form) }}
 
       <input type="submit" />

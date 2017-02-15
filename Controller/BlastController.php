@@ -30,19 +30,19 @@ class BlastController extends Controller
     public function indexAction()
     {
         $blastRequest = $this->get('blast.request');
-        
+
         $form = $this->createForm($this->get('blast.form.type'), $blastRequest);
-        
+
         $request = $this->get('request');
-        
+
         if ($request->isMethod('POST')) {
             $form->bind($request);
-            
+
             if ($form->isValid()) {
                 // Prepare the job
                 $job = $blastRequest->getJob($this->get('scheduler.scheduler'));
                 $job->setBackUrl($this->generateUrl('_blast_form', array(), true)); // Add an url to come back to the application
-                
+
                 // Let the scheduler launch the job and guide us
                 return $this->forward('GenouestSchedulerBundle:Scheduler:launchJob', array('job' => $job));
             }
@@ -51,7 +51,7 @@ class BlastController extends Controller
 
         return $this->render('GenouestBlastBundle:Blast:index.html.twig', array(
             'form' => $form->createView(),
-            'blast_version' => $this->container->hasParameter('blast.version') ? $this->container->getParameter('blast.version') : '',
+            'main_title' => $this->container->hasParameter('blast.title') ? $this->container->getParameter('blast.title') : '',
             'db_provider' => $this->container->get('blast.db.list.provider'),
             'db_provider_name' => $this->container->getParameter('blast.db.list.provider.name'),
         ));
@@ -68,26 +68,26 @@ class BlastController extends Controller
         $scheduler = $this->get('scheduler.scheduler');
         $jobRepo = $this->get('job.repository');
         $job = $jobRepo->find($uid);
-        
+
         // Check that job is valid
         if (!$job || !$job->isLaunched())
             return $this->render('GenouestSchedulerBundle:Scheduler:error.html.twig', array('job' => $job, 'uid' => $uid, 'error' => 'Job '.$uid.' is not available.'));
-        
+
         // Finished?
         if (!$scheduler->isFinished($job)) {
             return new RedirectResponse($this->generateUrl('_job_status', array('uid' => $job->getJobUid())));
         }
-        
+
         $textStatus = $scheduler->getStatusAsText($scheduler->getStatus($job));
         $resultUrl = $scheduler->getResultUrl($job);
-        
+
         // We need to check if the results are there, and to display only the first x lines
         $htmlFile = '';
         foreach ($job->getResultFiles() as $file) {
             if ($file->getDisplayName() == 'HTML blast output')
                 $htmlFile = $scheduler->getWorkDir($job).$file->getFsName();
         }
-        
+
         $blastCrashed = false;
         $truncatedPreview = false;
         $previewResults = '';
@@ -106,7 +106,7 @@ class BlastController extends Controller
                 $truncatedPreview = true;
             }
         }
-        
+
         return $this->render('GenouestBlastBundle:Blast:results.html.twig', array('job' => $job,
             'status' => $textStatus,
             'resultUrl' => $resultUrl,
