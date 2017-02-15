@@ -155,8 +155,11 @@ blastxml_to_gapped_gff3.py --min_gap 3 {{ workDir }}{{ job.jobuid }}.xml > {{ wo
 
 {% if link_command %}
     {{ link_command }} {{ workDir }}{{ job.jobuid }}.html > {{ workDir }}{{ job.jobuid }}.htmllinked;
-    mv {{ workDir }}{{ job.jobuid }}.html {{ workDir }}{{ job.jobuid }}.htmlraw;
-    mv {{ workDir }}{{ job.jobuid }}.htmllinked {{ workDir }}{{ job.jobuid }}.html;
+    if [ -s {{ workDir }}{{ job.jobuid }}.htmllinked ]
+    then
+        mv {{ workDir }}{{ job.jobuid }}.html {{ workDir }}{{ job.jobuid }}.htmlraw;
+        mv {{ workDir }}{{ job.jobuid }}.htmllinked {{ workDir }}{{ job.jobuid }}.html;
+    fi
 {% endif %}
 
 {%- endspaceless %}
