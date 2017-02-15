@@ -51,6 +51,8 @@ class GenouestBlastExtension extends Extension
 
         $container->setParameter('blast.pre_command', $config['pre_command']);
 
+        $container->setParameter('blast.link_command', $config['link_command']);
+
         // Db providers
         if (count($config['db_provider']) != 1) {
             throw new \InvalidArgumentException('There should exactly one "db_provider"');

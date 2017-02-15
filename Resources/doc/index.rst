@@ -99,6 +99,10 @@ The following configuration keys are available (with their default values):
         # It is a good place to add the blast binaries to the path
         pre_command: "export PATH=/some/blast/bin:$PATH"
 
+        # If you need you can call a script to add links to the blast html output
+        # e.g. to launch `add_links.py --really output.html`
+        link_command: "add_links.py --really"
+
         # Define how to retrieve the databank list. Choose only one of the three available method
         db_provider:
             # Use a BioMAJ server. Requires the GenouestBiomajBundle installed and configured.

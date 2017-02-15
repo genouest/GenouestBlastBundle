@@ -151,5 +151,11 @@ blast_formatter -archive {{ workDir }}{{ job.jobuid }}.asn -outfmt 6 -out {{ wor
 blast_formatter -archive {{ workDir }}{{ job.jobuid }}.asn -outfmt 10 -out {{ workDir }}{{ job.jobuid }}.csv;
 {%- endif %}
 
+{% if link_command %}
+    {{ link_command }} {{ workDir }}{{ job.jobuid }}.html > {{ workDir }}{{ job.jobuid }}.htmllinked;
+    mv {{ workDir }}{{ job.jobuid }}.html {{ workDir }}{{ job.jobuid }}.htmlraw;
+    mv {{ workDir }}{{ job.jobuid }}.htmllinked {{ workDir }}{{ job.jobuid }}.html;
+{% endif %}
+
 {%- endspaceless %}
 {% endautoescape %}
