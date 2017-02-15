@@ -727,6 +727,7 @@ class BlastRequest implements BlastRequestInterface
         }
         else {
             $resultFiles = array('HTML blast output' => $uid.'.html',
+                                   'GFF3 blast output' => $uid.'.gff3',
                                    'Text blast output' => $uid.'.txt',
                                    'Comma-separated blast output' => $uid.'.csv',
                                    'Tabular blast output' => $uid.'.tsv',
