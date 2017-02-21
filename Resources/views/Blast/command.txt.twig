@@ -150,7 +150,7 @@ blast_formatter -archive {{ workDir }}{{ job.jobuid }}.asn -outfmt 0 -html -out 
 blast_formatter -archive {{ workDir }}{{ job.jobuid }}.asn -outfmt 0 -out {{ workDir }}{{ job.jobuid }}.txt;
 blast_formatter -archive {{ workDir }}{{ job.jobuid }}.asn -outfmt 6 -out {{ workDir }}{{ job.jobuid }}.tsv;
 blast_formatter -archive {{ workDir }}{{ job.jobuid }}.asn -outfmt 10 -out {{ workDir }}{{ job.jobuid }}.csv;
-blastxml_to_gapped_gff3.py --min_gap 3 {{ workDir }}{{ job.jobuid }}.xml > {{ workDir }}{{ job.jobuid }}.gff3;
+xml2gff3.py {{ workDir }}{{ job.jobuid }}.xml > {{ workDir }}{{ job.jobuid }}.gff3;
 {%- endif %}
 
 {% if link_command %}

@@ -19,7 +19,7 @@ Installation
 
 You need to have BLAST+ installed and properly configured (download from ftp://ftp.ncbi.nih.gov/blast/executables/blast+/LATEST/).
 BLAST+ binaries should be in the PATH of the computing machines.
-If you want gff3 output, you will need to install https://github.com/galaxyproject/tools-iuc/blob/master/tools/blastxml_to_gapped_gff3/blastxml_to_gapped_gff3.py
+If you want gff3 output, you will need to install https://github.com/abretaud/docker-sf-blast/blob/master/bin/xml2gff3.py
 
 Install and configure GenouestSchedulerBundle and GenouestBioinfoBundle which are required by this bundle.
 
