@@ -154,6 +154,7 @@ xml2gff3.py {{ workDir }}{{ job.jobuid }}.xml > {{ workDir }}{{ job.jobuid }}.gf
 {%- endif %}
 
 {% if link_command %}
+    export GFF3_URL={{ resultUrl }}{{ job.jobuid }}.gff3
     {{ link_command }} {{ workDir }}{{ job.jobuid }}.html > {{ workDir }}{{ job.jobuid }}.htmllinked;
     if [ -s {{ workDir }}{{ job.jobuid }}.htmllinked ]
     then

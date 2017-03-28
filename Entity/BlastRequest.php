@@ -714,7 +714,8 @@ class BlastRequest implements BlastRequestInterface
             'job' => $job,
             'cdd_delta' => $this->container->getParameter('blast.cdd_delta.path'),
             'pre_command' => $this->container->getParameter('blast.pre_command'),
-            'link_command' => $this->container->getParameter('blast.link_command')
+            'link_command' => $this->container->getParameter('blast.link_command'),
+            'resultUrl' => $scheduler->getResultUrl($job)
             ));
 
         // Create an array containing the name of each result file
