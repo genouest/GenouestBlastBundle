@@ -94,7 +94,7 @@ class BlastController extends Controller
         if (empty($htmlFile) || !file_exists($htmlFile) || (filesize($htmlFile) <= 0))
             $blastCrashed = true;
         else {
-            $lengthToShow = 75000;
+            $lengthToShow = 400000;
             $resExtract = file_get_contents($htmlFile, false, NULL, 0, $lengthToShow);
             $startPre = strpos($resExtract, "<PRE>");
             $endPre = strpos($resExtract, "</BOD");
