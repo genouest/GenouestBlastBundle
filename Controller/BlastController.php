@@ -97,9 +97,14 @@ class BlastController extends Controller
             $lengthToShow = 400000;
             $resExtract = file_get_contents($htmlFile, false, NULL, 0, $lengthToShow);
             $startPre = strpos($resExtract, "<PRE>");
-            $endPre = strpos($resExtract, "</BOD");
+            $bonusPre = strrpos($resExtract, "<PRE>");
+            $endPre = strrpos($resExtract, "</BOD");
             if ($endPre > $startPre)
                 $previewResults = substr($resExtract, $startPre, $endPre);
+                if ($bonusPre > $endPre) {
+                    $truncatedPreview = true;
+                    $previewResults = $this->closeTags($previewResults);
+                }
             else {
                 $previewResults = substr($resExtract, $startPre);
                 $previewResults = $this->closeTags($previewResults);
